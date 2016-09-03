@@ -37,7 +37,6 @@ public class HardwareBuild1
     DcMotor motorBackLeft;
     DcMotor motorSlide;
 
-
     /* Local OpMode members. */
     HardwareMap hwMap  = null;
     private ElapsedTime period  = new ElapsedTime();
@@ -51,11 +50,11 @@ public class HardwareBuild1
         // save reference to HW Map
         hwMap = ahwMap;
 
-        motorFrontRight = hardwareMap.dcMotor.get("frontright");
-        motorFrontLeft = hardwareMap.dcMotor.get("frontleft");
-        motorBackRight = hardwareMap.dcMotor.get("backright");
-        motorBackLeft = hardwareMap.dcMotor.get("backleft");
-        motorSlide = hardwareMap.dcMotor.get("slideMotor");
+        motorFrontRight = hwMap.dcMotor.get("frontright");
+        motorFrontLeft = hwMap.dcMotor.get("frontleft");
+        motorBackRight = hwMap.dcMotor.get("backright");
+        motorBackLeft = hwMap.dcMotor.get("backleft");
+        motorSlide = hwMap.dcMotor.get("slideMotor");
 
         motorFrontLeft.setDirection(DcMotor.Direction.REVERSE);
         motorBackLeft.setDirection(DcMotor.Direction.REVERSE);

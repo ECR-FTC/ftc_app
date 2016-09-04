@@ -36,7 +36,8 @@ public class HardwareBuild1
     DcMotor motorBackRight;
     DcMotor motorBackLeft;
     DcMotor motorSlide;
-
+    Servo leftServo;
+    Servo rightServo;
     /* Local OpMode members. */
     HardwareMap hwMap  = null;
     private ElapsedTime period  = new ElapsedTime();
@@ -59,23 +60,22 @@ public class HardwareBuild1
         motorFrontLeft.setDirection(DcMotor.Direction.REVERSE);
         motorBackLeft.setDirection(DcMotor.Direction.REVERSE);
 
+        leftServo = hwMap.servo.get("servoLeft");
+        rightServo = hwMap.servo.get("servoRight");
         // Set all motors to zero power
         motorFrontLeft.setPower(0);
         motorFrontRight.setPower(0);
         motorBackRight.setPower(0);
-        motorBAcjLeft.setPower(0);
+        motorBackLeft.setPower(0);
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
-        leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorFrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        // Define and initialize ALL installed servos.
-        arm = hwMap.servo.get("servo_1");
-        claw = hwMap.servo.get("servo_6");
-        arm.setPosition(ARM_HOME);
-        claw.setPosition(CLAW_HOME);
-
+        /* // Define and initial
         // start calibrating the gyro.
         gyro.calibrate();
 
@@ -83,7 +83,7 @@ public class HardwareBuild1
         while (gyro.isCalibrating()) {
             Thread.sleep(50);
         }
-
+        */
     }
 
     /***

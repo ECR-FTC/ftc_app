@@ -32,7 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 // needs updating to the new ftc app
 // CEV 8/21/2016
 
-package com.qualcomm.ftcrobotcontroller.opmodes;
+package org.firstinspires.ftc.team11096code;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -48,12 +48,8 @@ import static java.lang.Math.*;
  * Enables control of the robot via the gamepad
  */
 public class Build1TankDrive extends OpMode {
+	HardwareBuild1   robot        = new HardwareBuild1();          // Use Bild1's Hardware file
 
-	DcMotor motorFrontRight;
-	DcMotor motorFrontLeft;
-	DcMotor motorBackRight;
-	DcMotor motorBackLeft;
-	DcMotor motorSlide;
 	/**
 	 * Constructor
 	 */
@@ -84,14 +80,6 @@ public class Build1TankDrive extends OpMode {
 		 *    "servo_1" controls the arm joint of the manipulator.
 		 *    "servo_6" controls the claw joint of the manipulator.
 		 */
-		motorFrontRight = hardwareMap.dcMotor.get("frontright");
-		motorFrontLeft = hardwareMap.dcMotor.get("frontleft");
-		motorBackRight = hardwareMap.dcMotor.get("backright");
-		motorBackLeft = hardwareMap.dcMotor.get("backleft");
-		motorSlide = hardwareMap.dcMotor.get("slideMotor");
-
-		motorFrontLeft.setDirection(DcMotor.Direction.REVERSE);
-		motorBackLeft.setDirection(DcMotor.Direction.REVERSE);
 
 	}
 
@@ -122,21 +110,38 @@ public class Build1TankDrive extends OpMode {
 
 		// clip the right/left values so that the values never exceed +/- 1
 		// write the values to the motors
-		motorFrontRight.setPower(Range.clip((b+c)/norm, -1, 1));
-		motorFrontLeft.setPower(Range.clip((a-c)/norm, -1, 1));
-		motorBackRight.setPower(Range.clip((b-c)/norm, -1, 1));
-		motorBackLeft.setPower(Range.clip((a+c)/norm, -1, 1));
+		robot.motorFrontRight.setPower(Range.clip((b+c)/norm, -1, 1));
+		robot.motorFrontLeft.setPower(Range.clip((a-c)/norm, -1, 1));
+		robot.motorBackRight.setPower(Range.clip((b-c)/norm, -1, 1));
+		robot.motorBackLeft.setPower(Range.clip((a+c)/norm, -1, 1));
 
 
-		if (gamepad1.a)
+		if (gamepad1.a) // motor for slide settings
 		{
-			motorSlide.setPower(.5);
+			robot.motorSlide.setPower(.5);
 		}
-
 		if (gamepad1.x)
 		{
-			motorSlide.setPower(-.5);
+			robot.motorSlide.setPower(-.5);
 		}
+
+		if (gamepad1.left_bumper) // trigger servo settings
+		{
+			robot.leftServo.setPosition(0.0);
+		}
+		else
+		{
+			robot.leftServo.setPosition(0.5);
+		}
+		if (gamepad1.right_bumper)
+		{
+			robot.rightServo.setPosition(0.9);
+		}
+		else
+		{
+			robot.rightServo.setPosition(0.3);
+		}
+
 		/*
 		 * Send telemetry data back to driver station. Note that if we are using
 		 * a legacy NXT-compatible motor controller, then the getPower() method
@@ -145,10 +150,11 @@ public class Build1TankDrive extends OpMode {
 		 */
 
 		telemetry.addData("Text", "*** Robot Data***");
-		telemetry.addData("right front power", "pwr: " + String.format(Locale.US,"%.2f", motorFrontRight.getPower()));
-		telemetry.addData("left front power", "pwr: " + String.format(Locale.US,"%.2f", motorFrontLeft.getPower()));
-		telemetry.addData("right back power", "pwr: " + String.format(Locale.US,"%.2f", motorBackRight.getPower()));
-		telemetry.addData("left back power", "pwr: " + String.format(Locale.US,"%.2f", motorBackLeft.getPower()));
+		telemetry.addData("slide power", "pwr: " + String.format(Locale.US,"%.2f", robot.motorSlide.getPower()));
+		telemetry.addData("right front power", "pwr: " + String.format(Locale.US,"%.2f", robot.motorFrontRight.getPower()));
+		telemetry.addData("left front power", "pwr: " + String.format(Locale.US,"%.2f", robot.motorFrontLeft.getPower()));
+		telemetry.addData("right back power", "pwr: " + String.format(Locale.US,"%.2f", robot.motorBackRight.getPower()));
+		telemetry.addData("left back power", "pwr: " + String.format(Locale.US,"%.2f", robot.motorBackLeft.getPower()));
 	}
 
 	/*

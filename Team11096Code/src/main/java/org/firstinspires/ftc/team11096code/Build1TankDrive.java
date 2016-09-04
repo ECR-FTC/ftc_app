@@ -35,7 +35,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 package org.firstinspires.ftc.team11096code;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+//import com.qualcomm.robotcore.hardware.DcMotor;
 //import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
@@ -47,6 +48,9 @@ import static java.lang.Math.*;
  * <p>
  * Enables control of the robot via the gamepad
  */
+
+@TeleOp(name="Build1bot: Telop Tank", group="Build1bot")
+//@Disabled
 public class Build1TankDrive extends OpMode {
 	HardwareBuild1   robot        = new HardwareBuild1();          // Use Bild1's Hardware file
 

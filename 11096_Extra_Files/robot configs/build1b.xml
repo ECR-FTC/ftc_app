@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<Robot>
+    <MotorController name="Motor Controller OQL9" serialNumber="A104OQL9">
+        <Motor name="backleft" port="1" />
+        <Motor name="backright" port="2" />
+    </MotorController>
+    <MotorController name="Motor Controller VWSW" serialNumber="AL00VWSW">
+        <Motor name="frontright" port="1" />
+        <Motor name="frontleft" port="2" />
+    </MotorController>
+    <MotorController name="Motor Controller VW4L" serialNumber="AL00VW4L">
+        <Motor name="slideMotor" port="1" />
+    </MotorController>
+</Robot>

@@ -33,6 +33,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package org.firstinspires.ftc.team11096code;
 
 //import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import android.media.MediaPlayer;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
@@ -72,6 +74,13 @@ public class K9TankDriveECR extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         double left;
         double right;
+        final MediaPlayer mp; // instantiate the object name
+        // populate the MediaPlayer object. The resource should be in the res/raw folder
+        // and should be named "puppybarking.wav"
+        mp = MediaPlayer.create(hardwareMap.appContext, R.raw.puppybarking);
+        waitForStart();
+
+
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
@@ -112,6 +121,13 @@ public class K9TankDriveECR extends LinearOpMode {
             robot.arm.setPosition(armPosition);
             clawPosition = Range.clip(clawPosition, HardwareK9botECR.CLAW_MIN_RANGE, HardwareK9botECR.CLAW_MAX_RANGE);
             robot.claw.setPosition(clawPosition);
+
+            if (gamepad1.left_bumper){
+                mp.start(); // this plays the sound
+            }
+            if (gamepad1.right_bumper){
+                mp.start(); // this plays the sound
+            }
 
             // Send telemetry message to signify robot running;
             telemetry.addData("arm",   "%.2f", armPosition);

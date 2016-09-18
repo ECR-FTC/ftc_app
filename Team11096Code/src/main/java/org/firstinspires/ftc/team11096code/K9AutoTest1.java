@@ -25,7 +25,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
+//import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import java.lang.System;
 
 
@@ -34,7 +34,7 @@ import java.lang.System;
  */
 
 @Autonomous(name="K9: Auto Test 1", group="K9")
-@Disabled
+//@Disabled
 public class K9AutoTest1 extends LinearOpMode {
 
   final static float MOTOR_POWER = (float) 0.60;
@@ -47,25 +47,30 @@ public class K9AutoTest1 extends LinearOpMode {
   //final static int GO_ONE_TILE_STAR = 3375;
   final static float GYRO_ACCEL_CONST = 15;
   final static int HEADING_TOLERANCE = 3;
-  //final static double SERVO_BLUE_CHUTE_DROP = 0.4;
-  final static double SERVO_BLUE_CHUTE_HOLD = 1.0;
-  //final static double SERVO_RED_CHUTE_DROP = 1.0;
-  final static double SERVO_RED_CHUTE_HOLD = 0.4;
 
-  DcMotor motorPortRear, motorPortFront;
-  DcMotor motorStarboardRear, motorStarboardFront;
-  DcMotor motorScore;
   Servo servoPeople, servoRedChute, servoBlueChute;
-  ModernRoboticsI2cGyro gyroSensor;
+  //ModernRoboticsI2cGyro gyroSensor;
   TouchSensor portTouchSensor, starBoardTouchSensor;
   long startTime;
 
   @Override
   public void runOpMode() throws InterruptedException {
+      HardwareK9botECR   robot        = new HardwareK9botECR();          // Use a K9's hardware
 
-    String[] autoInstructions = {"wait","straight","wait","gyro", "straight",  "gyro","lift", "wait","lift","wait", "lift","touch","climber", "end"};
-    double[] autoParameter =    {    0 ,         2,     0,    45,        1.8,     45 ,  -0.25,      0, -0.25,     0,    0.3,   0.35,        1,     0};
-    double[] autoTimeLimit =    { 1000 ,      4000,  6000,  3000,       3600,    3000,    400,    400,   450,   400,    600,   4000,     2000,     0};
+      //String[] autoInstructions = {"wait","straight","wait","gyro", "straight",  "gyro","lift", "wait","lift","wait", "lift","touch","climber", "end"};
+    //double[] autoParameter =    {    0 ,         2,     0,    45,        1.8,     45 ,  -0.25,      0, -0.25,     0,    0.3,   0.35,        1,     0};
+    //double[] autoTimeLimit =    { 1000 ,      4000,  6000,  3000,       3600,    3000,    400,    400,   450,   400,    600,   4000,     2000,     0};
+     // telemetry.addData("Say", "Hello Driver -1");
+     // telemetry.update();
+     // wait(1000);
+
+      String[] autoInstructions = {"straight", "end"};
+      double[] autoParameter =    {         2,     0};
+      double[] autoTimeLimit =    {      4000,     0};
+
+      telemetry.addData("Say", "Hello Driver 0");
+      telemetry.update();
+      wait(1000);
 
       String currentInstruction;
       int instructionIndex = 0;
@@ -78,44 +83,24 @@ public class K9AutoTest1 extends LinearOpMode {
       int heading;
       float speedPort, speedStar;
       float portTarget;//, starTarget;
-      double peopleDeploy = 1;
-      double peopleStore  = 0;
+//      double peopleDeploy = 1;
+    //  double peopleStore  = 0;
 
       int ENCODER_PORT_RESET;
       int ENCODER_STAR_RESET;
 
+      //telemetry.addData("Say", "Hello Driver 1");
+      //telemetry.update();
+      wait(1000);
+
       // write some device information (connection info, name and type)
       // to the log file.
       hardwareMap.logDevices();
-
-      //  Use the hardwareMap to get the dc motors and servos by name.
-      motorPortFront = hardwareMap.dcMotor.get("motorPortFront");
-      motorPortRear = hardwareMap.dcMotor.get("motorPortRear");
-      motorStarboardFront = hardwareMap.dcMotor.get("motorStarFront");
-      motorStarboardRear = hardwareMap.dcMotor.get("motorStarRear");
-      motorScore = hardwareMap.dcMotor.get("motorScore");
-
-      //reverse the port motors
-      motorPortFront.setDirection(DcMotor.Direction.REVERSE);
-      motorPortRear.setDirection(DcMotor.Direction.REVERSE);
-
-      servoPeople = hardwareMap.servo.get("servo3");
-      servoRedChute = hardwareMap.servo.get("servoRedChute");
-      servoBlueChute = hardwareMap.servo.get("servoBlueChute");
-      portTouchSensor = hardwareMap.touchSensor.get("portTouch");
-      starBoardTouchSensor = hardwareMap.touchSensor.get("starBoardTouch");// touch sensor
-
-      // 2015: motor encoder mode - encoders only work in "RUN_WITHOUT_ENCODERS"
-      // 2016: check to see if RUN_USING_ENCODER works
-      //motorStarboardFront.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-      motorStarboardFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-      motorStarboardRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
       // get a reference to our GyroSensor object.
-      gyroSensor = (ModernRoboticsI2cGyro) hardwareMap.gyroSensor.get("gyroSensor");
+//      gyroSensor = (ModernRoboticsI2cGyro) hardwareMap.gyroSensor.get("gyroSensor");
 
       // calibrate the gyro.
-      gyroSensor.calibrate();
+//      gyroSensor.calibrate();
 
       // initialize the instructions
       numberOfInstructions = autoInstructions.length;
@@ -124,22 +109,27 @@ public class K9AutoTest1 extends LinearOpMode {
       currentTimeLimit = autoTimeLimit[0];
 
       // reset encoders
-      ENCODER_PORT_RESET = motorPortRear.getCurrentPosition();
-      ENCODER_STAR_RESET = motorStarboardFront.getCurrentPosition();
+      ENCODER_PORT_RESET = robot.leftMotor.getCurrentPosition();
+      ENCODER_STAR_RESET = robot.rightMotor.getCurrentPosition();
 
       // reset gyro heading.
-      gyroSensor.resetZAxisIntegrator();
+  //    gyroSensor.resetZAxisIntegrator();
 
-      servoBlueChute.setPosition(SERVO_BLUE_CHUTE_HOLD);
-      servoRedChute.setPosition(SERVO_RED_CHUTE_HOLD);
-      servoPeople.setPosition(peopleStore);
+     // servoBlueChute.setPosition(SERVO_BLUE_CHUTE_HOLD);
+      //servoRedChute.setPosition(SERVO_RED_CHUTE_HOLD);
+      //servoPeople.setPosition(peopleStore);
+
+  //    telemetry.addData("Say", "Hello Driver 2");
+    //  telemetry.update();
+      wait(1000);
+
       // wait for the start button to be pressed.
       waitForStart();
 
       // make sure the gyro is done calibrating
-      while (gyroSensor.isCalibrating())  {
+    /*  while (gyroSensor.isCalibrating())  {
           Thread.sleep(50);
-      }
+      }*/
       startTime = System.currentTimeMillis();
       while (opModeIsActive() && (!Terminate))  {
 
@@ -149,14 +139,14 @@ public class K9AutoTest1 extends LinearOpMode {
                   portTarget = (float)currentParameter * GO_ONE_TILE_PORT;
                   //starTarget = (float)currentParameter * GO_ONE_TILE_STAR;
 
-                  if ((Math.abs(motorPortRear.getCurrentPosition()-ENCODER_PORT_RESET) < Math.abs(portTarget) - ENCODER_TOLERANCE) )// ||
-                  //      (Math.abs(motorStarboardFront.getCurrentPosition()-ENCODER_STAR_RESET) < Math.abs(starTarget) - ENCODER_TOLERANCE))
+                  if ((Math.abs(robot.leftMotor.getCurrentPosition()-ENCODER_PORT_RESET) < Math.abs(portTarget) - ENCODER_TOLERANCE) )// ||
+                  //      (Math.abs(robot.rightMotor.getCurrentPosition()-ENCODER_STAR_RESET) < Math.abs(starTarget) - ENCODER_TOLERANCE))
                   // disabled starboard encoder since the two were not in sync
                   {
                       // speed is proportional to number of encoder steps away from target
-                      speedPort = MOTOR_POWER / ENCODER_ACCEL_CONST * (portTarget - (motorPortRear.getCurrentPosition()-ENCODER_PORT_RESET));
+                      speedPort = MOTOR_POWER / ENCODER_ACCEL_CONST * (portTarget - (robot.leftMotor.getCurrentPosition()-ENCODER_PORT_RESET));
                       speedStar = speedPort;
-                      //speedStar = MOTOR_POWER / ENCODER_ACCEL_CONST * (starTarget - (motorStarboardFront.getCurrentPosition()-ENCODER_STAR_RESET));
+                      //speedStar = MOTOR_POWER / ENCODER_ACCEL_CONST * (starTarget - (robot.rightMotor.getCurrentPosition()-ENCODER_STAR_RESET));
 
                       // don't go faster than SPEED_NOMINAL
                       speedPort = Math.signum(speedPort) * Math.min(Math.abs(speedPort), MOTOR_POWER);
@@ -167,20 +157,18 @@ public class K9AutoTest1 extends LinearOpMode {
                       speedStar = Math.signum(speedStar) * Math.max(Math.abs(speedStar), SPEED_MIN);
 
                       // set the motor speeds
-                      motorStarboardRear.setPower(speedStar);
-                      motorStarboardFront.setPower(speedStar);
-                      motorPortRear.setPower(speedPort);
-                      motorPortFront.setPower(speedPort);
+                      robot.leftMotor.setPower(speedStar);
+                      robot.rightMotor.setPower(speedPort);
                   }
                   else{
-                      motorStarboardFront.setPower(0.0);
-                      motorStarboardRear.setPower(0.0);
-                      motorPortFront.setPower(0.0);
-                      motorPortRear.setPower(0.0);
+                      robot.rightMotor.setPower(0.0);
+                      //motorStarboardRear.setPower(0.0);
+                      robot.leftMotor.setPower(0.0);
+                      //motorPortRear.setPower(0.0);
                       doNextInstruction=true;
                   }
                   break;
-              case "gyro":      //  gyro turn
+/*              case "gyro":      //  gyro turn
                   telemetry.addData("Text", "Gyro");
                   heading = gyroSensor.getIntegratedZValue(); // getIntegratedZValue() works for any turn angle
                   if ( (Math.abs(heading) < (Math.abs(currentParameter)-HEADING_TOLERANCE)) && (elapsedTime() < currentTimeLimit))
@@ -194,21 +182,21 @@ public class K9AutoTest1 extends LinearOpMode {
                       speedPort = Math.signum(speedPort) * Math.max(Math.abs(speedPort), SPEED_MIN_TURN);
 
                       // set the speeds
-                      motorStarboardFront.setPower(-speedPort);
-                      motorStarboardRear.setPower(-speedPort);
-                      motorPortFront.setPower(speedPort);
-                      motorPortRear.setPower(speedPort);
+                      robot.rightMotor.setPower(-speedPort);
+                      //motorStarboardRear.setPower(-speedPort);
+                      robot.leftMotor.setPower(speedPort);
+                      //motorPortRear.setPower(speedPort);
                   }
                   else{
-                      motorStarboardFront.setPower(0.0);
-                      motorStarboardRear.setPower(0.0);
-                      motorPortFront.setPower(0.0);
-                      motorPortRear.setPower(0.0);
+                      robot.rightMotor.setPower(0.0);
+                      //motorStarboardRear.setPower(0.0);
+                      robot.leftMotor.setPower(0.0);
+                     // motorPortRear.setPower(0.0);
                       Thread.sleep(50);
                       doNextInstruction = true;
                   }
                   break;
-              case "touch":	   //  go straight using touch sensor
+  */            case "touch":	   //  go straight using touch sensor
                   telemetry.addData("Text", "Touch");
                   if(portTouchSensor.isPressed () || starBoardTouchSensor.isPressed()) {
                       driveStop();
@@ -217,10 +205,10 @@ public class K9AutoTest1 extends LinearOpMode {
                   }
                   else {
                       //drive
-                      motorStarboardFront.setPower(currentParameter*MOTOR_POWER);
-                      motorStarboardRear.setPower(currentParameter*MOTOR_POWER);
-                      motorPortFront.setPower(currentParameter*MOTOR_POWER);
-                      motorPortRear.setPower(currentParameter*MOTOR_POWER);
+                      robot.rightMotor.setPower(currentParameter*MOTOR_POWER);
+                      //motorStarboardRear.setPower(currentParameter*MOTOR_POWER);
+                      robot.leftMotor.setPower(currentParameter*MOTOR_POWER);
+                      //motorPortRear.setPower(currentParameter*MOTOR_POWER);
                   }
                   if(elapsedTime()>=currentTimeLimit)
                   {
@@ -228,7 +216,7 @@ public class K9AutoTest1 extends LinearOpMode {
                       doNextInstruction=true;
                   }
                   break;
-              case "lift":      //  raise and lower the scoop
+      /*        case "lift":      //  raise and lower the scoop
                   motorScore.setPower(currentParameter);
                   if(elapsedTime()>=currentTimeLimit)
                   {
@@ -241,19 +229,19 @@ public class K9AutoTest1 extends LinearOpMode {
                   servoPeople.setPosition(peopleDeploy);
                   Thread.sleep(1050); // give time to stop
                   doNextInstruction = true;
-                  break;
+        */  //        break;
               case "resetEncoder":      //  reset encoder
                   telemetry.addData("Text", "Reset Encoder");
-                  ENCODER_PORT_RESET = motorPortRear.getCurrentPosition();
-                  ENCODER_STAR_RESET = motorStarboardFront.getCurrentPosition();
+                  ENCODER_PORT_RESET = robot.leftMotor.getCurrentPosition();
+                  ENCODER_STAR_RESET = robot.rightMotor.getCurrentPosition();
                   doNextInstruction = true;
                   break;
               case "timeGo":      //  reset encoder
                   telemetry.addData("Text", "Time Go");
-                  motorStarboardRear.setPower(currentParameter);
-                  motorStarboardFront.setPower(currentParameter);
-                  motorPortRear.setPower(currentParameter);
-                  motorPortFront.setPower(currentParameter);
+                  //motorSt.setPower(currentParameter);
+                  robot.rightMotor.setPower(currentParameter);
+                  robot.leftMotor.setPower(currentParameter);
+                  //robot.leftMotor.setPower(currentParameter);
                   if(elapsedTime()>=currentTimeLimit)
                   {
                       driveStop();
@@ -291,19 +279,19 @@ public class K9AutoTest1 extends LinearOpMode {
                   currentInstruction = autoInstructions[instructionIndex];
                   currentTimeLimit = autoTimeLimit[instructionIndex];
                   // reset encoders
-                  ENCODER_PORT_RESET = motorPortRear.getCurrentPosition();
-                  ENCODER_STAR_RESET = motorStarboardFront.getCurrentPosition();
+                  ENCODER_PORT_RESET = robot.leftMotor.getCurrentPosition();
+                  ENCODER_STAR_RESET = robot.rightMotor.getCurrentPosition();
                   // reset gyro heading. UNTESTED
-                  gyroSensor.resetZAxisIntegrator();
+                 // gyroSensor.resetZAxisIntegrator();
                   // reset start time
                   startTime = System.currentTimeMillis();
               }
               doNextInstruction = false; // reset doNextInstruction for the next step
           }
 
-          telemetry.addData("gyro rotation ", gyroSensor.getIntegratedZValue());
-          telemetry.addData("Port encoder ", motorPortRear.getCurrentPosition()-ENCODER_PORT_RESET);
-          telemetry.addData("Star encoder ", motorStarboardFront.getCurrentPosition() - ENCODER_STAR_RESET);
+         // telemetry.addData("gyro rotation ", gyroSensor.getIntegratedZValue());
+          telemetry.addData("Port encoder ", robot.leftMotor.getCurrentPosition()-ENCODER_PORT_RESET);
+          telemetry.addData("Star encoder ", robot.rightMotor.getCurrentPosition() - ENCODER_STAR_RESET);
           telemetry.update();
           // may need something here // waitOneFullHardwareCycle();
       }
@@ -311,10 +299,10 @@ public class K9AutoTest1 extends LinearOpMode {
 
     private void driveStop() {
 
-        motorPortFront.setPower(0);
-        motorPortRear.setPower(0);
-        motorStarboardFront.setPower(0);
-        motorStarboardRear.setPower(0);
+        //robot.leftMotor.setPower(0);
+        //motorPortRear.setPower(0);
+        //robot.rightMotor.setPower(0);
+        //motorStarboardRear.setPower(0);
     }
 
     private long elapsedTime() {

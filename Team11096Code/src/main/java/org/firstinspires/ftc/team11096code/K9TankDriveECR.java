@@ -38,6 +38,14 @@ import android.media.MediaPlayer;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.hardware.TouchSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.GyroSensor;
+import com.qualcomm.robotcore.hardware.TouchSensor;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 
 //import org.firstinspires.ftc.robotcontroller.external.samples.HardwareK9bot;
 //import org.firstinspires.ftc.team11096code.HardwareK9botECR;
@@ -69,6 +77,12 @@ public class K9TankDriveECR extends LinearOpMode {
     double          clawPosition    = HardwareK9botECR.CLAW_HOME;      // Servo safe position
     final double    CLAW_SPEED      = 0.01;                            // sets rate to move servo
     final double    ARM_SPEED       = 0.01;                            // sets rate to move servo
+
+
+
+
+
+
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -103,7 +117,11 @@ public class K9TankDriveECR extends LinearOpMode {
             right = -gamepad1.right_stick_y/4.0;
             robot.leftMotor.setPower(left);
             robot.rightMotor.setPower(right);
-
+            if (robot.touchR.isPressed()){
+                robot.leftMotor.setPower(0);
+                robot.rightMotor.setPower(0);
+            }
+telemetry.addData("isPressed",String.valueOf(robot.touchR.isPressed()));
             // Use gamepad Y & A raise and lower the arm
             if (gamepad1.a)
                 armPosition += ARM_SPEED;
@@ -111,10 +129,10 @@ public class K9TankDriveECR extends LinearOpMode {
                 armPosition -= ARM_SPEED;
 
             // Use gamepad X & B to open and close the claw
-            if (gamepad1.x)
-                clawPosition += CLAW_SPEED;
-            else if (gamepad1.b)
-                clawPosition -= CLAW_SPEED;
+            //if (gamepad1.x)
+            //  clawPosition += CLAW_SPEED;
+            //else if (gamepad1.b)
+            //  clawPosition -= CLAW_SPEED;
 
             // Move both servos to new position.
             armPosition  = Range.clip(armPosition, HardwareK9botECR.ARM_MIN_RANGE, HardwareK9botECR.ARM_MAX_RANGE);

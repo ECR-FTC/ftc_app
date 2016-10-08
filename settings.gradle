@@ -1,4 +1,7 @@
 include ':FtcRobotController'
 include ':TeamCode'
+<<<<<<< HEAD
 include ':Team11096Code'
 include ':K9Code'
+=======
+>>>>>>> refs/remotes/ftctechnh/beta

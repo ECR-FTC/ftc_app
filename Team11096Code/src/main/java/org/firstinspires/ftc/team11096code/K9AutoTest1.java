@@ -62,7 +62,7 @@ public class K9AutoTest1 extends LinearOpMode {
     //double[] autoTimeLimit =    { 1000 ,      4000,  6000,  3000,       3600,    3000,    400,    400,   450,   400,    600,   4000,     2000,     0};
      // telemetry.addData("Say", "Hello Driver -1");
      // telemetry.update();
-     // wait(1000);
+     // Thread.sleep(1000);
 
       String[] autoInstructions = {"straight", "end"};
       double[] autoParameter =    {         2,     0};
@@ -70,7 +70,7 @@ public class K9AutoTest1 extends LinearOpMode {
 
       telemetry.addData("Say", "Hello Driver 0");
       telemetry.update();
-      wait(1000);
+      Thread.sleep(1000);
 
       String currentInstruction;
       int instructionIndex = 0;
@@ -89,9 +89,9 @@ public class K9AutoTest1 extends LinearOpMode {
       int ENCODER_PORT_RESET;
       int ENCODER_STAR_RESET;
 
-      //telemetry.addData("Say", "Hello Driver 1");
-      //telemetry.update();
-      wait(1000);
+      telemetry.addData("Say", "Hello Driver 1");
+      telemetry.update();
+      Thread.sleep(1000);
 
       // write some device information (connection info, name and type)
       // to the log file.
@@ -108,9 +108,17 @@ public class K9AutoTest1 extends LinearOpMode {
       currentParameter = autoParameter[0];
       currentTimeLimit = autoTimeLimit[0];
 
+      telemetry.addData("Say", "Hello Driver 1.5");
+      telemetry.update();
+      Thread.sleep(1000);
+
       // reset encoders
       ENCODER_PORT_RESET = robot.leftMotor.getCurrentPosition();
       ENCODER_STAR_RESET = robot.rightMotor.getCurrentPosition();
+
+      telemetry.addData("Say", "Hello Driver 1.75");
+      telemetry.update();
+      Thread.sleep(1000);
 
       // reset gyro heading.
   //    gyroSensor.resetZAxisIntegrator();
@@ -119,9 +127,9 @@ public class K9AutoTest1 extends LinearOpMode {
       //servoRedChute.setPosition(SERVO_RED_CHUTE_HOLD);
       //servoPeople.setPosition(peopleStore);
 
-  //    telemetry.addData("Say", "Hello Driver 2");
-    //  telemetry.update();
-      wait(1000);
+      telemetry.addData("Say", "Hello Driver 2");
+      telemetry.update();
+      Thread.sleep(1000);
 
       // wait for the start button to be pressed.
       waitForStart();

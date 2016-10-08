@@ -2,7 +2,7 @@
 // adapt 2015-2016 auto code to the K9 robot.
 // 
 
-package org.firstinspires.ftc.team11096code;
+package org.firstinspires.ftc.k9code;
 
 /*
 instructions                           parameter

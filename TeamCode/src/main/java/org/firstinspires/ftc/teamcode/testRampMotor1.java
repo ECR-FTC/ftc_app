@@ -29,16 +29,18 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
-package org.firstinspires.ftc.team11096code;
+package org.firstinspires.ftc.teamcode;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.provider.Settings;
 import android.view.View;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.ftcrobotcontroller.R;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
@@ -56,13 +58,16 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
-@TeleOp(name = "testTouch", group = "Sensor")
-//@Disabled
-public class testTouch1 extends LinearOpMode {
+@TeleOp(name = "testRamp", group = "Sensor")
+@Disabled
+public class testRampMotor1 extends LinearOpMode {
 
   TouchSensor sensorTouch;   // Hardware Device Object
   DcMotor motorOne ;
-
+  double speed = 0.0;
+  double maxSpeed = 1.0;
+  long startTime;
+  double endTime = 5.0;
   @Override
   public void runOpMode() throws InterruptedException {
 
@@ -81,7 +86,9 @@ public class testTouch1 extends LinearOpMode {
     sensorTouch = hardwareMap.touchSensor.get("sensorTouch");
     motorOne = hardwareMap.dcMotor.get("motor1");
     // Set the LED in the beginning
+    motorOne.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
+    startTime  = System.currentTimeMillis();
     // wait for the start button to be pressed.
     waitForStart();
 
@@ -89,29 +96,19 @@ public class testTouch1 extends LinearOpMode {
     // Note we use opModeIsActive() as our loop condition because it is an interruptible method.
     while (opModeIsActive()) {
 
-      // check the status of the x button on either gamepad
-      if ((sensorTouch.isPressed() == true))
+      if(elapsedTime() < endTime)
       {
-        motorOne.setPower(0.0);
-        telemetry.addData("I am touching a wall:", sensorTouch.getValue());
+        speed = (maxSpeed / endTime) * elapsedTime();
       }
-      else
-      {
-        motorOne.setPower(0.5);
-      }
-      // send the info back to driver station using telemetry function.
-
-      // change the background color to match the color detected by the RGB sensor.
-      // pass a reference to the hue, saturation, and value array as an argument
-      // to the HSVToColor method.
-      relativeLayout.post(new Runnable() {
-        public void run() {
-          relativeLayout.setBackgroundColor(Color.HSVToColor(0xff, values));
-        }
-      });
-
+      motorOne.setPower(speed);
+      telemetry.addData("speed:",speed);
+      telemetry.addData("time:",elapsedTime());
       telemetry.update();
       idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
     }
+  }
+  private long elapsedTime() {
+
+    return System.currentTimeMillis() - startTime;
   }
 }

@@ -34,6 +34,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package org.firstinspires.ftc.team11096code;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //import com.qualcomm.robotcore.hardware.DcMotor;
@@ -50,7 +51,7 @@ import static java.lang.Math.*;
  */
 
 @TeleOp(name="Build1bot: Telop Tank", group="Build1bot")
-//@Disabled
+@Disabled
 public class Build1TankDrive extends OpMode {
 	HardwareBuild1   robot        = new HardwareBuild1();          // Use Bild1's Hardware file
 

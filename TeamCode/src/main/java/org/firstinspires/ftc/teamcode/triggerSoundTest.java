@@ -1,16 +1,17 @@
 // this OpMode makes a puppy barking sound when you press the "a" button on the gamepad.
 // you have to create the sound resource by inserting a sound file into the src/main/res/raw folder
 
-package org.firstinspires.ftc.team11096code;
+package org.firstinspires.ftc.teamcode;
 
 //import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //import com.qualcomm.robotcore.util.Range;
 import android.media.MediaPlayer; // include this class to play a sound file on the robot phone
 
-@TeleOp(name="K9bot: Telop Bark", group="K9bot")
-//@Disabled
+@TeleOp(name="Telop Bark", group="Test")
+@Disabled
 public class triggerSoundTest extends LinearOpMode {
 
     @Override

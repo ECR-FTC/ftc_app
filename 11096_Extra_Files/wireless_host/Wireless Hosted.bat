@@ -10,7 +10,7 @@ REM *****  For more help, go to www.YouTube.com/user/GEARSinc/playlists
 REM
 adb kill-server
 netsh wlan stop hostednetwork
-echo --  Starting a Hosted Network called: AndroidDev
+echo --  Starting a Hosted Network called: Android11096Dev
 netsh wlan set hostednetwork mode=allow SSID=Android11096Dev key=ECR11096
 netsh wlan start hostednetwork
 echo --  Make sure the phone is connected to the computer via USB
@@ -19,7 +19,7 @@ adb usb
 Timeout 10
 adb tcpip 5555
 echo --
-echo --  Now connect your phone to the "AndroidDev" network.
+echo --  Now connect your phone to the "Android11096Dev" network.
 echo --  Use Settings-WiFi link to get the phone's NEW IP address
 set /p phoneip= --  Enter the IP address here:  
 adb connect %phoneip%

@@ -77,10 +77,11 @@ public class testTouch1 extends LinearOpMode {
     // color of the Robot Controller app to match the hue detected by the RGB sensor.
     final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(R.id.RelativeLayout);
 
-
     // get a reference to our ColorSensor object.
     sensorTouch = hardwareMap.touchSensor.get("sensorTouch");
     motorOne = hardwareMap.dcMotor.get("motor1");
+    motorOne.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
     // Set the LED in the beginning
     motorOne.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     // wait for the start button to be pressed.
@@ -110,6 +111,8 @@ public class testTouch1 extends LinearOpMode {
           relativeLayout.setBackgroundColor(Color.HSVToColor(0xff, values));
         }
       });
+
+      telemetry.addData("encoder:", "%d",motorOne.getCurrentPosition());
 
       telemetry.update();
       idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop

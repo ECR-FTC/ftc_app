@@ -28,7 +28,6 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 //import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import java.lang.System;
 
-
 /*
  * This is autonomous LinearOpMode
  */
@@ -50,7 +49,7 @@ public class K9AutoTest1 extends LinearOpMode {
 
   Servo servoPeople, servoRedChute, servoBlueChute;
   //ModernRoboticsI2cGyro gyroSensor;
-  TouchSensor portTouchSensor, starBoardTouchSensor;
+  //TouchSensor portTouchSensor, starBoardTouchSensor;
   long startTime;
 
   @Override
@@ -206,7 +205,8 @@ public class K9AutoTest1 extends LinearOpMode {
                   break;
   */            case "touch":	   //  go straight using touch sensor
                   telemetry.addData("Text", "Touch");
-                  if(portTouchSensor.isPressed () || starBoardTouchSensor.isPressed()) {
+                  //if(portTouchSensor.isPressed () || starBoardTouchSensor.isPressed()) {
+                  if(robot.touchR.isPressed ()) {
                       driveStop();
                       Thread.sleep(200); // give time to stop motors
                       doNextInstruction = true;

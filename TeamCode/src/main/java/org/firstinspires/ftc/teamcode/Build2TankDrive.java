@@ -53,7 +53,7 @@ import static java.lang.Math.max;
  * Enables control of the robot via the gamepad
  */
 
-@TeleOp(name = "Build2bot: Telop Tank", group = "Build1bot")
+@TeleOp(name = "Build2bot: Telop Tank. settings: John", group = "Build1bot")
 //@Disabled
 public class Build2TankDrive extends OpMode {
     HardwareBuild2 robot;
@@ -80,29 +80,10 @@ public class Build2TankDrive extends OpMode {
         }
 
 		/*
-         * Use the hardwareMap to get the dc motors and servos by name. Note
-		 * that the names of the devices must match the names used when you
-		 * configured your robot and created the configuration file.
-		 */
-
-		/*
-         * For the demo Tetrix K9 bot we assume the following,
-		 *   There are two motors "motor_1" and "motor_2"
-		 *   "motor_1" is on the right side of the bot.
-		 *   "motor_2" is on the left side of the bot.
-		 *
-		 * We also assume that there are two servos "servo_1" and "servo_6"
-		 *    "servo_1" controls the arm joint of the manipulator.
-		 *    "servo_6" controls the claw joint of the manipulator.
 		 */
 
     }
 
-    /*
-     * This method will be called repeatedly in a loop
-     *
-     * @see com.qualcomm.robotcore.eventloop.opmode.OpMode#run()
-     */
     @Override
     public void loop() {
 //		telemetry.addData("Say", "Hello World! -1");
@@ -111,16 +92,15 @@ public class Build2TankDrive extends OpMode {
         teleDrive(gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.right_stick_y);
 
 
-		if (gamepad1.a) // motor for slide settings
-		{
-			robot.motorShoot.setPower(-.20);
-		}
-        else if (gamepad1.b)
+        if (gamepad2.dpad_down) // take off for comp.
         {
-            robot.motorShoot.setPower(0);
+            robot.motorShoot.setPower(0.0);
         }
-
-		if (gamepad1.left_bumper) // trigger servo settings
+        if (gamepad2.dpad_up)
+        {
+            robot.motorShoot.setPower(.30);
+        }
+		if (gamepad2.left_bumper) // trigger servo settings
 		{
 			robot.leftServo.setPosition(0.9);
 		}
@@ -128,7 +108,7 @@ public class Build2TankDrive extends OpMode {
 		{
 			robot.leftServo.setPosition(0.3);
 		}
-		if (gamepad1.right_bumper)
+		if (gamepad2.right_bumper)
 		{
 			robot.rightServo.setPosition(0.1);
 		}
@@ -136,7 +116,22 @@ public class Build2TankDrive extends OpMode {
 		{
 			robot.rightServo.setPosition(0.7);
 		}
-
+        if (gamepad2.a)
+        {
+            robot.fireServo.setPosition(0.5);
+        }
+        else
+        {
+            robot.fireServo.setPosition(0.0);
+        }
+        if (gamepad2.y)
+        {
+            robot.loadServo.setPosition(0.7);
+        }
+        if (gamepad2.b)
+        {
+            robot.loadServo.setPosition(0.0);
+        }
 		/*
 		 * Send telemetry data back to driver station. Note that if we are using
 		 * a legacy NXT-compatible motor controller, then the getPower() method

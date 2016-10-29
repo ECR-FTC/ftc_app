@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 /**
  * Created by ECR FTC on 10/16/2016.
+ * this object contains the motor power set points for a four-motor robot
  */
 public class MotorPower {
 

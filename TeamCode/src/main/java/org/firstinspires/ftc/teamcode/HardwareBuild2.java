@@ -18,19 +18,8 @@ import org.firstinspires.ftc.robotcontroller.external.samples.SensorMRGyro;
  * This is NOT an opmode.
  *
  * This class can be used to define all the specific hardware for a single robot.
- * In this case that robot is a K9 robot.
+ * In this case that robot is the build2 robot.
  *
- * This hardware class assumes the following device names have been configured on the robot:
- * Note:  All names are lower case and some have single spaces between words.
- *
- * Motor channel:  Left  drive motor:        "left motor"
- * Motor channel:  Right drive motor:        "right motor"
- * Servo channel:  Servo to raise/lower arm: "arm"
- * Servo channel:  Servo to open/close claw: "claw"
- *
- * Note: the configuration of the servos is such that:
- *   As the arm servo approaches 0, the arm position moves up (away from the floor).
- *   As the claw servo approaches 0, the claw opens up (drops the game element).
  */
 public class HardwareBuild2
 {
@@ -43,6 +32,8 @@ public class HardwareBuild2
     DcMotor motorShoot;
     Servo leftServo;
     Servo rightServo;
+    Servo loadServo;
+    Servo fireServo;
     ColorSensor color;
     ModernRoboticsI2cGyro gyro;   // Hardware Device Object
     OpticalDistanceSensor ODS;
@@ -72,6 +63,8 @@ public class HardwareBuild2
 
         leftServo = hwMap.servo.get("servoLeft");
         rightServo = hwMap.servo.get("servoRight");
+        fireServo = hwMap.servo.get("servoFire");
+        loadServo = hwMap.servo.get("servoLoad");
 
         gyro = (ModernRoboticsI2cGyro)hwMap.gyroSensor.get("sensorGyro");
         color = hwMap.colorSensor.get("sensorColor");

@@ -34,13 +34,22 @@ public class HardwareBuild2
     Servo rightServo;
     Servo loadServo;
     Servo fireServo;
-    ColorSensor color;
+    ColorSensor colorR, colorL;
     ModernRoboticsI2cGyro gyro;   // Hardware Device Object
     OpticalDistanceSensor ODS;
     TouchSensor touch;
     /* Local OpMode members. */
     HardwareMap hwMap  = null;
     private ElapsedTime period  = new ElapsedTime();
+
+    double leftPress = .9;
+    double rightPress = .1;
+    double leftStore = .3;
+    double rightStore = .7;
+    double fireGo = .5;
+    double fireStay = .0;
+    double loadClosed = .7;
+    double loadOpen = .0;
 
     /* Constructor */
     public HardwareBuild2() {
@@ -58,8 +67,8 @@ public class HardwareBuild2
         motorShoot = hwMap.dcMotor.get("shootMotor");
 
 
-        motorFrontLeft.setDirection(DcMotor.Direction.REVERSE);
-        motorBackLeft.setDirection(DcMotor.Direction.REVERSE);
+        motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
+        motorBackRight.setDirection(DcMotor.Direction.REVERSE);
 
         leftServo = hwMap.servo.get("servoLeft");
         rightServo = hwMap.servo.get("servoRight");
@@ -67,7 +76,8 @@ public class HardwareBuild2
         loadServo = hwMap.servo.get("servoLoad");
 
         gyro = (ModernRoboticsI2cGyro)hwMap.gyroSensor.get("sensorGyro");
-        color = hwMap.colorSensor.get("sensorColor");
+        colorR = hwMap.colorSensor.get("sensorColorRight");
+        colorL = hwMap.colorSensor.get("sensorColorLeft");
         ODS = hwMap.opticalDistanceSensor.get("sensorODS");
         touch = hwMap.touchSensor.get("sensorTouch");
 
@@ -94,7 +104,8 @@ public class HardwareBuild2
         }
 
         */
-        color.enableLed(false);
+        colorL.enableLed(false);
+        colorR.enableLed(false);
     }
 
     /***

@@ -102,19 +102,19 @@ public class Build2TankDrive extends OpMode {
         }
 		if (gamepad2.left_bumper) // trigger servo settings
 		{
-			robot.leftServo.setPosition(0.9);
+			robot.leftServo.setPosition(robot.leftPress);
 		}
 		else
 		{
-			robot.leftServo.setPosition(0.3);
+			robot.leftServo.setPosition(robot.leftStore);
 		}
 		if (gamepad2.right_bumper)
 		{
-			robot.rightServo.setPosition(0.1);
+			robot.rightServo.setPosition(robot.rightPress);
 		}
 		else
 		{
-			robot.rightServo.setPosition(0.7);
+			robot.rightServo.setPosition(robot.rightStore);
 		}
         if (gamepad2.a)
         {

@@ -1,37 +1,14 @@
 /*
-Copyright (c) 2016 Robert Atkinson
+East Cobb Robotics 11096
+10/29/2016
 
-All rights reserved.
+this code is used for developing autonomous functions for the competition robot
 
-Redistribution and use in source and binary forms, with or without modification,
-are permitted (subject to the limitations in the disclaimer below) provided that
-the following conditions are met:
 
-Redistributions of source code must retain the above copyright notice, this list
-of conditions and the following disclaimer.
-
-Redistributions in binary form must reproduce the above copyright notice, this
-list of conditions and the following disclaimer in the documentation and/or
-other materials provided with the distribution.
-
-Neither the name of Robert Atkinson nor the names of his contributors may be used to
-endorse or promote products derived from this software without specific prior
-written permission.
-
-NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
-LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESSFOR A PARTICULAR PURPOSE
-ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
-TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.firstinspires.ftc.teamcode;
 
+//these are all the imports that we use to allow us to use all of the sensors and motors
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -39,36 +16,32 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
-
-/**
- * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
- * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
- * of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
- * class is instantiated on the Robot Controller and executed.
- *
- * This particular OpMode just executes a basic Tank Drive Teleop for a PushBot
- * It includes all the skeletal structure that all linear OpModes contain.
- *
- * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
- */
+import static java.lang.Math.rint;
 
 @Autonomous(name="Build2Auto1b", group="Linear Opmode")  // @Autonomous(...) is the other common choice
 //@Disabled
 public class Build2Auto1b extends LinearOpMode {
-
         HardwareBuild2 robot;
 
-        /* Declare OpMode members. */
         private ElapsedTime runtime = new ElapsedTime();
-        // DcMotor leftMotor = null;
-        // DcMotor rightMotor = null;
+    // here we declare 2 things, the hardware map, and an elapsed time funtion
 
         @Override
         public void runOpMode() throws InterruptedException {
+            robot = new HardwareBuild2();          // Use Build2's Hardware file
+
+            try
+            {
+                robot.init(hardwareMap);
+            }
+            catch (InterruptedException e) {
+            }
+            // we call the hardware map here
+
             telemetry.addData("Status", "Initialized");
             telemetry.update();
 
@@ -76,77 +49,169 @@ public class Build2Auto1b extends LinearOpMode {
          * to 'get' must correspond to the names assigned during the robot configuration
          * step (using the FTC Robot Controller app on the phone).
          */
-            // leftMotor  = hardwareMap.dcMotor.get("left motor");
-            // rightMotor = hardwareMap.dcMotor.get("right motor");
 
-            // eg: Set the drive motor directions:
-            // "Reverse" the motor that runs backwards when connected directly to the battery
-            // leftMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-            // rightMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
+            robot.rightServo.setPosition(.7);
+            robot.leftServo.setPosition(.3);
+            waitForStart();   // we set our servos in init and wait for start (the driver hitting play)
 
-            // Wait for the game to start (driver presses PLAY)
-            waitForStart();
-            runtime.reset();
+            //this is a sample autonomous where the robot shoots 2 balls and pushes both beacons.
+            // this is a blue code
+             autoFire(true); // spin up motor and shoot 1st ball
+             autoFire(false); // shoot second ball
+             autoDrive(-1,0,0,1500);
+             autoDrive(0,0,1,1500);
+             autoDrive(-1,0,0,1500);
+             autoDrive(0,0,-1,1500); // rotate parallel to wall
+             autoDrive(0,(float)0.5,0,1000); // push into wall
+             autoGoToWhiteLine(1000);
+             autoBeacon();
+             autoGoToWhiteLine(2000);
+             autoBeacon();
 
-            // run until the end of the match (driver presses STOP)
-            while (opModeIsActive()) {
-                telemetry.addData("Status", "Run Time: " + runtime.toString());
-                telemetry.update();
+//           idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
+        }
 
-                autoDrive(1,0,0, 1000);
+    // TODO: put in sideways drift: will need an argument to pick alliance color
+    // TODO: return false if we do not find a white line
+    //
+    public void autoGoToWhiteLine (double waitFor) // when this code is called, the robot goes to the white line and stops
+    {
+        runtime.reset(); // this is called allot, it resets 'runtime' to 0
 
-                robot.motorShoot.setPower(.35);
+        while((robot.ODS.getRawLightDetected() < 0.2) & (runtime.seconds() < waitFor) ) {
+            robot.motorBackRight.setPower(.2);
+            robot.motorBackLeft.setPower(.2);
+            robot.motorFrontLeft.setPower(.2);
+            robot.motorFrontRight.setPower(.2);
+            telemetry.addData("No white line:", robot.ODS.getRawLightDetected());
+            // if the robot doesn't see the line, and still has time, it goes forward.
+        }
 
-                // eg: Run wheels in tank mode (note: The joystick goes negative when pushed forwards)
-                // leftMotor.setPower(-gamepad1.left_stick_y);
-                // rightMotor.setPower(-gamepad1.right_stick_y);
+        driveMotorStop();
 
-                idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
+        telemetry.addData("I see the line:", robot.ODS.getRawLightDetected());
+        telemetry.update();
+        // if the robot does see the line, it stops.
+
+    }
+
+    // TODO: write with argument that lets you pick red or blue function
+    // TODO: adjust so the robot only pushes a button if it sees a color. Return false
+    //       if neither color is identified
+    public void autoBeacon () { //this will (when called) tell the robot to push the beacon
+        // our color sensor is in front of the servo
+
+        // if we see our color (red) we drive forward, if we don't, we do nothing
+        if ((robot.colorR.red() > 2)) {
+            while ((runtime.seconds() < .5)) {
+                robot.motorBackRight.setPower(-.2);
+                robot.motorBackLeft.setPower(-.2);
+                robot.motorFrontLeft.setPower(-.2);
+                robot.motorFrontRight.setPower(-.2);
+            }
+            driveMotorStop();
+        runtime.reset();
+        }// once we are positioned, we press the beacon
+        while ((runtime.seconds() < 0.5)) {
+            telemetry.update();
+            robot.rightServo.setPosition(0.1);
+        }
+        robot.rightServo.setPosition(.7);
+    }
+
+    // autoFire(): this code fires the particles
+    // input arguments:
+    //      motorSpinUp: boolean, set to true to spin up the motor from stop
+    //          set false to shoot without spinning up the motor
+    // output arguments: none
+    // TODO: need an argument to conditionally turn off the motor when done.
+
+    public void autoFire(boolean motorSpinUp) {
+        if (motorSpinUp) {//spins up the motor at full speed for 2 seconds ro make it faster.
+            runtime.reset();// unless we tell it not to (eg: autofire(false);)
+            while ((runtime.seconds() < 1.90)) {
+                robot.motorShoot.setPower(1.00);
             }
         }
+        robot.motorShoot.setPower(.30);//this sets the motor to firing speed
+        runtime.reset();
+        while ((runtime.seconds() < 0.50)) {
+            robot.fireServo.setPosition(0.7);// and we fire it here
+        }
+        runtime.reset();
+        while ((runtime.seconds()) < 0.50) {
+            robot.fireServo.setPosition(0.0);// the servo is retracted after firing here.
+        }
+    }
+
     public void autoDrive(float foward, float left, float turn, long waitFor){
         telemetry.addData("Say", "teledrive! 0");
         telemetry.update();
-
+        // this code runs the robot in all directions using a combination of forward, left, and turn
+        // combined with a time. It runs off of time.
         float a, b, c;
-        long  d;
 //		float norm;
         // holonomic tank drive
 
         a = foward;
         b = left;
-        c = turn;
-        d = waitFor;
+        c = turn;//change variables into smaller ones
 
-        MotorPower returnMotorPower;
-        returnMotorPower = motorScale(a - b - c, a + b - c, a + b + c, a - b+ c, (float) 1.0);
+        MotorPower returnMotorPower; // we call another program here to determine our motor powwers for us
+        returnMotorPower = motorScale(a - b - c, a + b - c, a + b + c, a - b + c, (float) 1.0);
 
-        // clip the right/left values so that the values never exceed +/- 1
         // write the values to the motors
-        robot.motorBackRight.setPower(returnMotorPower.getMotorBackLeft());// me have muches goods grammers yes
-        robot.motorBackLeft.setPower(returnMotorPower.getMotorBackRight());//srrey mssi clarke
+        robot.motorBackRight.setPower(returnMotorPower.getMotorBackRight());
+        robot.motorBackLeft.setPower(returnMotorPower.getMotorBackLeft());
         robot.motorFrontLeft.setPower(returnMotorPower.getMotorFrontLeft());
-        robot.motorFrontRight.setPower(returnMotorPower.getMotorFrontRight()); // note: reversal of BL and BR is purpassful
-        runtime.reset();
+        robot.motorFrontRight.setPower(returnMotorPower.getMotorFrontRight());
+        runtime.reset();  // then we set our motor powers
         while ((runtime.seconds() < waitFor/1000.0)) {
+            telemetry.update();
+        }
+
+        driveMotorStop();
+        runtime.reset();
+        while ((runtime.seconds() < 0.1)) {
             telemetry.update();
         }
 
     }
 
+    public void driveMotorStop()
+    { // this stops our motors to make it easier to write (one line instead of 4)
+        robot.motorBackRight.setPower(0.0);
+        robot.motorBackLeft.setPower(0.0);
+        robot.motorFrontLeft.setPower(0.0);
+        robot.motorFrontRight.setPower(0.0);
+    }
+
     public MotorPower motorScale(float motorFL, float motorBL, float motorFR, float motorBR, float maxSpeed) {
-        float norm;
+        float norm; // this is a code that normalizes motor speeds.
         float motorFLadj = 0, motorBLadj = 0, motorFRadj = 0, motorBRadj = 0;
         // Normalise by the largest motor power.
         norm = max(max(abs(motorFL), abs(motorBL)), max(abs(motorFR), abs(motorBR)));
         norm = max(norm, (float) 1.0);
 
         motorFLadj = (Range.clip((motorFL) / norm, -maxSpeed, maxSpeed));
-        motorBLadj = (Range.clip((motorBL) / norm, -maxSpeed, maxSpeed));
+        motorBLadj = (Range.clip((motorBL) / norm, -maxSpeed, maxSpeed));// clips our speeds to -1 to 1
         motorFRadj = (Range.clip((motorFR) / norm, -maxSpeed, maxSpeed));
         motorBRadj = (Range.clip((motorBR) / norm, -maxSpeed, maxSpeed));
         MotorPower returnMotorPower = new MotorPower(motorBLadj, motorBRadj, motorFLadj, motorFRadj);
         return returnMotorPower;
+    }
+
+    private void WaitForInputDebug()
+    {   // this code can be inserted into our master code to make it so the robot waits for you
+        // to push a button (y) on the gamepad
+        while(!gamepad1.y)
+        {
+            runtime.reset();
+            while ((runtime.seconds() < 0.1)) {
+                telemetry.update();
+            }
+        }
+
     }
 
 }

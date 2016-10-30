@@ -1,11 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
 <Robot type="FirstInspires-FTC">
-    <DeviceInterfaceModule name="Sensor Controller" serialNumber="AL00XKYN">
-        <ColorSensor name="sensorColor" port="0" />
-        <Gyro name="sensorGyro" port="1" />
-        <OpticalDistanceSensor name="sensorODS" port="0" />
-        <TouchSensor name="sensorTouch" port="0" />
-    </DeviceInterfaceModule>
     <MotorController name="Left Motors" serialNumber="A104OQGM">
         <Motor name="backLeft" port="1" />
         <Motor name="frontLeft" port="2" />
@@ -13,12 +7,19 @@
     <ServoController name="Servo Controller" serialNumber="AI049LRY">
         <Servo name="servoRight" port="1" />
         <Servo name="servoLeft" port="2" />
+        <Servo name="servoFire" port="3" />
+        <Servo name="servoLoad" port="4" />
     </ServoController>
+    <DeviceInterfaceModule name="Sensor Controller" serialNumber="AL00XKYN">
+        <ColorSensor name="sensorColorRight" port="0" />
+        <Gyro name="sensorGyro" port="1" />
+        <ColorSensor name="sensorColorLeft" port="2" />
+        <OpticalDistanceSensor name="sensorODS" port="0" />
+        <TouchSensor name="sensorTouch" port="0" />
+    </DeviceInterfaceModule>
     <MotorController name="Shoot Motors" serialNumber="A104OQL9">
         <Motor name="shootMotor" port="1" />
     </MotorController>
-    <MotorController name="Right Motors" serialNumber="AL00VX1F">
+    <MotorController name="Right Motors" serialNumber="AL00VTBG">
         <Motor name="backRight" port="1" />
-        <Motor name="frontRight" port="2" />
-    </MotorController>
-</Robot>
+        <Motor n

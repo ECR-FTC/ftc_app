@@ -29,16 +29,14 @@ public class Build2Auto1b extends LinearOpMode {
 
         private ElapsedTime runtime = new ElapsedTime();
     // here we declare 2 things, the hardware map, and an elapsed time funtion
-
+    boolean lineSeen;
         @Override
         public void runOpMode() throws InterruptedException {
             robot = new HardwareBuild2();          // Use Build2's Hardware file
 
-            try
-            {
+            try {
                 robot.init(hardwareMap);
-            }
-            catch (InterruptedException e) {
+            } catch (InterruptedException e) {
             }
             // we call the hardware map here
 
@@ -50,67 +48,147 @@ public class Build2Auto1b extends LinearOpMode {
          * step (using the FTC Robot Controller app on the phone).
          */
 
-            robot.rightServo.setPosition(.7);
-            robot.leftServo.setPosition(.3);
             waitForStart();   // we set our servos in init and wait for start (the driver hitting play)
 
             //this is a sample autonomous where the robot shoots 2 balls and pushes both beacons.
             // this is a blue code
-             autoFire(true); // spin up motor and shoot 1st ball
-             autoFire(false); // shoot second ball
-             autoDrive(-1,0,0,1500);
-             autoDrive(0,0,1,1500);
-             autoDrive(-1,0,0,1500);
-             autoDrive(0,0,-1,1500); // rotate parallel to wall
-             autoDrive(0,(float)0.5,0,1000); // push into wall
-             autoGoToWhiteLine(1000);
-             autoBeacon();
-             autoGoToWhiteLine(2000);
-             autoBeacon();
+            autoFire(true,false);
+            autoFire(false,true);
+            /*
+            autoFire(true, false); // spin up motor and shoot 1st ball
+            autoFire(false, true); // shoot second ball
+            autoGoOneTileForward(2);
+            autoGyroTurn(90);
+            autoGoOneTileForward(2);
+            autoGyroTurn(-90); // rotate parallel to wall
+            autoDrive(0, (float) 0.5, 0, 1000); // push into wall
+            autoGoToWhiteLine(1000, true, false);
+            if (lineSeen) {
+                autoBeacon(false);
 
-//           idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
-        }
+                autoGoToWhiteLine(2000, true, false);
+                if (lineSeen) {
+                    autoBeacon(false);
+                }
+            }
+            */
+            autoGoOneTileForward(1);
+         }
 
-    // TODO: put in sideways drift: will need an argument to pick alliance color
-    // TODO: return false if we do not find a white line
+
     //
-    public void autoGoToWhiteLine (double waitFor) // when this code is called, the robot goes to the white line and stops
+    public void autoGoToWhiteLine (double waitFor, boolean isBlue, boolean isRed) // when this code is called, the robot goes to the white line and stops
     {
         runtime.reset(); // this is called allot, it resets 'runtime' to 0
 
         while((robot.ODS.getRawLightDetected() < 0.2) & (runtime.seconds() < waitFor) ) {
-            robot.motorBackRight.setPower(.2);
-            robot.motorBackLeft.setPower(.2);
-            robot.motorFrontLeft.setPower(.2);
-            robot.motorFrontRight.setPower(.2);
+            if (isBlue)
+            {
+                robot.motorBackRight.setPower(.25);
+                robot.motorBackLeft.setPower(.15);
+                robot.motorFrontLeft.setPower(.25);
+                robot.motorFrontRight.setPower(.15);
+            }
+            if (isRed)
+            {
+                robot.motorBackRight.setPower(.25);
+                robot.motorBackLeft.setPower(.15);
+                robot.motorFrontLeft.setPower(.25);
+                robot.motorFrontRight.setPower(.15);
+            }
+            lineSeen = false;
             telemetry.addData("No white line:", robot.ODS.getRawLightDetected());
             // if the robot doesn't see the line, and still has time, it goes forward.
         }
 
         driveMotorStop();
-
+        lineSeen = true;
         telemetry.addData("I see the line:", robot.ODS.getRawLightDetected());
         telemetry.update();
         // if the robot does see the line, it stops.
+        return;
+    }
+    public void autoGoOneTileForward(int tiles)
+    {
+        float portTarget;
+        double speedPort, speedStar;
+        float ENCODER_ACCEL_CONST = 500;
+        //double ENCODER_PORT_RESET = robot.motorFrontLeft.getCurrentPosition();
+        portTarget = (float)tiles * robot.GO_ONE_TILE_PORT;
+        //starTarget = (float)currentParameter * GO_ONE_TILE_STAR;
 
+        while ((Math.abs(robot.motorFrontLeft.getCurrentPosition()) < Math.abs(portTarget) - 5) )// ||
+        {
+            // speed is proportional to number of encoder steps away from target
+            speedPort = .5 / ENCODER_ACCEL_CONST * (portTarget - (robot.motorFrontLeft.getCurrentPosition()));
+            speedStar = speedPort;
+            //speedStar = MOTOR_POWER / ENCODER_ACCEL_CONST * (starTarget - (robot.rightMotor.getCurrentPosition()-ENCODER_STAR_RESET));
+
+            // don't go faster than SPEED_NOMINAL
+            speedPort = Math.signum(speedPort) * Math.min(Math.abs(speedPort), .5);
+            speedStar = Math.signum(speedStar) * Math.min(Math.abs(speedStar), .5);
+
+            // don't go slower than SPEED_MIN
+            speedPort = Math.signum(speedPort) * Math.max(Math.abs(speedPort), .15);
+            speedStar = Math.signum(speedStar) * Math.max(Math.abs(speedStar), .15);
+
+            // set the motor speeds
+
+            robot.motorFrontRight.setPower(speedStar);
+            robot.motorFrontLeft.setPower(speedPort);
+            robot.motorBackRight.setPower(speedStar);
+            robot.motorBackLeft.setPower(speedPort);
+        }
+        driveMotorStop();
     }
 
-    // TODO: write with argument that lets you pick red or blue function
-    // TODO: adjust so the robot only pushes a button if it sees a color. Return false
-    //       if neither color is identified
-    public void autoBeacon () { //this will (when called) tell the robot to push the beacon
+    public void autoGyroTurn (int degrees) {
+        int heading;
+        int headingTolerance = 5;
+        double speedPort;
+        heading = robot.gyro.getIntegratedZValue(); // getIntegratedZValue() works for any turn angle
+
+        while ( (Math.abs(heading) < (Math.abs(degrees)-headingTolerance)))
+        {
+            // speed is proportional to angle away from target
+            speedPort = (float)(.5 / 15 * (degrees - heading));
+            // don't go faster than SPEED_NOMINAL
+            speedPort = Math.signum(speedPort) * Math.min(Math.abs(speedPort), .5);
+            // don't go slower than SPEED_MIN
+            speedPort = Math.signum(speedPort) * Math.max(Math.abs(speedPort), .15);
+
+            // set the speeds
+            robot.motorBackLeft.setPower(-speedPort);
+            robot.motorBackRight.setPower(speedPort);
+            robot.motorFrontLeft.setPower(-speedPort);
+            robot.motorFrontRight.setPower(speedPort);
+        }
+        driveMotorStop();
+    }
+
+    public void autoBeacon (boolean isRed) { //this will (when called) tell the robot to push the beacon
         // our color sensor is in front of the servo
 
         // if we see our color (red) we drive forward, if we don't, we do nothing
-        if ((robot.colorR.red() > 2)) {
+        if ((robot.colorR.red() > 2) && isRed) {
             while ((runtime.seconds() < .5)) {
-                robot.motorBackRight.setPower(-.2);
-                robot.motorBackLeft.setPower(-.2);
-                robot.motorFrontLeft.setPower(-.2);
-                robot.motorFrontRight.setPower(-.2);
+                robot.motorBackRight.setPower(-.25);
+                robot.motorBackLeft.setPower(-.15);
+                robot.motorFrontLeft.setPower(-.25);
+                robot.motorFrontRight.setPower(-.15);
             }
             driveMotorStop();
         runtime.reset();
+        }
+        if ((robot.colorR.blue() > 2) && !isRed) {
+            while ((runtime.seconds() < .5)) {
+                robot.motorBackRight.setPower(-.15);
+                robot.motorBackLeft.setPower(-.25);
+                robot.motorFrontLeft.setPower(-.15);
+                robot.motorFrontRight.setPower(-.25);
+            }
+            driveMotorStop();
+            runtime.reset();
         }// once we are positioned, we press the beacon
         while ((runtime.seconds() < 0.5)) {
             telemetry.update();
@@ -124,23 +202,26 @@ public class Build2Auto1b extends LinearOpMode {
     //      motorSpinUp: boolean, set to true to spin up the motor from stop
     //          set false to shoot without spinning up the motor
     // output arguments: none
-    // TODO: need an argument to conditionally turn off the motor when done.
 
-    public void autoFire(boolean motorSpinUp) {
+    public void autoFire(boolean motorSpinUp, boolean motorTurnOff) {
         if (motorSpinUp) {//spins up the motor at full speed for 2 seconds ro make it faster.
             runtime.reset();// unless we tell it not to (eg: autofire(false);)
-            while ((runtime.seconds() < 1.90)) {
-                robot.motorShoot.setPower(1.00);
+            while ((runtime.seconds() < robot.shootRampTime)) {
+                robot.motorShoot.setPower(robot.shootRampPower);
             }
         }
-        robot.motorShoot.setPower(.30);//this sets the motor to firing speed
+        robot.motorShoot.setPower(robot.shootPower);//this sets the motor to firing speed
         runtime.reset();
-        while ((runtime.seconds() < 0.50)) {
-            robot.fireServo.setPosition(0.7);// and we fire it here
+        while ((runtime.seconds() < robot.fireServoTime)) {
+            robot.fireServo.setPosition(robot.fireGo);// and we fire it here
         }
         runtime.reset();
-        while ((runtime.seconds()) < 0.50) {
-            robot.fireServo.setPosition(0.0);// the servo is retracted after firing here.
+        while ((runtime.seconds()) < 2*robot.fireServoTime) {
+            robot.fireServo.setPosition(robot.fireStay);// the servo is retracted after firing here.
+        }
+        if (motorTurnOff)
+        {
+            robot.motorShoot.setPower(0.0);
         }
     }
 
@@ -172,8 +253,8 @@ public class Build2Auto1b extends LinearOpMode {
 
         driveMotorStop();
         runtime.reset();
-        while ((runtime.seconds() < 0.1)) {
-            telemetry.update();
+        while ((runtime.seconds() < 0.25)) {
+            telemetry.update(); // make sure we stop
         }
 
     }

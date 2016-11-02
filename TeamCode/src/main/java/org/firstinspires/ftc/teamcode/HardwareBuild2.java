@@ -24,7 +24,13 @@ import org.firstinspires.ftc.robotcontroller.external.samples.SensorMRGyro;
 public class HardwareBuild2
 {
     /* Public OpMode members. */
-
+    /*
+        Forward   Left   Clockwise
+   FR     1         -1      -1
+   FL     1          1       1
+   BR     1          1       1
+   BL     1         -1      -1
+     */
     DcMotor motorFrontRight;
     DcMotor motorFrontLeft;
     DcMotor motorBackRight;
@@ -42,15 +48,24 @@ public class HardwareBuild2
     HardwareMap hwMap  = null;
     private ElapsedTime period  = new ElapsedTime();
 
-    double leftPress = .9;
-    double rightPress = .1;
-    double leftStore = .3;
-    double rightStore = .7;
-    double fireGo = .5;
-    double fireStay = .0;
-    double loadClosed = .7;
-    double loadOpen = .0;
+    public double leftPress = 0.9; // left button pusher "on" value
+    public double rightPress = 0.1; // right button pusher "on" value
+    public double leftStore = 0.3; // left button pusher "off" value
+    public double rightStore = 0.7;  // right button pusher "off" value
+    public double fireGo = 0.5; // setting to fire a ball into the launcher
+    public double fireStay = 0.0; // down setting for the fire servo
+    public double loadClosed = 0.7; // "up" setting for the ball loader
+    public double loadOpen = 0.0;  // "down" setting for the ball loader
+    public double shootPower = -0.35; // steady-state launcher motor power
+    public double shootRampPower = -1.0; // ramp-up launcher motor power
+    public double shootRampTime = 2.0;  // ramp-up time for launcher motor
+    public double fireServoTime = 0.5;  // delay time for the firing servo
 
+    public int GO_ONE_TILE_PORT = 1000;
+
+    public double driveMinPower = 0.4;
+    public double driveMaxPower = 1.0;
+    public double drivePowerIncrement = 0.01;
     /* Constructor */
     public HardwareBuild2() {
     }
@@ -65,7 +80,6 @@ public class HardwareBuild2
         motorBackRight = hwMap.dcMotor.get("backRight");
         motorBackLeft = hwMap.dcMotor.get("backLeft");
         motorShoot = hwMap.dcMotor.get("shootMotor");
-
 
         motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
         motorBackRight.setDirection(DcMotor.Direction.REVERSE);
@@ -94,7 +108,6 @@ public class HardwareBuild2
         motorBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        /* // Define and initial
         // start calibrating the gyro.
         gyro.calibrate();
 
@@ -103,7 +116,10 @@ public class HardwareBuild2
             Thread.sleep(50);
         }
 
-        */
+        // set the button pushing servos to the store positions
+        rightServo.setPosition(rightStore);
+        leftServo.setPosition(leftStore);
+
         colorL.enableLed(false);
         colorR.enableLed(false);
     }

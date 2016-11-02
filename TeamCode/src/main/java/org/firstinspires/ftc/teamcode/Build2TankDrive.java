@@ -57,7 +57,7 @@ import static java.lang.Math.max;
 //@Disabled
 public class Build2TankDrive extends OpMode {
     HardwareBuild2 robot;
-
+    double maxSpeed = 0.5;
     /**
      * Constructor
      */
@@ -86,19 +86,28 @@ public class Build2TankDrive extends OpMode {
 
     @Override
     public void loop() {
-//		telemetry.addData("Say", "Hello World! -1");
-//		telemetry.update();
-
+        // set the drive motor speeds
         teleDrive(gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.right_stick_y);
 
+        // let the driver adjust the drive motor max speed
+        if (gamepad1.left_bumper) // lower max speed
+        {
+            maxSpeed = maxSpeed - robot.drivePowerIncrement;
+        }
+        if (gamepad1.right_bumper) // raise max speed
+        {
+            maxSpeed = maxSpeed + robot.drivePowerIncrement;
+        }
+        maxSpeed = Math.max(maxSpeed, robot.driveMinPower); // apply a min speed
+        maxSpeed = Math.min(maxSpeed, robot.driveMaxPower); // apply a max speed
 
-        if (gamepad2.dpad_down) // take off for comp.
+        if (gamepad2.dpad_down) // turn off the launch motor
         {
             robot.motorShoot.setPower(0.0);
         }
-        if (gamepad2.dpad_up)
+        if (gamepad2.dpad_up) // turn on the launch motor
         {
-            robot.motorShoot.setPower(.30);
+            robot.motorShoot.setPower(robot.shootPower);
         }
 		if (gamepad2.left_bumper) // trigger servo settings
 		{
@@ -118,33 +127,32 @@ public class Build2TankDrive extends OpMode {
 		}
         if (gamepad2.a)
         {
-            robot.fireServo.setPosition(0.5);
+            robot.fireServo.setPosition(robot.fireGo);
         }
         else
         {
-            robot.fireServo.setPosition(0.0);
+            robot.fireServo.setPosition(robot.fireStay);
         }
         if (gamepad2.y)
         {
-            robot.loadServo.setPosition(0.7);
+            robot.loadServo.setPosition(robot.loadClosed);
         }
         if (gamepad2.b)
         {
-            robot.loadServo.setPosition(0.0);
+            robot.loadServo.setPosition(robot.loadOpen);
         }
 		/*
-		 * Send telemetry data back to driver station. Note that if we are using
-		 * a legacy NXT-compatible motor controller, then the getPower() method
-		 * will return a null value. The legacy NXT-compatible motor controllers
-		 * are currently write only.
+		 * Send telemetry data back to driver station.
 		 */
 
-        //	telemetry.addData("Text", "*** Robot Data***");
+        	telemetry.addData("Text", "*** Robot Data***");
 //	//	telemetry.addData("slide power", "pwr: " + String.format(Locale.US,"%.2f", robot.motorSlide.getPower()));
         //	telemetry.addData("right front power", "pwr: " + String.format(Locale.US,"%.2f", robot.motorFrontRight.getPower()));
         //	telemetry.addData("left front power", "pwr: " + String.format(Locale.US,"%.2f", robot.motorFrontLeft.getPower()));
         //	telemetry.addData("right back power", "pwr: " + String.format(Locale.US,"%.2f", robot.motorBackRight.getPower()));
         //	telemetry.addData("left back power", "pwr: " + String.format(Locale.US,"%.2f", robot.motorBackLeft.getPower()));
+        telemetry.update();
+
     }
 
     /*
@@ -157,65 +165,50 @@ public class Build2TankDrive extends OpMode {
 
     }
 
+    // holonomic tank drive
+    public void teleDrive(float left, float side, float right) {
+        telemetry.addData("Say", "teledrive! 0");
+        telemetry.update();
+
     /*
      * This method scales the joystick input so for low joystick values, the
      * scaled value is less than linear.  This is to make it easier to drive
      * the robot more precisely at slower speeds.
      */
-    public void teleDrive(float left, float side, float right) {
-        telemetry.addData("Say", "teledrive! 0");
-        telemetry.update();
-
-        float a, b, c;
-//		float norm;
-        // holonomic tank drive
-
-        a = left;
-        b = right;
-        c = side;
-
-        // scale the joystick value to make it easier to control
-        // the robot more precisely at slower speeds.
-        a = (float) scaleInput(a);
-        b = (float) scaleInput(b);
-        c = (float) scaleInput(c);
-        telemetry.addData("Say", "Hello World! .5");
-        telemetry.update();
+        left = (float) scaleInput(-left); // "up" on joystick is negative
+        right = (float) scaleInput(-right); // "up" on joystick is negative
+        side = (float) scaleInput(side);
 
         MotorPower returnMotorPower;
-        returnMotorPower = motorScale(a - c, b - c, b + c, a + c, (float) 1.0);
+        returnMotorPower = motorScale(left + side, left - side, right - side, right + side, (float) maxSpeed);
 
-
-        // clip the right/left values so that the values never exceed +/- 1
         // write the values to the motors
-        robot.motorBackRight.setPower(returnMotorPower.getMotorBackLeft());// me have muches goods grammers yes
-        robot.motorBackLeft.setPower(returnMotorPower.getMotorBackRight());
+        robot.motorBackRight.setPower(returnMotorPower.getMotorBackRight());
+        robot.motorBackLeft.setPower(returnMotorPower.getMotorBackLeft());
         robot.motorFrontLeft.setPower(returnMotorPower.getMotorFrontLeft());
-        robot.motorFrontRight.setPower(returnMotorPower.getMotorFrontRight()); // note: reversal of BL and BR is purpassful
-        telemetry.addData("Say", "Motor power set");
-        telemetry.update();
+        robot.motorFrontRight.setPower(returnMotorPower.getMotorFrontRight());
+
+        //telemetry.addData("Say", "Motor power set");
+        //telemetry.update();
 
     }
 
+    // normalize the motor powers so that direction is preserved
     public MotorPower motorScale(float motorFL, float motorBL, float motorFR, float motorBR, float maxSpeed) {
         float norm;
         float motorFLadj = 0, motorBLadj = 0, motorFRadj = 0, motorBRadj = 0;
-        // Normalise by the largest motor power.
+        // Normalize by the largest motor power.
         norm = max(max(abs(motorFL), abs(motorBL)), max(abs(motorFR), abs(motorBR)));
         norm = max(norm, (float) 1.0);
 
-        telemetry.addData("Say", "Hello World! 1");
-        telemetry.update();
         motorFLadj = (Range.clip((motorFL) / norm, -maxSpeed, maxSpeed));
         motorBLadj = (Range.clip((motorBL) / norm, -maxSpeed, maxSpeed));
         motorFRadj = (Range.clip((motorFR) / norm, -maxSpeed, maxSpeed));
         motorBRadj = (Range.clip((motorBR) / norm, -maxSpeed, maxSpeed));
-        telemetry.addData("Say", "Hello World! 2");
-        telemetry.update();
+
         MotorPower returnMotorPower = new MotorPower(motorBLadj, motorBRadj, motorFLadj, motorFRadj);
         return returnMotorPower;
     }
-
 
     double scaleInput(double dVal) {
         double[] scaleArray = {0.0, 0.05, 0.09, 0.10, 0.12, 0.15, 0.18, 0.24,

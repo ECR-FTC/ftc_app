@@ -1,14 +1,14 @@
 package org.firstinspires.ftc.teamcode;
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
-import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
-//import com.qualcomm.robotcore.hardware.TouchSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.SensorMRGyro;
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+//import com.qualcomm.robotcore.hardware.TouchSensor;
 
 //import com.qualcomm.robotcore.hardware.GyroSensor;
 
@@ -21,7 +21,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.SensorMRGyro;
  * In this case that robot is the build2 robot.
  *
  */
-public class HardwareBuild2
+public class HardwareBuild2_tele
 {
     /* Public OpMode members. */
     /*
@@ -31,11 +31,10 @@ public class HardwareBuild2
    BR     1          1       1
    BL     1         -1      -1
      */
-/*    public DcMotor motorFrontRight;
+    public DcMotor motorFrontRight;
     public DcMotor motorFrontLeft;
     public DcMotor motorBackRight;
     public DcMotor motorBackLeft;
-    */
 
     public DcMotor motorShoot;
     public Servo leftServo;
@@ -46,7 +45,7 @@ public class HardwareBuild2
     public ModernRoboticsI2cGyro gyro;   // Hardware Device Object
     public OpticalDistanceSensor ODS;
 
-//    private double ENCODER_PORT_RESET;
+    private double ENCODER_PORT_RESET;
 
     /* Local OpMode members. */
     public HardwareMap hwMap  = null;
@@ -62,16 +61,16 @@ public class HardwareBuild2
     public double loadOpen = 0.0;  // "down" setting for the ball loader
     public double shootPower = -0.14; // steady-state launcher motor power
     public double shootRampPower = -1.0; // ramp-up launcher motor power
-    public double shootRampTime = 1.9;  // ramp-up time for launcher motor
+    public double shootRampTime = 2.0;  // ramp-up time for launcher motor
     public double fireServoTime = 0.5;  // delay time for the firing servo
 
-    public int GO_ONE_TILE_PORT = 3150;
+    public int GO_ONE_TILE_PORT = 1000;
 
     public double driveMinPower = 0.4;
     public double driveMaxPower = 1.0;
     public double drivePowerIncrement = 0.01;
     /* Constructor */
-    public HardwareBuild2() {
+    public HardwareBuild2_tele() {
     }
 
     /* Initialize standard Hardware interfaces */
@@ -79,15 +78,15 @@ public class HardwareBuild2
         // save reference to HW Map
         hwMap = ahwMap;
 
-  /*      motorFrontRight = hwMap.dcMotor.get("frontRight");
+        motorFrontRight = hwMap.dcMotor.get("frontRight");
         motorFrontLeft = hwMap.dcMotor.get("frontLeft");
         motorBackRight = hwMap.dcMotor.get("backRight");
         motorBackLeft = hwMap.dcMotor.get("backLeft");
-        */
+
         motorShoot = hwMap.dcMotor.get("shootMotor");
 
-//        motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
-//        motorBackRight.setDirection(DcMotor.Direction.REVERSE);
+        motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
+        motorBackRight.setDirection(DcMotor.Direction.REVERSE);
 
         leftServo = hwMap.servo.get("servoLeft");
         rightServo = hwMap.servo.get("servoRight");
@@ -100,19 +99,19 @@ public class HardwareBuild2
         ODS = hwMap.opticalDistanceSensor.get("sensorODS");
 //        touch = hwMap.touchSensor.get("sensorTouch");
 
-/*        // Set all motors to zero power
+        // Set all motors to zero power
         motorFrontLeft.setPower(0);
         motorFrontRight.setPower(0);
         motorBackRight.setPower(0);
         motorBackLeft.setPower(0);
-*/
-  /*      // Set all motors to run without encoders.
+
+        // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
         motorFrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-*/
+
 
         colorR.enableLed(false);
 
@@ -151,4 +150,12 @@ public class HardwareBuild2
         period.reset();
     }
 
+    public double returnEncoderValue(){
+
+        return motorFrontLeft.getCurrentPosition() - ENCODER_PORT_RESET;
+    }
+
+    public void resetEncoderValue(){
+        ENCODER_PORT_RESET = motorFrontLeft.getCurrentPosition();
+    }
 }

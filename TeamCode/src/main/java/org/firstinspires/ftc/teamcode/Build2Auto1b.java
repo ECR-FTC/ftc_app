@@ -23,16 +23,16 @@ import static java.lang.Math.max;
 import static java.lang.Math.rint;
 
 @Autonomous(name="Build2Auto1b", group="Linear Opmode")  // @Autonomous(...) is the other common choice
-//@Disabled
+@Disabled
 public class Build2Auto1b extends LinearOpMode {
-        HardwareBuild2 robot;
+        HardwareBuild2_tele robot;
 
         private ElapsedTime runtime = new ElapsedTime();
     // here we declare 2 things, the hardware map, and an elapsed time funtion
     boolean lineSeen;
         @Override
         public void runOpMode() throws InterruptedException {
-            robot = new HardwareBuild2();          // Use Build2's Hardware file
+            robot = new HardwareBuild2_tele();          // Use Build2's Hardware file
 
             try {
                 robot.init(hardwareMap);
@@ -52,8 +52,7 @@ public class Build2Auto1b extends LinearOpMode {
 
             //this is a sample autonomous where the robot shoots 2 balls and pushes both beacons.
             // this is a blue code
-            autoFire(true,false);
-            autoFire(false,true);
+            //autoGoOneTileForward(1);
             /*
             autoFire(true, false); // spin up motor and shoot 1st ball
             autoFire(false, true); // shoot second ball
@@ -113,14 +112,14 @@ public class Build2Auto1b extends LinearOpMode {
         float portTarget;
         double speedPort, speedStar;
         float ENCODER_ACCEL_CONST = 500;
-        //double ENCODER_PORT_RESET = robot.motorFrontLeft.getCurrentPosition();
+        double ENCODER_PORT_RESET = robot.motorFrontLeft.getCurrentPosition();
         portTarget = (float)tiles * robot.GO_ONE_TILE_PORT;
         //starTarget = (float)currentParameter * GO_ONE_TILE_STAR;
 
-        while ((Math.abs(robot.motorFrontLeft.getCurrentPosition()) < Math.abs(portTarget) - 5) )// ||
+        while ((Math.abs(robot.motorFrontLeft.getCurrentPosition() - ENCODER_PORT_RESET) < Math.abs(portTarget) - 5) )// ||
         {
             // speed is proportional to number of encoder steps away from target
-            speedPort = .5 / ENCODER_ACCEL_CONST * (portTarget - (robot.motorFrontLeft.getCurrentPosition()));
+            speedPort = .5 / ENCODER_ACCEL_CONST * (portTarget - (robot.motorFrontLeft.getCurrentPosition() - ENCODER_PORT_RESET));
             speedStar = speedPort;
             //speedStar = MOTOR_POWER / ENCODER_ACCEL_CONST * (starTarget - (robot.rightMotor.getCurrentPosition()-ENCODER_STAR_RESET));
 
@@ -138,6 +137,9 @@ public class Build2Auto1b extends LinearOpMode {
             robot.motorFrontLeft.setPower(speedPort);
             robot.motorBackRight.setPower(speedStar);
             robot.motorBackLeft.setPower(speedPort);
+
+            telemetry.addData("Encoder Value:", robot.motorFrontLeft.getCurrentPosition() - ENCODER_PORT_RESET);
+            telemetry.update();
         }
         driveMotorStop();
     }

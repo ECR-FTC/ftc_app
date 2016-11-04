@@ -34,6 +34,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
@@ -53,10 +54,10 @@ import static java.lang.Math.max;
  * Enables control of the robot via the gamepad
  */
 
-@TeleOp(name = "Build2bot: Telop Tank. settings: John", group = "Build1bot")
+@TeleOp(name = "Build2bot: Telop Tank", group = "Build1bot")
 //@Disabled
 public class Build2TankDrive extends OpMode {
-    HardwareBuild2 robot;
+    HardwareBuild2_tele robot;
     double maxSpeed = 0.5;
     /**
      * Constructor
@@ -73,7 +74,7 @@ public class Build2TankDrive extends OpMode {
     @Override
     public void init() {
 
-        robot = new HardwareBuild2();          // Use Build2's Hardware file
+        robot = new HardwareBuild2_tele();          // Use Build2's Hardware file
         try {
             robot.init(hardwareMap);
         } catch (InterruptedException e) {
@@ -145,12 +146,10 @@ public class Build2TankDrive extends OpMode {
 		 * Send telemetry data back to driver station.
 		 */
 
-        	telemetry.addData("Text", "*** Robot Data***");
-//	//	telemetry.addData("slide power", "pwr: " + String.format(Locale.US,"%.2f", robot.motorSlide.getPower()));
-        //	telemetry.addData("right front power", "pwr: " + String.format(Locale.US,"%.2f", robot.motorFrontRight.getPower()));
-        //	telemetry.addData("left front power", "pwr: " + String.format(Locale.US,"%.2f", robot.motorFrontLeft.getPower()));
-        //	telemetry.addData("right back power", "pwr: " + String.format(Locale.US,"%.2f", robot.motorBackRight.getPower()));
-        //	telemetry.addData("left back power", "pwr: " + String.format(Locale.US,"%.2f", robot.motorBackLeft.getPower()));
+//        telemetry.addData("Text", "*** Robot Data***");
+        telemetry.addData("Drive Power", "Drive: " + String.format(Locale.US,"%.2f", maxSpeed));
+        telemetry.addData("Encoder Value:", robot.returnEncoderValue());
+        telemetry.addData("Heading:", robot.gyro.getIntegratedZValue());
         telemetry.update();
 
     }
@@ -167,8 +166,6 @@ public class Build2TankDrive extends OpMode {
 
     // holonomic tank drive
     public void teleDrive(float left, float side, float right) {
-        telemetry.addData("Say", "teledrive! 0");
-        telemetry.update();
 
     /*
      * This method scales the joystick input so for low joystick values, the
@@ -177,7 +174,7 @@ public class Build2TankDrive extends OpMode {
      */
         left = (float) scaleInput(-left); // "up" on joystick is negative
         right = (float) scaleInput(-right); // "up" on joystick is negative
-        side = (float) scaleInput(side);
+        side = (float) -scaleInput(side);
 
         MotorPower returnMotorPower;
         returnMotorPower = motorScale(left + side, left - side, right - side, right + side, (float) maxSpeed);
@@ -188,15 +185,13 @@ public class Build2TankDrive extends OpMode {
         robot.motorFrontLeft.setPower(returnMotorPower.getMotorFrontLeft());
         robot.motorFrontRight.setPower(returnMotorPower.getMotorFrontRight());
 
-        //telemetry.addData("Say", "Motor power set");
-        //telemetry.update();
-
     }
 
     // normalize the motor powers so that direction is preserved
     public MotorPower motorScale(float motorFL, float motorBL, float motorFR, float motorBR, float maxSpeed) {
         float norm;
         float motorFLadj = 0, motorBLadj = 0, motorFRadj = 0, motorBRadj = 0;
+
         // Normalize by the largest motor power.
         norm = max(max(abs(motorFL), abs(motorBL)), max(abs(motorFR), abs(motorBR)));
         norm = max(norm, (float) 1.0);

@@ -35,6 +35,7 @@ package org.firstinspires.ftc.teamcode;
 //import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import android.media.MediaPlayer;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
@@ -61,7 +62,7 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 @TeleOp(name="K9bot: Telop Tank ECR", group="K9bot")
-//@Disabled
+@Disabled
 public class K9TankDriveECR extends LinearOpMode {
 
     /* Declare OpMode members. */

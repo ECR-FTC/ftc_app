@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -9,7 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  */
 
 @Autonomous(name="K9: MiniK9AutoTri", group="K9")
-//@Disabled
+@Disabled
 
 public class MiniK9AutoTri extends LinearOpMode {
     HardwareK9botECR robot = new HardwareK9botECR();

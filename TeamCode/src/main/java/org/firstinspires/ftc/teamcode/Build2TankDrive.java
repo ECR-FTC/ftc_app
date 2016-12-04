@@ -58,7 +58,7 @@ import static java.lang.Math.max;
 //@Disabled
 public class Build2TankDrive extends OpMode {
     HardwareBuild2_tele robot;
-    double maxSpeed = 0.5;
+    double maxSpeed = 1.0;
     /**
      * Constructor
      */
@@ -102,15 +102,24 @@ public class Build2TankDrive extends OpMode {
         maxSpeed = Math.max(maxSpeed, robot.driveMinPower); // apply a min speed
         maxSpeed = Math.min(maxSpeed, robot.driveMaxPower); // apply a max speed
 
-        if (gamepad2.dpad_down) // turn off the launch motor
-        {
-            robot.motorShoot.setPower(0.0);
-        }
-        if (gamepad2.dpad_up) // turn on the launch motor
+        if (gamepad2.dpad_up)
         {
             robot.motorShoot.setPower(robot.shootPower);
         }
-		if (gamepad2.left_bumper) // trigger servo settings
+        if (gamepad2.dpad_down && gamepad1.dpad_down)
+        {
+            robot.motorShoot.setPower(-robot.shootPower);
+        }
+        if (gamepad2.dpad_left || gamepad2.dpad_right)
+        {
+            robot.motorShoot.setPower(0.0);
+        }
+        if (gamepad2.right_stick_y > robot.deadZone)
+        {
+            robot.motorLift.setPower(robot.liftMotorPower);
+        }
+
+        if (gamepad2.left_bumper) // trigger servo settings
 		{
 			robot.leftServo.setPosition(robot.leftPress);
 		}
@@ -126,6 +135,7 @@ public class Build2TankDrive extends OpMode {
 		{
 			robot.rightServo.setPosition(robot.rightStore);
 		}
+
         if (gamepad2.a)
         {
             robot.fireServo.setPosition(robot.fireGo);
@@ -134,6 +144,7 @@ public class Build2TankDrive extends OpMode {
         {
             robot.fireServo.setPosition(robot.fireStay);
         }
+
         if (gamepad2.y)
         {
             robot.loadServo.setPosition(robot.loadClosed);
@@ -142,7 +153,8 @@ public class Build2TankDrive extends OpMode {
         {
             robot.loadServo.setPosition(robot.loadOpen);
         }
-		/*
+
+        /*
 		 * Send telemetry data back to driver station.
 		 */
 

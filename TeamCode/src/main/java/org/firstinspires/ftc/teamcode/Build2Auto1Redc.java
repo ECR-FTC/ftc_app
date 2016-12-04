@@ -18,9 +18,9 @@ import com.qualcomm.robotcore.util.Range;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 
-@Autonomous(name="Build2AutoTests", group="Linear Opmode")  // @Autonomous(...) is the other common choice
+@Autonomous(name="Red1", group="Linear Opmode")  // @Autonomous(...) is the other common choice
 //@Disabled
-public class Build2Auto1c extends LinearOpMode {
+public class Build2Auto1Redc extends LinearOpMode {
         HardwareBuild2 robot;
         private double ENCODER_PORT_RESET;
         DcMotor motorFrontRight;
@@ -80,8 +80,21 @@ public class Build2Auto1c extends LinearOpMode {
             //this is a sample autonomous where the robot shoots 2 balls and pushes both beacons.
             // this is a blue code
             //autoGoOneTileForward(1);
-            autoGoToWhiteLine(1000, true, false);
-            autoBeacon(false);
+            autoFire(true, false); // spin up motor and shoot 1st ball
+            delayLoop(2.0);
+            autoFire(false, true); // shoot second ball
+            autoGyroTurn(-42);
+            autoGoOneTileForward(-2.3);
+            autoGyroTurn(20);
+            autoGoOneTileForward(-.2);
+            autoGyroTurn(25);
+            autoDrive(0, (float) 1.0, 0, 800); // push into wall
+            autoGoToWhiteLine(1000, false, true);
+            autoBeacon(true);
+            autoGoOneTileForward(-1.0);
+            autoDrive(0, (float) 1.0, 0, 800); // push into wall
+            autoGoToWhiteLine(2000, false, true);
+            autoBeacon(true);
 
          }
 
@@ -100,10 +113,10 @@ public class Build2Auto1c extends LinearOpMode {
             }
             if (isRed)
             {
-                motorBackRight.setPower(-0.25);
-                motorBackLeft.setPower(-0.15);
-                motorFrontLeft.setPower(-0.25);
-                motorFrontRight.setPower(-0.15);
+                motorBackRight.setPower(-0.15);
+                motorBackLeft.setPower(-0.25);
+                motorFrontLeft.setPower(-0.15);
+                motorFrontRight.setPower(-0.25);
             }
             lineSeen = false;
             telemetry.addData("No white line:", robot.ODS.getRawLightDetected());
@@ -183,14 +196,14 @@ public class Build2Auto1c extends LinearOpMode {
     }
 
     public void autoBeacon (boolean isAllianceRed) { //this will (when called) tell the robot to push the beacon
-        // our color sensor is in front of the servo
+        // using our color sensor that is in front of the servo
         boolean beaconFound = false;
         int redThreshold = 2;
         int blueThreshold = 3;
 
         if(isAllianceRed) { // red alliance
             if (robot.colorR.red() > redThreshold) {
-                telemetry.addData("Red","Red");
+                telemetry.addData("Red ","Red");
                 telemetry.update();
                 beaconFound = true;
                 // if we see our color (red) we drive forward
@@ -213,7 +226,6 @@ public class Build2Auto1c extends LinearOpMode {
 
         if(!isAllianceRed) { // blue alliance
             if (robot.colorR.blue() > blueThreshold) {
-                beaconFound = true;
                 telemetry.addData("Blue","Blue");
                 telemetry.update();
                 // if we see our color (blue) we drive forward
@@ -224,6 +236,7 @@ public class Build2Auto1c extends LinearOpMode {
                     motorFrontLeft.setPower (-0.2 + 0.05);
                     motorFrontRight.setPower(-0.2 - 0.05);                }
                 driveMotorStop();
+                beaconFound = true;
             }
 
             else if (robot.colorR.red() > redThreshold) {

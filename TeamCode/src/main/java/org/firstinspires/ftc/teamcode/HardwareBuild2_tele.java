@@ -36,6 +36,7 @@ public class HardwareBuild2_tele
     public DcMotor motorBackRight;
     public DcMotor motorBackLeft;
 
+    public DcMotor motorLift;
     public DcMotor motorShoot;
     public Servo leftServo;
     public Servo rightServo;
@@ -59,11 +60,12 @@ public class HardwareBuild2_tele
     public double fireStay = 0.0; // down setting for the fire servo
     public double loadClosed = 0.7; // "up" setting for the ball loader
     public double loadOpen = 0.0;  // "down" setting for the ball loader
-    public double shootPower = -0.14; // steady-state launcher motor power
+    public double shootPower = -0.15; // steady-state launcher motor power
     public double shootRampPower = -1.0; // ramp-up launcher motor power
-    public double shootRampTime = 2.0;  // ramp-up time for launcher motor
+    public double shootRampTime = 2.1;  // ramp-up time for launcher motor
+    public double liftMotorPower = .25;
     public double fireServoTime = 0.5;  // delay time for the firing servo
-
+    public double deadZone = 0.25; // For lift motor.
     public int GO_ONE_TILE_PORT = 1000;
 
     public double driveMinPower = 0.4;
@@ -84,6 +86,7 @@ public class HardwareBuild2_tele
         motorBackLeft = hwMap.dcMotor.get("backLeft");
 
         motorShoot = hwMap.dcMotor.get("shootMotor");
+        motorLift = hwMap.dcMotor.get("liftMotor");
 
         motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
         motorBackRight.setDirection(DcMotor.Direction.REVERSE);

@@ -18,9 +18,9 @@ import com.qualcomm.robotcore.util.Range;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 
-@Autonomous(name="Build2AutoTests", group="Linear Opmode")  // @Autonomous(...) is the other common choice
+@Autonomous(name="GenericCode1", group="Linear Opmode")  // @Autonomous(...) is the other common choice
 //@Disabled
-public class Build2Auto1c extends LinearOpMode {
+public class Build2Auto2Bluec extends LinearOpMode {
         HardwareBuild2 robot;
         private double ENCODER_PORT_RESET;
         DcMotor motorFrontRight;
@@ -77,12 +77,14 @@ public class Build2Auto1c extends LinearOpMode {
 
             waitForStart();   // we set our servos in init and wait for start (the driver hitting play)
 
-            //this is a sample autonomous where the robot shoots 2 balls and pushes both beacons.
+            //this is a sample autonomous where the robot shoots 2 balls and pushes the cap ball off, and parks partway onboard..
             // this is a blue code
-            //autoGoOneTileForward(1);
-            autoGoToWhiteLine(1000, true, false);
-            autoBeacon(false);
+            autoGoOneTileForward(-0.5);
 
+            autoFire(true, false); // spin up motor and shoot 1st ball
+            delayLoop(8.2);
+            autoFire(false, true); // shoot second ball
+            autoGoOneTileForward(-2.3);
          }
 
     //
@@ -218,7 +220,7 @@ public class Build2Auto1c extends LinearOpMode {
                 telemetry.update();
                 // if we see our color (blue) we drive forward
                 runtime.reset();
-                while ((runtime.seconds() < 0.5)) {
+                while ((runtime.seconds() < 0.4)) {
                     motorBackRight.setPower (-0.2 + 0.05); // slant into wall
                     motorBackLeft.setPower  (-0.2 - 0.05);
                     motorFrontLeft.setPower (-0.2 + 0.05);

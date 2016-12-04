@@ -52,6 +52,7 @@ public class HardwareBuild2
     public HardwareMap hwMap  = null;
     private ElapsedTime period  = new ElapsedTime();
 
+    public double deadZone = 0.05; // Min and Max Range to not do anything
     public double leftPress = 0.9; // left button pusher "on" value
     public double rightPress = 0.1; // right button pusher "on" value
     public double leftStore = 0.3; // left button pusher "off" value
@@ -60,9 +61,9 @@ public class HardwareBuild2
     public double fireStay = 0.0; // down setting for the fire servo
     public double loadClosed = 0.7; // "up" setting for the ball loader
     public double loadOpen = 0.0;  // "down" setting for the ball loader
-    public double shootPower = -0.14; // steady-state launcher motor power
+    public double shootPower = -0.15; // steady-state launcher motor power
     public double shootRampPower = -1.0; // ramp-up launcher motor power
-    public double shootRampTime = 1.9;  // ramp-up time for launcher motor
+    public double shootRampTime = 2;  // ramp-up time for launcher motor
     public double fireServoTime = 0.5;  // delay time for the firing servo
 
     public int GO_ONE_TILE_PORT = 3150;

@@ -5,10 +5,17 @@ package org.firstinspires.ftc.teamcode.steprunner;
  */
 public class DriveStep extends  Step {
 
+    protected double driveSpeed = 0;
+
+    public DriveStep(double theSpeed)
+    {
+        driveSpeed = theSpeed;
+    }
+
     @Override
     public void start(Robot r) {
         super.start(r);
-        robot.allMotorsOn();
+        robot.allMotorsOn(driveSpeed);
     }
 
     @Override

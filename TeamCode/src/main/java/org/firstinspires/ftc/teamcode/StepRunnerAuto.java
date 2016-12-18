@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.HardwareK9botECR;
 import org.firstinspires.ftc.teamcode.steprunner.MotorStep;
 import org.firstinspires.ftc.teamcode.steprunner.Robot;
+import org.firstinspires.ftc.teamcode.steprunner.SequenceStep;
 import org.firstinspires.ftc.teamcode.steprunner.UntilOneDoneStep;
 import org.firstinspires.ftc.teamcode.steprunner.WaitStep;
 import org.firstinspires.ftc.teamcode.steprunner.DriveStep;
@@ -43,10 +44,17 @@ public class StepRunnerAuto extends LinearOpMode {
         // we call the hardware map here
 
         // Can we make it?
-        UntilOneDoneStep step = new UntilOneDoneStep();
-        step.add(new DriveStep());
-        step.add(new WaitStep(4000));
 
+        UntilOneDoneStep step1 = new UntilOneDoneStep();
+        step1.add(new DriveStep(0.5));
+        step1.add(new WaitStep(2000));
+        UntilOneDoneStep step2 = new UntilOneDoneStep();
+        step2.add(new DriveStep(0.5));
+        step2.add(new WaitStep(2000));
+        SequenceStep step = new SequenceStep();
+        step.add(step1);
+        step.add(step2);
+        
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "StepRunnerAuto Ready");    //
         telemetry.update();

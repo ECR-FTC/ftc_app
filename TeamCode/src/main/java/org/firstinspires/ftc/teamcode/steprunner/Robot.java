@@ -19,16 +19,16 @@ public class Robot {
     }
     public void motorOn()
     {
-        bot.leftMotor.setPower(0.50);
+        bot.leftMotor.setPower(0.25);
     }
     public void motorOff()
     {
         bot.leftMotor.setPower(0.00);
     }
-    public void allMotorsOn()
+    public void allMotorsOn(double speed)
     {
-        bot.leftMotor.setPower(0.50);
-        bot.rightMotor.setPower(0.50);
+        bot.leftMotor.setPower(speed);
+        bot.rightMotor.setPower(speed);
     }
     public void allMotorsOff()
     {

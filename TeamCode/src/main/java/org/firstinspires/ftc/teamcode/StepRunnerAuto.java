@@ -8,8 +8,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.HardwareK9bot;
+import org.firstinspires.ftc.teamcode.HardwareK9botECR;
+import org.firstinspires.ftc.teamcode.steprunner.MotorStep;
+import org.firstinspires.ftc.teamcode.steprunner.Robot;
+import org.firstinspires.ftc.teamcode.steprunner.UntilOneDoneStep;
 import org.firstinspires.ftc.teamcode.steprunner.WaitStep;
+import org.firstinspires.ftc.teamcode.steprunner.DriveStep;
 
 /**
  We're trying to get something that does nothing working.
@@ -20,7 +24,7 @@ import org.firstinspires.ftc.teamcode.steprunner.WaitStep;
 public class StepRunnerAuto extends LinearOpMode {
 
     /* Declare OpMode members. */
-    HardwareK9bot robot = new HardwareK9bot();
+    HardwareK9botECR bot = new HardwareK9botECR();
 
     @Override
     public void runOpMode() {
@@ -28,10 +32,20 @@ public class StepRunnerAuto extends LinearOpMode {
         /* Initialize the drive system variables.
          * The init() method of the hardware class does all the work here
          */
-        robot.init(hardwareMap);
+        try {
+            bot.init(hardwareMap);
+        } catch (InterruptedException e) {
+        // TODO: what to do if this fails?
+        }
+
+        Robot robot = new Robot(bot);
+
+        // we call the hardware map here
 
         // Can we make it?
-        WaitStep waitStep = new WaitStep(30);
+        UntilOneDoneStep step = new UntilOneDoneStep();
+        step.add(new DriveStep());
+        step.add(new WaitStep(4000));
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "StepRunnerAuto Ready");    //
@@ -43,15 +57,22 @@ public class StepRunnerAuto extends LinearOpMode {
             idle();
         }
 
-        // create steps and start them
+        // Start our step(s)
+        telemetry.addData("Status", "StepRunnerAuto Starting");    //
+        telemetry.update();
+        step.start(robot);
 
-        // run until the white line is seen OR the driver presses STOP;
-        while (opModeIsActive() ) {
-
-            // run the step
+        // run
+        while (opModeIsActive() && step.isRunning()) {
+            telemetry.addData("Status", "StepRunnerAuto Running");    //
+            telemetry.update();
+            step.run();
         }
 
         // Stop the step
+        telemetry.addData("Status", "StepRunnerAuto Stopping");    //
+        telemetry.update();
+        step.stop();
 
     }
 }

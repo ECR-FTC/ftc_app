@@ -29,7 +29,7 @@ public class Build2Auto1Bluec extends LinearOpMode {
         DcMotor motorBackLeft;
 
 
-    private ElapsedTime runtime = new ElapsedTime();
+        private ElapsedTime runtime = new ElapsedTime();
         // here we declare 2 things, the hardware map, and an elapsed time function
         boolean lineSeen;
 

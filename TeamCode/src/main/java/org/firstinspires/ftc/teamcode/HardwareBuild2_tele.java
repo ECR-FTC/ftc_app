@@ -8,10 +8,10 @@ import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+//import static java.lang.Math.max;
+//import static java.lang.Math.min;
 //import com.qualcomm.robotcore.hardware.TouchSensor;
-
 //import com.qualcomm.robotcore.hardware.GyroSensor;
-
 //import org.firstinspires.ftc.robotcontroller.external.samples.SensorMRGyro;
 
 /**
@@ -42,6 +42,7 @@ public class HardwareBuild2_tele
     public Servo rightServo;
     public Servo loadServo;
     public Servo fireServo;
+    public Servo flipServo;
     public ColorSensor colorR;
     public ModernRoboticsI2cGyro gyro;   // Hardware Device Object
     public OpticalDistanceSensor ODS;
@@ -67,14 +68,14 @@ public class HardwareBuild2_tele
     public double fireServoTime = 0.5;  // delay time for the firing servo
     public double deadZone = 0.25; // For lift motor.
     public int GO_ONE_TILE_PORT = 1000;
+    public double flipStore = 0.00;
+    public double flipGo = 0.00;
 
     public double driveMinPower = 0.4;
     public double driveMaxPower = 1.0;
     public double drivePowerIncrement = 0.01;
     /* Constructor */
-    public HardwareBuild2_tele() {
-    }
-
+    public HardwareBuild2_tele() {    }
     /* Initialize standard Hardware interfaces */
     public void init(HardwareMap ahwMap) throws InterruptedException {
         // save reference to HW Map
@@ -95,6 +96,7 @@ public class HardwareBuild2_tele
         rightServo = hwMap.servo.get("servoRight");
         fireServo = hwMap.servo.get("servoFire");
         loadServo = hwMap.servo.get("servoLoad");
+        flipServo = hwMap.servo.get("flipServo");
 
         gyro = (ModernRoboticsI2cGyro)hwMap.gyroSensor.get("sensorGyro");
         colorR = hwMap.colorSensor.get("sensorColorRight");
@@ -114,7 +116,6 @@ public class HardwareBuild2_tele
         motorFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
 
         colorR.enableLed(false);
 
@@ -161,4 +162,5 @@ public class HardwareBuild2_tele
     public void resetEncoderValue(){
         ENCODER_PORT_RESET = motorFrontLeft.getCurrentPosition();
     }
+
 }

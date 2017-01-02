@@ -34,21 +34,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.Range;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
+
+import java.util.Locale;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
-
-import org.firstinspires.ftc.teamcode.MotorPower;
-
-import java.util.Locale;
 
 
 //import com.qualcomm.robotcore.hardware.DcMotor;
@@ -61,14 +56,26 @@ import java.util.Locale;
  */
 
 @TeleOp(name = "Build2bot: Telop Tank", group = "Build1bot")
-@Disabled
-public class Build2TankDrive extends OpMode {
+//@Disabled
+public class Build2TankDriveTwo extends OpMode {
     HardwareBuild2_tele robot;
     double maxDSpeed = 1.0;
+    boolean motorOn = false;
+    private ElapsedTime runtime = new ElapsedTime();
+    int ticks = 0, ticksTwo = 0;
+    double time = 0, timeTwo = 0;
+    double ticksPerTime;
+    double target = 1.22, difference = 0;
+    double speed = 0.5;
+    double P = 0.5, I = 0;
+    double pChangeFactor = 4, iChangeFactor = 1;
+    double maxSpeed = 1.0, minSpeed = 0.2;
+    int timeInt = 1000;
+
     /**
      * Constructor
      */
-    public Build2TankDrive() {
+    public Build2TankDriveTwo() {
 
     }
 
@@ -111,25 +118,59 @@ public class Build2TankDrive extends OpMode {
         //set motor speed for shoot
         if (gamepad2.dpad_up) // forward
         {
-            robot.motorShoot.setPower(robot.shootPower);        }
+            motorOn = true;
+            runtime.reset();
+        }
         if (gamepad2.dpad_down && gamepad1.dpad_down) // backward
         {
-            robot.motorShoot.setPower(-robot.shootPower);
+            motorOn = false;
+            robot.motorShoot.setPower(-0.5);
         }
         if (gamepad2.dpad_left || gamepad2.dpad_right) // off
         {
             robot.motorShoot.setPower(0.0);
+            motorOn = false;
+        }
+        if(motorOn == true) {
+            //get new time and ticks
+         //   robot.motorShoot.setPower(speed);
+            ticks = robot.motorShoot.getCurrentPosition();
+            time = runtime.milliseconds();
+
+            //get ticks per time
+            ticksPerTime = ((ticks - ticksTwo) / (time - timeTwo));
+
+            // find 'p'
+            difference = target - ticksPerTime;
+
+            // find 'i'
+            I = (I * (timeInt - (time - timeTwo)) + difference * (time - timeTwo)) / timeInt;
+
+            // find speed
+            speed += (difference * pChangeFactor) + (I * iChangeFactor);
+            speed = max(speed, minSpeed);
+            speed = min(speed, maxSpeed);
+
+            robot.motorShoot.setPower(speed);
+
+            //save old time & ticks
+            timeTwo = time;
+            ticksTwo = ticks;
         }
 
 
-        // extend lift
+        // extend & retract lift
         if (gamepad2.right_stick_y > robot.deadZone)
         {
             robot.motorLift.setPower(robot.liftMotorPower);
         }
 
+        if (gamepad2.right_stick_y < robot.deadZone)
+        {
+            robot.motorLift.setPower(0.0);
+        }
+
         // flip 'forklift'
-        // TODO finish this section of code for the flip servo
         if(gamepad2.x)
         {
             robot.flipServo.setPosition(robot.flipGo);
@@ -174,9 +215,11 @@ public class Build2TankDrive extends OpMode {
 
 
 		// Send telemetry data back to driver station.
-        telemetry.addData("Drive Power", "Drive: " + String.format(Locale.US,"%.2f", maxDSpeed));
+        telemetry.addData("Drive Power", "Drive: " + String.format(Locale.US,"%.2f", maxSpeed));
         telemetry.addData("Encoder Value:", robot.returnEncoderValue());
         telemetry.addData("Heading:", robot.gyro.getIntegratedZValue());
+        telemetry.addData("speed", speed);
+        telemetry.addData("ticks over time", ticksPerTime);
         telemetry.update();
 
     }
@@ -199,7 +242,7 @@ public class Build2TankDrive extends OpMode {
         side = (float) -scaleInput(side);
 
         MotorPower returnMotorPower;
-        returnMotorPower = motorScale(left + side, left - side, right - side, right + side, (float) maxDSpeed);
+        returnMotorPower = motorScale(left + side, left - side, right - side, right + side, (float) maxSpeed);
 
         // write the values to the motors
         robot.motorBackRight.setPower(returnMotorPower.getMotorBackRight());
@@ -218,18 +261,18 @@ public class Build2TankDrive extends OpMode {
         norm = max(max(abs(motorFL), abs(motorBL)), max(abs(motorFR), abs(motorBR)));
         norm = max(norm, (float) 1.0);
 
-        motorFLadj = (Range.clip((motorFL) / norm, -maxSpeed, maxSpeed));
-        motorBLadj = (Range.clip((motorBL) / norm, -maxSpeed, maxSpeed));
-        motorFRadj = (Range.clip((motorFR) / norm, -maxSpeed, maxSpeed));
-        motorBRadj = (Range.clip((motorBR) / norm, -maxSpeed, maxSpeed));
+        motorFLadj = (Range.clip((motorFL) / norm, -(float)maxDSpeed, (float)maxDSpeed));
+        motorBLadj = (Range.clip((motorBL) / norm, -(float)maxDSpeed, (float)maxDSpeed));
+        motorFRadj = (Range.clip((motorFR) / norm, -(float)maxDSpeed, (float)maxDSpeed));
+        motorBRadj = (Range.clip((motorBR) / norm, -(float)maxDSpeed, (float)maxDSpeed));
 
         MotorPower returnMotorPower = new MotorPower(motorBLadj, motorBRadj, motorFLadj, motorFRadj);
         return returnMotorPower;
     }
 
     double scaleInput(double dVal) {
-        double[] scaleArray = {0.0, 0.05, 0.09, 0.10, 0.12, 0.15, 0.18, 0.24,
-                0.30, 0.36, 0.43, 0.50, 0.60, 0.72, 0.85, 1.00, 1.00};
+        double[] scaleArray = {0.00, 0.05, 0.09, 0.10, 0.12, 0.15, 0.18, 0.24,
+                               0.30, 0.36, 0.43, 0.50, 0.60, 0.72, 0.85, 1.00, 1.00};
         double dScale;
 
         // get the corresponding index for the scaleInput array.

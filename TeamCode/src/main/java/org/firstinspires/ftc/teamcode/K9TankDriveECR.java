@@ -44,44 +44,31 @@ import com.qualcomm.robotcore.util.Range;
 //import org.firstinspires.ftc.robotcontroller.external.samples.HardwareK9bot;
 //import org.firstinspires.ftc.team11096code.HardwareK9botECR;
 
-/**
- * This OpMode uses the common HardwareK9bot class to define the devices on the robot.
- * All device access is managed through the HardwareK9bot class. (See this class for device names)
- * The code is structured as a LinearOpMode
- *
- * This particular OpMode executes a basic Tank Drive Teleop for the K9 bot
- * It raises and lowers the arm using the Gampad Y and A buttons respectively.
- * It also opens and closes the claw slowly using the X and B buttons.
- *
- * Note: the configuration of the servos is such that
- * as the arm servo approaches 0, the arm position moves up (away from the floor).
- * Also, as the claw servo approaches 0, the claw opens up (drops the game element).
- *
- * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
- */
+/*
+This OpMode uses the ECR HardwareK9bot class to define the devices on the robot.
+All device access is managed through the HardwareK9botECR class. (See this class for device names)
+The code is structured as a LinearOpMode
+
+This particular OpMode executes a basic Tank Drive Teleop for the K9 bot
+*/
 
 @TeleOp(name="K9bot: Telop Tank ECR", group="K9bot")
-@Disabled
+//@Disabled
 public class K9TankDriveECR extends LinearOpMode {
 
     /* Declare OpMode members. */
+
     HardwareK9botECR   robot        = new HardwareK9botECR();          // Use a K9'shardware
     double          armPosition     = HardwareK9botECR.ARM_HOME;       // Servo safe position
     double          clawPosition    = HardwareK9botECR.CLAW_HOME;      // Servo safe position
     final double    CLAW_SPEED      = 0.01;                            // sets rate to move servo
     final double    ARM_SPEED       = 0.01;                            // sets rate to move servo
 
-
-
-
-
-
-
     @Override
     public void runOpMode() throws InterruptedException {
         double left;
         double right;
+        int speedChange = 1;
         final MediaPlayer mp; // instantiate the object name
         // populate the MediaPlayer object. The resource should be in the res/raw folder
         // and should be named "puppybarking.wav"
@@ -105,17 +92,31 @@ public class K9TankDriveECR extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
+            //change speed
+            if(gamepad1.dpad_up)
+            {
+                speedChange = 1;
+            }
+            if(gamepad1.dpad_left || gamepad1.dpad_right)
+            {
+                speedChange = 2;
+            }
+            if(gamepad1.dpad_down)
+            {
+                speedChange = 4;
+            }
+
             // Run wheels in tank mode (note: The joystick goes negative when pushed forward, so negate it)
             // add /4 to slow down drive motors
-            left = -gamepad1.left_stick_y/4.0;
-            right = -gamepad1.right_stick_y/4.0;
+            left = -gamepad1.left_stick_y/speedChange;
+            right = -gamepad1.right_stick_y/speedChange;
             robot.leftMotor.setPower(left);
             robot.rightMotor.setPower(right);
             if (robot.touchR.isPressed()){
                 robot.leftMotor.setPower(0);
                 robot.rightMotor.setPower(0);
             }
-telemetry.addData("isPressed",String.valueOf(robot.touchR.isPressed()));
+            telemetry.addData("isPressed",String.valueOf(robot.touchR.isPressed()));
             // Use gamepad Y & A raise and lower the arm
             if (gamepad1.a)
                 armPosition += ARM_SPEED;
@@ -147,7 +148,8 @@ telemetry.addData("isPressed",String.valueOf(robot.touchR.isPressed()));
             telemetry.addData("left",  "%.2f", left);
             telemetry.addData("right", "%.2f", right);
             telemetry.addData("touch", "%b", robot.touchR.isPressed());
-            telemetry.addData("4. h", "%03d", robot.gyro.getHeading());
+            telemetry.addData("speedChange speed / ", speedChange);
+            telemetry.addData("Gyro: 4. h", "%03d", robot.gyro.getHeading());
             telemetry.update();
 
             // Pause for metronome tick.  40 mS each cycle = update 25 times a second.

@@ -38,9 +38,9 @@ public class HardwareK9botECR
     public GyroSensor gyro = null;
     public TouchSensor touchR = null;
 
-    public final static double ARM_HOME = 0.2;
+    public final static double ARM_HOME = 0.36;
     public final static double CLAW_HOME = 0.2;
-    public final static double ARM_MIN_RANGE  = 0.00;
+    public final static double ARM_MIN_RANGE  = 0.36;
     public final static double ARM_MAX_RANGE  = 1.00;
     public final static double CLAW_MIN_RANGE  = 0.00;
     public final static double CLAW_MAX_RANGE  = 0.7;

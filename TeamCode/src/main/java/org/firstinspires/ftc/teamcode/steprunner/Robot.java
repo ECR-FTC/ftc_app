@@ -17,11 +17,11 @@ public class Robot {
     public Robot(HardwareK9botECR bot) {
         this.bot = bot;
     }
-    public void motorOn()
+    public void motorLeftOn(double speed)
     {
-        bot.leftMotor.setPower(0.25);
+        bot.leftMotor.setPower(speed);
     }
-    public void motorOff()
+    public void motorLeftOff()
     {
         bot.leftMotor.setPower(0.00);
     }
@@ -34,7 +34,28 @@ public class Robot {
     {
         bot.leftMotor.setPower(0.00);
         bot.rightMotor.setPower(0.00);
-    }    /*
+    }
+    public void motorRightOn(double speed)
+    {
+        bot.leftMotor.setPower(speed);
+    }
+    public void motorRightOff()
+    {
+        bot.leftMotor.setPower(0.00);
+    }
+    public int encoderRight()
+    {
+        //need to reset encoder
+        int rightTicks = bot.rightMotor.getCurrentPosition();
+        return rightTicks;
+    }
+    public int encoderLeft()
+    {
+        //need to reset encoder
+        int leftTicks = bot.leftMotor.getCurrentPosition();
+        return leftTicks;
+    }
+    /*
         Return current time in milliseconds.
      */
     public long currentTimeMillis() {

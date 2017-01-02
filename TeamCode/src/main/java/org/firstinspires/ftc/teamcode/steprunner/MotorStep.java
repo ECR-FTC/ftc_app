@@ -8,7 +8,7 @@ public class MotorStep extends  Step {
     @Override
     public void start(Robot r) {
         super.start(r);
-        robot.motorOn();
+        robot.motorLeftOn(.25);
     }
 
     @Override
@@ -20,7 +20,7 @@ public class MotorStep extends  Step {
     @Override
     public void stop(){
         super.stop();
-        robot.motorOff();
+        robot.motorLeftOff();
     };
 
 }

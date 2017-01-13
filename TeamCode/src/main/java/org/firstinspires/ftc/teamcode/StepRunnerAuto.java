@@ -11,12 +11,15 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.HardwareK9botECR;
 import org.firstinspires.ftc.teamcode.steprunner.EncoderStep;
 import org.firstinspires.ftc.teamcode.steprunner.MotorStep;
+import org.firstinspires.ftc.teamcode.steprunner.Ramper;
 import org.firstinspires.ftc.teamcode.steprunner.Robot;
 import org.firstinspires.ftc.teamcode.steprunner.SequenceStep;
 import org.firstinspires.ftc.teamcode.steprunner.TurnStep;
 import org.firstinspires.ftc.teamcode.steprunner.UntilOneDoneStep;
 import org.firstinspires.ftc.teamcode.steprunner.WaitStep;
 import org.firstinspires.ftc.teamcode.steprunner.DriveStep;
+
+import java.util.Locale;
 
 /**
  We're trying to get something that does nothing working.
@@ -34,7 +37,20 @@ public class StepRunnerAuto extends LinearOpMode {
 
         /* Initialize the drive system variables.
          * The init() method of the hardware class does all the work here
-         */
+        */
+        telemetry.addData("hi", "hi");
+        telemetry.update();
+
+        Ramper r = new Ramper(10, 20, 100, 0, 1);
+        for(int i = 0; i <= 100; i++)
+        {
+            double v = r.getRampValue((double) i);
+            telemetry.addData("Power", String.format(Locale.US,"%d %.2f",i, v ));
+            telemetry.update();
+            sleep(200);
+        }
+
+
         try {
             bot.init(hardwareMap);
         } catch (InterruptedException e) {
@@ -42,6 +58,7 @@ public class StepRunnerAuto extends LinearOpMode {
         }
 
         Robot robot = new Robot(bot);
+
 
         // we call the hardware map here
 

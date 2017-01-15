@@ -15,7 +15,6 @@ public class EncoderStep extends  Step {
     @Override
     public void start(Robot r) {
         super.start(r);
-
     }
 
     @Override

@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.HardwareK9botECR;
 import org.firstinspires.ftc.teamcode.steprunner.EncoderStep;
 import org.firstinspires.ftc.teamcode.steprunner.MotorStep;
 import org.firstinspires.ftc.teamcode.steprunner.Ramper;
+import org.firstinspires.ftc.teamcode.steprunner.RamperDriveStep;
 import org.firstinspires.ftc.teamcode.steprunner.Robot;
 import org.firstinspires.ftc.teamcode.steprunner.SequenceStep;
 import org.firstinspires.ftc.teamcode.steprunner.TurnStep;
@@ -25,7 +26,7 @@ import java.util.Locale;
  We're trying to get something that does nothing working.
  */
 
-@Autonomous(name="StepRunnerAuto", group="K9bot")
+@Autonomous(name="StepRunnerAutoHello", group="K9bot")
 //@Disabled
 public class StepRunnerAuto extends LinearOpMode {
 
@@ -38,9 +39,8 @@ public class StepRunnerAuto extends LinearOpMode {
         /* Initialize the drive system variables.
          * The init() method of the hardware class does all the work here
         */
-        telemetry.addData("hi", "hi");
-        telemetry.update();
 
+/*
         Ramper r = new Ramper(10, 20, 100, 0, 1);
         for(int i = 0; i <= 100; i++)
         {
@@ -49,7 +49,7 @@ public class StepRunnerAuto extends LinearOpMode {
             telemetry.update();
             sleep(200);
         }
-
+*/
 
         try {
             bot.init(hardwareMap);
@@ -59,10 +59,12 @@ public class StepRunnerAuto extends LinearOpMode {
 
         Robot robot = new Robot(bot);
 
-
+        telemetry.addData("hi", "hi");
+        telemetry.update();
         // we call the hardware map here
 
         //go straight until 2000 encoder ticks
+        /*
         UntilOneDoneStep step1 = new UntilOneDoneStep();
         step1.add(new DriveStep(0.5));
         step1.add(new EncoderStep(2000));
@@ -76,7 +78,8 @@ public class StepRunnerAuto extends LinearOpMode {
         SequenceStep step = new SequenceStep();
         step.add(step1);
         step.add(step2);
-
+*/
+        RamperDriveStep step = new RamperDriveStep( 0.60, 3000);
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "StepRunnerAuto Ready");    //
         telemetry.update();
@@ -94,7 +97,8 @@ public class StepRunnerAuto extends LinearOpMode {
 
         // run
         while (opModeIsActive() && step.isRunning()) {
-            telemetry.addData("Status", "StepRunnerAuto Running");    //
+            String msg = step.getTelemetry();
+            telemetry.addData("Status", msg);    //
             telemetry.update();
             step.run();
         }

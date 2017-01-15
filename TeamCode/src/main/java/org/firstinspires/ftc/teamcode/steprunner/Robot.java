@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.steprunner;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
+
 import org.firstinspires.ftc.teamcode.HardwareK9botECR;
 
 /**
@@ -25,30 +27,36 @@ public class Robot {
     {
         bot.leftMotor.setPower(0.00);
     }
+
     public void allMotorsOn(double speed)
     {
         bot.leftMotor.setPower(speed);
         bot.rightMotor.setPower(speed);
     }
+
     public void allMotorsOff()
     {
         bot.leftMotor.setPower(0.00);
         bot.rightMotor.setPower(0.00);
     }
+
     public void motorRightOn(double speed)
     {
         bot.leftMotor.setPower(speed);
     }
+
     public void motorRightOff()
     {
         bot.leftMotor.setPower(0.00);
     }
+
     public int encoderRight()
     {
         //need to reset encoder
         int rightTicks = bot.rightMotor.getCurrentPosition();
         return rightTicks;
     }
+
     public int encoderLeft()
     {
         //need to reset encoder

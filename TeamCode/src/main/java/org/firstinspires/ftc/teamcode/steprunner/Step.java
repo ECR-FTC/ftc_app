@@ -72,5 +72,8 @@ public class Step {
                 message));
         // Log.info(prefix + ":" + message);
     }
+    public String getTelemetry(){
 
+        return "Hi";
+    }
 }

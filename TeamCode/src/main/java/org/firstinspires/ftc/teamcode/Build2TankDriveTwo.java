@@ -65,8 +65,8 @@ public class Build2TankDriveTwo extends OpMode {
     int ticks = 0, ticksTwo = 0;
     double time = 0, timeTwo = 0;
     double ticksPerTime;
-    double target = 1.22, difference = 0;
-    double speed = 0.5;
+    double target = 1.10, difference = 0;
+    double speed = 1.0;
     double P = 0.5, I = 0;
     double pChangeFactor = 4, iChangeFactor = 1;
     double maxSpeed = 1.0, minSpeed = 0.2;

@@ -79,12 +79,13 @@ public class Build2Auto2Bluec extends LinearOpMode {
 
             //this is a sample autonomous where the robot shoots 2 balls and pushes the cap ball off, and parks partway onboard..
             // this is a blue code
-            autoGoOneTileForward(-0.5);
+            autoGoOneTileForward(-0.75);
 
             autoFire(true, false); // spin up motor and shoot 1st ball
-            delayLoop(8.2);
+            delayLoop(5.2);
             autoFire(false, true); // shoot second ball
-            autoGoOneTileForward(-2.3);
+
+            autoGoOneTileForward(-3.0);
          }
 
     //
@@ -261,7 +262,7 @@ public class Build2Auto2Bluec extends LinearOpMode {
             delayLoop(robot.shootRampTime);
             }
 
-        robot.motorShoot.setPower(robot.shootPower);//this sets the motor to firing speed
+        robot.motorShoot.setPower(0.8);//this sets the motor to firing speed
         robot.fireServo.setPosition(robot.fireGo);// and we fire it here
         delayLoop(robot.fireServoTime);
 

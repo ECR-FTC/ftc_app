@@ -268,11 +268,11 @@ public class Build2Auto1Redc extends LinearOpMode {
 
     public void autoFire(boolean motorSpinUp, boolean motorTurnOff) {
         if (motorSpinUp) {//spins up the motor at full speed for 2 seconds ro make it faster.
-            robot.motorShoot.setPower(robot.shootRampPower);
+            robot.motorShoot.setPower(-robot.shootRampPower);
             delayLoop(robot.shootRampTime);
             }
 
-        robot.motorShoot.setPower(robot.shootPower);//this sets the motor to firing speed
+        robot.motorShoot.setPower(-0.9);//this sets the motor to firing speed
         robot.fireServo.setPosition(robot.fireGo);// and we fire it here
         delayLoop(robot.fireServoTime);
 

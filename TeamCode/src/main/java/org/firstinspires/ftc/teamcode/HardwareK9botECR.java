@@ -35,8 +35,8 @@ public class HardwareK9botECR
     public Servo    arm         = null;
     public Servo    claw        = null;
     //public SensorMRGyro gyro    = null;
-    public GyroSensor gyro = null;
-    public TouchSensor touchR = null;
+//    public GyroSensor gyro = null;
+//    public TouchSensor touchR = null;
 
     public final static double ARM_HOME = 0.36;
     public final static double CLAW_HOME = 0.2;
@@ -58,8 +58,8 @@ public class HardwareK9botECR
         // save reference to HW Map
         hwMap = ahwMap;
 
-        gyro = hwMap.gyroSensor.get("gyro");
-        touchR = hwMap.touchSensor.get("touchFR");
+     //   gyro = hwMap.gyroSensor.get("gyro");
+  //      touchR = hwMap.touchSensor.get("touchFR");
         // Define and Initialize Motors
         leftMotor   = hwMap.dcMotor.get("motor_1");
         rightMotor  = hwMap.dcMotor.get("motor_2");
@@ -79,13 +79,13 @@ public class HardwareK9botECR
         claw.setPosition(CLAW_HOME);
 
         // start calibrating the gyro.
-        gyro.calibrate();
+       // gyro.calibrate();
 
         // make sure the gyro is calibrated.
-        while (gyro.isCalibrating()) {
+       /* while (gyro.isCalibrating()) {
             Thread.sleep(50);
         }
-
+*/
     }
 
     /***

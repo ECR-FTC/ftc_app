@@ -53,21 +53,20 @@ public class PIDTest extends LinearOpMode {
 
             //get ticks per time
             ticksPerTime = ((ticks - ticksTwo) / (time - timeTwo));
-
+/*
             if(gamepad1.dpad_up)
             {
-                pChangeFactor = iChangeFactor + .01;
+                pChangeFactor = pChangeFactor + .01;
             }
             if(gamepad1.dpad_down)
             {
-                pChangeFactor = iChangeFactor - .01;
+                pChangeFactor = pChangeFactor - .01;
             }
-
+*/
             // find 'p'
             difference = target - ticksPerTime;
 
             // find 'i'
-
             I = (I * (timeInt - (time - timeTwo)) + difference * (time - timeTwo)) / timeInt;
 
             // find speed

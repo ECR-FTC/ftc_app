@@ -112,11 +112,11 @@ public class K9TankDriveECR extends LinearOpMode {
             right = -gamepad1.right_stick_y/speedChange;
             robot.leftMotor.setPower(left);
             robot.rightMotor.setPower(right);
-            if (robot.touchR.isPressed()){
+/*            if (robot.touchR.isPressed()){
                 robot.leftMotor.setPower(0);
                 robot.rightMotor.setPower(0);
-            }
-            telemetry.addData("isPressed",String.valueOf(robot.touchR.isPressed()));
+    */        }
+  //          telemetry.addData("isPressed",String.valueOf(robot.touchR.isPressed()));
             // Use gamepad Y & A raise and lower the arm
             if (gamepad1.a)
                 armPosition += ARM_SPEED;
@@ -145,11 +145,11 @@ public class K9TankDriveECR extends LinearOpMode {
             // Send telemetry message to signify robot running;
             telemetry.addData("arm",   "%.2f", armPosition);
             telemetry.addData("claw",  "%.2f", clawPosition);
-            telemetry.addData("left",  "%.2f", left);
-            telemetry.addData("right", "%.2f", right);
-            telemetry.addData("touch", "%b", robot.touchR.isPressed());
+     //       telemetry.addData("left",  "%.2f", left);
+       //     telemetry.addData("right", "%.2f", right);
+           // telemetry.addData("touch", "%b", robot.touchR.isPressed());
             telemetry.addData("speedChange speed / ", speedChange);
-            telemetry.addData("Gyro: 4. h", "%03d", robot.gyro.getHeading());
+         //   telemetry.addData("Gyro: 4. h", "%03d", robot.gyro.getHeading());
             telemetry.update();
 
             // Pause for metronome tick.  40 mS each cycle = update 25 times a second.
@@ -157,4 +157,4 @@ public class K9TankDriveECR extends LinearOpMode {
             idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
         }
     }
-}
+//}

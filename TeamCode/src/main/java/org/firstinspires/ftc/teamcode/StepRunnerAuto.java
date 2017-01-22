@@ -26,7 +26,7 @@ import java.util.Locale;
  We're trying to get something that does nothing working.
  */
 
-@Autonomous(name="StepRunnerAutoHello", group="K9bot")
+@Autonomous(name="StepRunnerAuto", group="K9bot")
 //@Disabled
 public class StepRunnerAuto extends LinearOpMode {
 
@@ -59,7 +59,7 @@ public class StepRunnerAuto extends LinearOpMode {
 
         Robot robot = new Robot(bot);
 
-        telemetry.addData("hi", "hi");
+        telemetry.addData("t hi", "hi");
         telemetry.update();
         // we call the hardware map here
 
@@ -79,7 +79,7 @@ public class StepRunnerAuto extends LinearOpMode {
         step.add(step1);
         step.add(step2);
 */
-        RamperDriveStep step = new RamperDriveStep( 0.60, 3000);
+        RamperDriveStep step = new RamperDriveStep(0.60, 10000);
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "StepRunnerAuto Ready");    //
         telemetry.update();
@@ -97,9 +97,12 @@ public class StepRunnerAuto extends LinearOpMode {
 
         // run
         while (opModeIsActive() && step.isRunning()) {
+
             String msg = step.getTelemetry();
-            telemetry.addData("Status", msg);    //
-            telemetry.update();
+            if(msg != null && !msg.isEmpty()) {
+                telemetry.addData("Status", msg);    //
+                telemetry.update();
+            }
             step.run();
         }
 

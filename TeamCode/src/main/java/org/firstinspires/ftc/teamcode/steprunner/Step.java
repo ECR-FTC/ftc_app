@@ -74,6 +74,6 @@ public class Step {
     }
     public String getTelemetry(){
 
-        return "Hi";
+        return null;
     }
 }

@@ -38,11 +38,14 @@ public class HardwareBuild2_tele
 
     public DcMotor motorLift;
     public DcMotor motorShoot;
+
     public Servo leftServo;
     public Servo rightServo;
     public Servo loadServo;
     public Servo fireServo;
     public Servo flipServo;
+    public Servo releaseServo;
+
     public ColorSensor colorR;
     public ModernRoboticsI2cGyro gyro;   // Hardware Device Object
     public OpticalDistanceSensor ODS;
@@ -70,6 +73,8 @@ public class HardwareBuild2_tele
     public int GO_ONE_TILE_PORT = 1000;
     public double flipStore = 0.00;
     public double flipGo = 0.00;
+    public double releaseClosed = 0.00;
+    public double releaseOpen = 0.00;
 
     public double driveMinPower = 0.4;
     public double driveMaxPower = 1.0;
@@ -97,6 +102,7 @@ public class HardwareBuild2_tele
         fireServo = hwMap.servo.get("servoFire");
         loadServo = hwMap.servo.get("servoLoad");
         flipServo = hwMap.servo.get("flipServo");
+        releaseServo = hwMap.servo.get("releaseServo");
 
         gyro = (ModernRoboticsI2cGyro)hwMap.gyroSensor.get("sensorGyro");
         colorR = hwMap.colorSensor.get("sensorColorRight");

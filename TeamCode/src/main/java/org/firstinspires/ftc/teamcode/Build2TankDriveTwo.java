@@ -171,7 +171,7 @@ public class Build2TankDriveTwo extends OpMode {
         }
 
         // flip 'forklift'
-        if(gamepad2.x)
+        if(gamepad2.right_trigger > 0.2)
         {
             robot.flipServo.setPosition(robot.flipGo);
         }
@@ -180,6 +180,15 @@ public class Build2TankDriveTwo extends OpMode {
             robot.flipServo.setPosition(robot.flipStore);
         }
 
+        //enable release
+        if(gamepad2.left_trigger > 0.2)
+        {
+            robot.releaseServo.setPosition(robot.releaseOpen);
+        }
+        else
+        {
+            
+        }
 
         // beacon pushers
         if (gamepad2.left_bumper || gamepad2.right_bumper) // trigger servo settings

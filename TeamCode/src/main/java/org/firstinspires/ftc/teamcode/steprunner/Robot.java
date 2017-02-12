@@ -27,6 +27,14 @@ public class Robot {
     {
         bot.leftMotor.setPower(0.00);
     }
+    public void motorRightOn(double speed)
+    {
+        bot.rightMotor.setPower(speed);
+    }
+    public void motorRightOff()
+    {
+        bot.rightMotor.setPower(0.00);
+    }
 
     public void allMotorsOn(double speed)
     {
@@ -38,16 +46,6 @@ public class Robot {
     {
         bot.leftMotor.setPower(0.00);
         bot.rightMotor.setPower(0.00);
-    }
-
-    public void motorRightOn(double speed)
-    {
-        bot.leftMotor.setPower(speed);
-    }
-
-    public void motorRightOff()
-    {
-        bot.leftMotor.setPower(0.00);
     }
 
     public int encoderRight()

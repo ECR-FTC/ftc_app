@@ -10,6 +10,7 @@ package org.firstinspires.ftc.teamcode;
 
 //these are all the imports that we use to allow us to use all of the sensors and motors
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -17,9 +18,10 @@ import com.qualcomm.robotcore.util.Range;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
+import static java.lang.Math.min;
 
-@Autonomous(name="Test1", group="Linear Opmode")  // @Autonomous(...) is the other common choice
-//@Disabled
+@Autonomous(name="GenericCode1", group="Linear Opmode")  // @Autonomous(...) is the other common choice
+@Disabled
 public class Build2AutoTest extends LinearOpMode {
         HardwareBuild2 robot;
         private double ENCODER_PORT_RESET;
@@ -77,25 +79,12 @@ public class Build2AutoTest extends LinearOpMode {
 
             waitForStart();   // we set our servos in init and wait for start (the driver hitting play)
 
-            //this is a sample autonomous where the robot shoots 2 balls and pushes both beacons.
+            //this is a sample autonomous where the robot shoots 2 balls and pushes the cap ball off, and parks partway onboard..
             // this is a blue code
-            //autoGoOneTileForward(1);
-            autoFire(true, false); // spin up motor and shoot 1st ball
-            delayLoop(2.0);
-            autoFire(false, true); // shoot second ball
-            autoGyroTurn(-42);
-            autoGoOneTileForward(-2.3);
-            autoGyroTurn(20);
-            autoGoOneTileForward(-.2);
-            autoGyroTurn(25);
-            autoDrive(0, (float) 1.0, 0, 800); // push into wall
-            autoGoToWhiteLine(1000, false, true);
-            autoBeacon(true);
-            autoGoOneTileForward(-1.0);
-            autoDrive(0, (float) 1.0, 0, 800); // push into wall
-            autoGoToWhiteLine(2000, false, true);
-            autoBeacon(true);
-
+            autoGoOneTileForward(-1.5);
+            autoFire();
+            autoFire();
+            autoGoOneTileForward(-2.0);
          }
 
     //
@@ -113,10 +102,10 @@ public class Build2AutoTest extends LinearOpMode {
             }
             if (isRed)
             {
-                motorBackRight.setPower(-0.15);
-                motorBackLeft.setPower(-0.25);
-                motorFrontLeft.setPower(-0.15);
-                motorFrontRight.setPower(-0.25);
+                motorBackRight.setPower(-0.25);
+                motorBackLeft.setPower(-0.15);
+                motorFrontLeft.setPower(-0.25);
+                motorFrontRight.setPower(-0.15);
             }
             lineSeen = false;
             telemetry.addData("No white line:", robot.ODS.getRawLightDetected());
@@ -143,34 +132,18 @@ public class Build2AutoTest extends LinearOpMode {
 
         while ((Math.abs(returnEncoderValue()) < Math.abs(portTarget) - 5) )// ||
         {
-            double rampUpSpeed, rampDownSpeed, speedMotor;
             // speed is proportional to number of encoder steps away from target
-            rampDownSpeed = 0.5 / ENCODER_ACCEL_CONST * (portTarget - returnEncoderValue());
-            // don't go faster than 1
-            rampDownSpeed = Math.signum(rampDownSpeed) * Math.min(Math.abs(rampDownSpeed), 1);
-            // don't go slower than 0
-            rampDownSpeed = Math.signum(rampDownSpeed) * Math.max(Math.abs(rampDownSpeed), 0);
-
-            // speed is proportional to number of encoder steps away from 0
-            rampUpSpeed = 0.5 / ENCODER_ACCEL_CONST * (returnEncoderValue());
-            // don't go faster than 1
-            rampUpSpeed = Math.signum(rampUpSpeed) * Math.min(Math.abs(rampUpSpeed), 1);
-            // don't go slower than 0
-            rampUpSpeed = Math.signum(rampUpSpeed) * Math.max(Math.abs(rampUpSpeed), 0);
-
-            // real speed
-            speedMotor = rampDownSpeed * rampUpSpeed;
+            speedPort = 0.5 / ENCODER_ACCEL_CONST * (portTarget - returnEncoderValue());
             // don't go faster than SPEED_NOMINAL
-            speedMotor = Math.signum(speedMotor) * Math.min(Math.abs(speedMotor), 0.50);
+            speedPort = Math.signum(speedPort) * Math.min(Math.abs(speedPort), .5);
             // don't go slower than SPEED_MIN
-            speedMotor = Math.signum(speedMotor) * Math.max(Math.abs(speedMotor), 0.15);
-
+            speedPort = Math.signum(speedPort) * Math.max(Math.abs(speedPort), .15);
 
             // set the motor speeds
-            motorFrontRight.setPower(speedMotor);
-            motorFrontLeft.setPower(speedMotor);
-            motorBackRight.setPower(speedMotor);
-            motorBackLeft.setPower(speedMotor);
+            motorFrontRight.setPower(speedPort);
+            motorFrontLeft.setPower(speedPort);
+            motorBackRight.setPower(speedPort);
+            motorBackLeft.setPower(speedPort);
 
             telemetry.addData("Encoder Value:", returnEncoderValue());
             telemetry.update();
@@ -212,14 +185,14 @@ public class Build2AutoTest extends LinearOpMode {
     }
 
     public void autoBeacon (boolean isAllianceRed) { //this will (when called) tell the robot to push the beacon
-        // using our color sensor that is in front of the servo
+        // our color sensor is in front of the servo
         boolean beaconFound = false;
         int redThreshold = 2;
         int blueThreshold = 3;
 
         if(isAllianceRed) { // red alliance
             if (robot.colorR.red() > redThreshold) {
-                telemetry.addData("Red ","Red");
+                telemetry.addData("Red","Red");
                 telemetry.update();
                 beaconFound = true;
                 // if we see our color (red) we drive forward
@@ -242,17 +215,17 @@ public class Build2AutoTest extends LinearOpMode {
 
         if(!isAllianceRed) { // blue alliance
             if (robot.colorR.blue() > blueThreshold) {
+                beaconFound = true;
                 telemetry.addData("Blue","Blue");
                 telemetry.update();
                 // if we see our color (blue) we drive forward
                 runtime.reset();
-                while ((runtime.seconds() < 0.5)) {
+                while ((runtime.seconds() < 0.4)) {
                     motorBackRight.setPower (-0.2 + 0.05); // slant into wall
                     motorBackLeft.setPower  (-0.2 - 0.05);
                     motorFrontLeft.setPower (-0.2 + 0.05);
                     motorFrontRight.setPower(-0.2 - 0.05);                }
                 driveMotorStop();
-                beaconFound = true;
             }
 
             else if (robot.colorR.red() > redThreshold) {
@@ -282,23 +255,14 @@ public class Build2AutoTest extends LinearOpMode {
     //          set false to leave motor on
     // output arguments: none
 
-    public void autoFire(boolean motorSpinUp, boolean motorTurnOff) {
-        if (motorSpinUp) {//spins up the motor at full speed for 2 seconds ro make it faster.
-            robot.motorShoot.setPower(robot.shootRampPower);
-            delayLoop(robot.shootRampTime);
-            }
+    public void autoFire() {
+        robot.motorShoot.setPower(0.45);
 
-        robot.motorShoot.setPower(robot.shootPower);//this sets the motor to firing speed
-        robot.fireServo.setPosition(robot.fireGo);// and we fire it here
-        delayLoop(robot.fireServoTime);
+        delayLoop(4);
+        robot.fireServo.setPosition(robot.fireGo);// the servo is retracted after firing here.
+        delayLoop(2 * robot.fireServoTime);
+        robot.fireServo.setPosition(robot.fireStay);
 
-        robot.fireServo.setPosition(robot.fireStay);// the servo is retracted after firing here.
-        delayLoop(2*robot.fireServoTime);
-
-        if (motorTurnOff)
-        {
-            robot.motorShoot.setPower(0.0);
-        }
     }
 
     public void autoDrive(float foward, float left, float turn, long waitFor){

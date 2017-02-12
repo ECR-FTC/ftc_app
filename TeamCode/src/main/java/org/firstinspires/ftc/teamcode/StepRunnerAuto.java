@@ -40,16 +40,6 @@ public class StepRunnerAuto extends LinearOpMode {
          * The init() method of the hardware class does all the work here
         */
 
-/*
-        Ramper r = new Ramper(10, 20, 100, 0, 1);
-        for(int i = 0; i <= 100; i++)
-        {
-            double v = r.getRampValue((double) i);
-            telemetry.addData("Power", String.format(Locale.US,"%d %.2f",i, v ));
-            telemetry.update();
-            sleep(200);
-        }
-*/
 
         try {
             bot.init(hardwareMap);
@@ -58,28 +48,35 @@ public class StepRunnerAuto extends LinearOpMode {
         }
 
         Robot robot = new Robot(bot);
+        bot.gyro.calibrate();
+
+        // make sure the gyro is calibrated before continuing
+        while (!isStopRequested() && bot.gyro.isCalibrating())  {
+            sleep(50);
+            idle();
+        }
 
         telemetry.addData("t hi", "hi");
         telemetry.update();
         // we call the hardware map here
 
         //go straight until 2000 encoder ticks
-        /*
-        UntilOneDoneStep step1 = new UntilOneDoneStep();
-        step1.add(new DriveStep(0.5));
-        step1.add(new EncoderStep(2000));
 
-        //turn for 2 seconds
-        UntilOneDoneStep step2 = new UntilOneDoneStep();
-        step2.add(new TurnStep(0.5, 1));
-        step2.add(new WaitStep(2000));
+
+        RamperDriveStep step1 = new RamperDriveStep(.4, 4000);
+        TurnStep step2 = new TurnStep(0.40, -90);
 
         //sequence step 1 and 2
         SequenceStep step = new SequenceStep();
         step.add(step1);
         step.add(step2);
-*/
-        RamperDriveStep step = new RamperDriveStep(0.60, 10000);
+        step.add(step1);
+        step.add(step2);
+        step.add(step1);
+        step.add(step2);
+        step.add(step1);
+        step.add(step2);
+
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "StepRunnerAuto Ready");    //
         telemetry.update();

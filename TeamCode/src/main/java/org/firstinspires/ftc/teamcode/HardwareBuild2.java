@@ -59,11 +59,11 @@ public class HardwareBuild2
     public double rightStore = 0.65;  // right button pusher "off" value
     public double fireGo = 0.5; // setting to fire a ball into the launcher
     public double fireStay = 0.0; // down setting for the fire servo
-    public double loadClosed = 0.7; // "up" setting for the ball loader
-    public double loadOpen = 0.0;  // "down" setting for the ball loader
-    public double shootPower = -0.15; // steady-state launcher motor power
-    public double shootRampPower = -1.0; // ramp-up launcher motor power
-    public double shootRampTime = 2;  // ramp-up time for launcher motor
+    public double loadClosed = 0.8; // "up" setting for the ball loader
+    public double loadOpen = 0.1;  // "down" setting for the ball loader
+    public double shootPower = 0.35; // steady-state launcher motor power
+    public double shootRampPower = 1.0; // ramp-up launcher motor power
+    public double shootRampTime = 5;  // ramp-up time for launcher motor
     public double fireServoTime = 0.5;  // delay time for the firing servo
 
     public int GO_ONE_TILE_PORT = 3150;

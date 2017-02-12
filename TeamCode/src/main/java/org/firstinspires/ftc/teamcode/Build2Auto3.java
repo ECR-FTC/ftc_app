@@ -19,9 +19,9 @@ import com.qualcomm.robotcore.util.Range;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 
-@Autonomous(name="GenericCode1", group="Linear Opmode")  // @Autonomous(...) is the other common choice
-@Disabled
-public class Build2Auto2Redc extends LinearOpMode {
+@Autonomous(name="BeaconsBlue", group="Linear Opmode")  // @Autonomous(...) is the other common choice
+//@Disabled
+public class Build2Auto3 extends LinearOpMode {
         HardwareBuild2 robot;
         private double ENCODER_PORT_RESET;
         DcMotor motorFrontRight;
@@ -30,7 +30,7 @@ public class Build2Auto2Redc extends LinearOpMode {
         DcMotor motorBackLeft;
 
 
-    private ElapsedTime runtime = new ElapsedTime();
+        private ElapsedTime runtime = new ElapsedTime();
         // here we declare 2 things, the hardware map, and an elapsed time function
         boolean lineSeen;
 
@@ -81,14 +81,23 @@ public class Build2Auto2Redc extends LinearOpMode {
             //this is a sample autonomous where the robot shoots 2 balls and pushes both beacons.
             // this is a blue code
             //autoGoOneTileForward(1);
+            /* Old Full Code
             autoFire(true, false); // spin up motor and shoot 1st ball
             delayLoop(4.0);
             autoFire(false, true); // shoot second ball
-            autoGyroTurn(45);
-            autoGoOneTileForward(-1.4);
-            autoGyroTurn(-90);
-            autoGoOneTileForward(-1.5);
-
+            autoGyroTurn(42);
+            autoGoOneTileForward(-2.3);
+            autoGyroTurn(-20);
+            autoGoOneTileForward(-.2);
+            autoGyroTurn(-25);
+            autoDrive(0, (float) -1.0, 0, 800); // push into wall
+            autoGoToWhiteLine(1000, true, false);
+            autoBeacon(false);
+            autoGoOneTileForward(-1.0);
+            autoDrive(0, (float) -1.0, 0, 800); // push into wall
+            autoGoToWhiteLine(2000, true, false);
+            autoBeacon(false);
+            */
          }
 
     //
@@ -96,7 +105,8 @@ public class Build2Auto2Redc extends LinearOpMode {
     {
         runtime.reset(); // this is called allot, it resets 'runtime' to 0
 
-        while((robot.ODS.getRawLightDetected() < 0.2) & (runtime.seconds() < waitFor) ) {
+        while((robot.ODS.getRawLightDetected() < 0.2) & (runtime.seconds() < waitFor) )
+        {
             if (isBlue)
             {
                 motorBackRight.setPower(-0.25);
@@ -106,10 +116,10 @@ public class Build2Auto2Redc extends LinearOpMode {
             }
             if (isRed)
             {
-                motorBackRight.setPower(-0.15);
-                motorBackLeft.setPower(-0.25);
-                motorFrontLeft.setPower(-0.15);
-                motorFrontRight.setPower(-0.25);
+                motorBackRight.setPower(-0.25);
+                motorBackLeft.setPower(-0.15);
+                motorFrontLeft.setPower(-0.25);
+                motorFrontRight.setPower(-0.15);
             }
             lineSeen = false;
             telemetry.addData("No white line:", robot.ODS.getRawLightDetected());
@@ -139,9 +149,9 @@ public class Build2Auto2Redc extends LinearOpMode {
             // speed is proportional to number of encoder steps away from target
             speedPort = 0.5 / ENCODER_ACCEL_CONST * (portTarget - returnEncoderValue());
             // don't go faster than SPEED_NOMINAL
-            speedPort = Math.signum(speedPort) * Math.min(Math.abs(speedPort), .5);
+            speedPort = Math.signum(speedPort) * Math.min(Math.abs(speedPort), robot.driveMaxPower);
             // don't go slower than SPEED_MIN
-            speedPort = Math.signum(speedPort) * Math.max(Math.abs(speedPort), .15);
+            speedPort = Math.signum(speedPort) * Math.max(Math.abs(speedPort), robot.driveMinPower);
 
             // set the motor speeds
             motorFrontRight.setPower(speedPort);
@@ -187,67 +197,104 @@ public class Build2Auto2Redc extends LinearOpMode {
         }
         driveMotorStop();
     }
-
-    public void autoBeacon (boolean isAllianceRed) { //this will (when called) tell the robot to push the beacon
-        // using our color sensor that is in front of the servo
-        boolean beaconFound = false;
+    public int detectColor()
+    {
+        int seeWhat = 0;
         int redThreshold = 2;
         int blueThreshold = 3;
-
-        if(isAllianceRed) { // red alliance
-            if (robot.colorR.red() > redThreshold) {
-                telemetry.addData("Red ","Red");
-                telemetry.update();
-                beaconFound = true;
-                // if we see our color (red) we drive forward
-                runtime.reset();
-                while ((runtime.seconds() < 0.4)) {
-                    motorBackRight.setPower (-0.2 - 0.05); // slant into wall
-                    motorBackLeft.setPower  (-0.2 + 0.05);
-                    motorFrontLeft.setPower (-0.2 - 0.05);
-                    motorFrontRight.setPower(-0.2 + 0.05);
-                }
-                driveMotorStop();
+        if (robot.colorR.red() > redThreshold) {
+            telemetry.addData("Red", "Red");
+            telemetry.update();
+            seeWhat = 1;
+        }
+        if (robot.colorR.blue() > blueThreshold) {
+            telemetry.addData("Blue", "Blue");
+            telemetry.update();
+            seeWhat = -1;
+        }
+        if (robot.colorR.red() < redThreshold && robot.colorR.blue() < blueThreshold)
+        {
+            telemetry.addData("Nothing", "Nothing");
+            telemetry.update();
+            seeWhat = 0;
+        }
+        return seeWhat;
+    }
+    public void pushBeacon()
+    {
+        runtime.reset();
+        while ((runtime.seconds() < 0.5)) {
+            robot.rightServo.setPosition(robot.rightPress);
+            robot.leftServo.setPosition(robot.leftPress);
+        }
+        // put the servos back when we are done
+        robot.rightServo.setPosition(robot.rightStore);
+        robot.leftServo.setPosition(robot.leftStore);
+    }
+    public void driveAlongWall(boolean isRed)
+    {
+        double speed = .20, sideSpeed = .5;
+        runtime.reset();
+        while ((runtime.seconds() < 0.4)) {
+        if (isRed)
+            {
+            motorBackLeft.setPower(speed + sideSpeed);
+            motorBackRight.setPower(speed - sideSpeed);
+            motorFrontLeft.setPower(speed + sideSpeed);
+            motorFrontRight.setPower(speed - sideSpeed);
             }
-            else if (robot.colorR.blue() > blueThreshold) {
-                telemetry.addData("Blue","Blue");
-                telemetry.update();
-                // if we see blue, we are in the right place
-                beaconFound = true;
+        if (!isRed)
+            {
+            motorBackLeft.setPower(speed - sideSpeed);
+            motorBackRight.setPower(speed + sideSpeed);
+            motorFrontLeft.setPower(speed - sideSpeed);
+            motorFrontRight.setPower(speed + sideSpeed);
             }
         }
+    }
 
-        if(!isAllianceRed) { // blue alliance
-            if (robot.colorR.blue() > blueThreshold) {
-                telemetry.addData("Blue","Blue");
-                telemetry.update();
-                // if we see our color (blue) we drive forward
-                runtime.reset();
-                while ((runtime.seconds() < 0.5)) {
-                    motorBackRight.setPower (-0.2 + 0.05); // slant into wall
-                    motorBackLeft.setPower  (-0.2 - 0.05);
-                    motorFrontLeft.setPower (-0.2 + 0.05);
-                    motorFrontRight.setPower(-0.2 - 0.05);                }
-                driveMotorStop();
-                beaconFound = true;
+
+
+    public void autoBeacon (boolean isAllianceRed) { //this will (when called) tell the robot to push the beacon
+        // our color sensor is in front of the servo
+        boolean beaconFound = false;
+        int seeWhat;
+        seeWhat = detectColor();
+        if (isAllianceRed) {// red alliance
+
+        if (seeWhat == 0) { //no color
+
+        }
+        if (seeWhat == 1) {//red color
+            pushBeacon();
+        }
+        if (seeWhat == -1) {//blue color
+            driveAlongWall(isAllianceRed);
+
+            if (seeWhat == 0) {
+
             }
-
-            else if (robot.colorR.red() > redThreshold) {
-                telemetry.addData("Red","Red");
-                telemetry.update();
-                beaconFound = true;
+            if (seeWhat == 1) {
+                pushBeacon();
             }
         }
-        // once we are positioned, we press the beacon if we registered a color
-        if (beaconFound) {
-            runtime.reset();
-            while ((runtime.seconds() < 0.5)) {
-                robot.rightServo.setPosition(robot.rightPress);
-                robot.leftServo.setPosition(robot.leftPress);
+        }
+        if(!isAllianceRed)
+            if (seeWhat == 0) {
+
             }
-            // put the servos back when we are done
-            robot.rightServo.setPosition(robot.rightStore);
-            robot.leftServo.setPosition(robot.leftStore);
+        if (seeWhat == -1) {
+            pushBeacon();
+        }
+        if (seeWhat == 1) {
+            driveAlongWall(isAllianceRed);
+
+            if (seeWhat == 0) {
+
+            }
+            if (seeWhat == 1) {
+                pushBeacon();
+            }
         }
     }
 

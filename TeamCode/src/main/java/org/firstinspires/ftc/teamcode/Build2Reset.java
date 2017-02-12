@@ -95,9 +95,7 @@ public class Build2Reset extends OpMode {
             robot.motorLift.setPower(0.0);
         }
 
-        //reset servos to closed
-        //close flip servo
-        robot.flipServo.setPosition(robot.flipStore);
+        //reset servos to close
         //clamp release servo
         robot.releaseServo.setPosition(robot.releaseClosed);
         //close beacon pushers

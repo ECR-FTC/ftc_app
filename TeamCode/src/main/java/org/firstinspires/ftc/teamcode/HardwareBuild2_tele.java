@@ -4,6 +4,7 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.LED;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -38,17 +39,18 @@ public class HardwareBuild2_tele
 
     public DcMotor motorLift;
     public DcMotor motorShoot;
+    public DcMotor motorFlip;
 
     public Servo leftServo;
     public Servo rightServo;
     public Servo loadServo;
     public Servo fireServo;
-    public Servo flipServo;
     public Servo releaseServo;
 
     public ColorSensor colorR;
     public ModernRoboticsI2cGyro gyro;   // Hardware Device Object
     public OpticalDistanceSensor ODS;
+    public LED LEDGreen = null,LEDHeadlight = null;
 
     private double ENCODER_PORT_RESET;
 
@@ -62,8 +64,9 @@ public class HardwareBuild2_tele
     public double rightStore = 0.65;  // right button pusher "off" value
     public double fireGo = 0.5; // setting to fire a ball into the launcher
     public double fireStay = 0.0; // down setting for the fire servo
-    public double loadClosed = 0.7; // "up" setting for the ball loader
-    public double loadOpen = 0.0;  // "down" setting for the ball loader
+    public double loadClosed = 0.8; // "up" setting for the ball loader
+    public double loadHalf = .45; // load 1/2 way up
+    public double loadOpen = 0.1;  // "down" setting for the ball loader
     public double shootPower = -0.15; // steady-state launcher motor power
     public double shootRampPower = -1.0; // ramp-up launcher motor power
     public double shootRampTime = 2.1;  // ramp-up time for launcher motor
@@ -71,10 +74,9 @@ public class HardwareBuild2_tele
     public double fireServoTime = 0.5;  // delay time for the firing servo
     public double deadZone = 0.25; // For lift motor.
     public int GO_ONE_TILE_PORT = 1000;
-    public double flipStore = 0.00;
-    public double flipGo = 0.00;
+    public double flipSpeed = 0.50;
     public double releaseClosed = 0.00;
-    public double releaseOpen = 0.00;
+    public double releaseOpen = 1.00;
 
     public double driveMinPower = 0.4;
     public double driveMaxPower = 1.0;
@@ -93,6 +95,7 @@ public class HardwareBuild2_tele
 
         motorShoot = hwMap.dcMotor.get("shootMotor");
         motorLift = hwMap.dcMotor.get("liftMotor");
+        motorFlip = hwMap.dcMotor.get("flipMotor");
 
         motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
         motorBackRight.setDirection(DcMotor.Direction.REVERSE);
@@ -101,14 +104,13 @@ public class HardwareBuild2_tele
         rightServo = hwMap.servo.get("servoRight");
         fireServo = hwMap.servo.get("servoFire");
         loadServo = hwMap.servo.get("servoLoad");
-        flipServo = hwMap.servo.get("flipServo");
         releaseServo = hwMap.servo.get("releaseServo");
 
         gyro = (ModernRoboticsI2cGyro)hwMap.gyroSensor.get("sensorGyro");
         colorR = hwMap.colorSensor.get("sensorColorRight");
-//        colorL = hwMap.colorSensor.get("sensorColorLeft");
         ODS = hwMap.opticalDistanceSensor.get("sensorODS");
-//        touch = hwMap.touchSensor.get("sensorTouch");
+        LEDGreen = hwMap.led.get("ledGreen");
+        LEDHeadlight = hwMap.led.get("ledHeadlight");
 
         // Set all motors to zero power
         motorFrontLeft.setPower(0);
@@ -117,7 +119,6 @@ public class HardwareBuild2_tele
         motorBackLeft.setPower(0);
 
         // Set all motors to run without encoders.
-        // May want to use RUN_USING_ENCODERS if encoders are installed.
         motorFrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -136,7 +137,10 @@ public class HardwareBuild2_tele
         // set the button pushing servos to the store positions
         rightServo.setPosition(rightStore);
         leftServo.setPosition(leftStore);
-
+        loadServo.setPosition(loadOpen);
+        fireServo.setPosition(fireStay);
+        releaseServo.setPosition(releaseClosed
+        );
     }
 
     /***
@@ -160,6 +164,7 @@ public class HardwareBuild2_tele
         period.reset();
     }
 
+    // allows a software reset of the encoders
     public double returnEncoderValue(){
 
         return motorFrontLeft.getCurrentPosition() - ENCODER_PORT_RESET;

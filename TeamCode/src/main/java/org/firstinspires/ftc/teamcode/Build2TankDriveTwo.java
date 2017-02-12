@@ -29,8 +29,6 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
-// needs updating to the new ftc app
-// CEV 8/21/2016
 
 package org.firstinspires.ftc.teamcode;
 
@@ -45,10 +43,6 @@ import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-
-//import com.qualcomm.robotcore.hardware.DcMotor;
-//import com.qualcomm.robotcore.hardware.Servo;
-
 /**
  * TeleOp Mode
  * <p/>
@@ -59,19 +53,21 @@ import static java.lang.Math.min;
 //@Disabled
 public class Build2TankDriveTwo extends OpMode {
     HardwareBuild2_tele robot;
+
     double maxDSpeed = 1.0;
     boolean motorOn = false;
     private ElapsedTime runtime = new ElapsedTime();
     int ticks = 0, ticksTwo = 0;
-    double time = 0, timeTwo = 0;
+    double time = 0, timeTwo = -50;
     double ticksPerTime;
-    double target = 1.10, difference = 0;
+    double target = 0.80;
     double speed = 1.0;
     double P = 0.5, I = 0;
-    double pChangeFactor = 4, iChangeFactor = 1;
-    double maxSpeed = 1.0, minSpeed = 0.2;
-    int timeInt = 1000;
-
+    double pChangeFactor = 0, iChangeFactor = 0.01;
+    double maxSpeed = 1.0, minSpeed = 0.1;
+    int timeInt = 50;
+    double ticksPerTimeAvg;
+    double targetTolerance = 0.05;
     /**
      * Constructor
      */
@@ -92,14 +88,12 @@ public class Build2TankDriveTwo extends OpMode {
             robot.init(hardwareMap);
         } catch (InterruptedException e) {
         }
-
-		/*
-		 */
-
     }
 
     @Override
     public void loop() {
+        robot.LEDHeadlight.enable(true); // turn on Headlight
+
         // set the drive motor speeds
         teleDrive(gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.right_stick_y);
 
@@ -116,82 +110,81 @@ public class Build2TankDriveTwo extends OpMode {
         maxDSpeed = Math.min(maxDSpeed, robot.driveMaxPower); // apply a max speed
 
         //set motor speed for shoot
-        if (gamepad2.dpad_up) // forward
+        if (gamepad2.dpad_up && !motorOn) // forward
         {
             motorOn = true;
+            robot.motorShoot.setPower(1.0);
             runtime.reset();
+//            timeTwo = -50;
+//            ticksTwo = 0;
         }
-        if (gamepad2.dpad_down && gamepad1.dpad_down) // backward
+        else if (gamepad2.dpad_down && gamepad1.dpad_down) //shoot wheel reverse
         {
             motorOn = false;
             robot.motorShoot.setPower(-0.5);
         }
-        if (gamepad2.dpad_left || gamepad2.dpad_right) // off
+        else if (gamepad2.dpad_left || gamepad2.dpad_right) // shoot wheel off
         {
             robot.motorShoot.setPower(0.0);
             motorOn = false;
+            robot.LEDGreen.enable(false); // turns LED off when stopped.
         }
         if(motorOn == true) {
+            // PID: see PIDTest.java for full details
             //get new time and ticks
-         //   robot.motorShoot.setPower(speed);
-            ticks = robot.motorShoot.getCurrentPosition();
+            ticks =  robot.motorShoot.getCurrentPosition();
             time = runtime.milliseconds();
 
-            //get ticks per time
+            //get updated ticks per time
+            // encoder ticks / milliseconds
             ticksPerTime = ((ticks - ticksTwo) / (time - timeTwo));
+            // find 'p' value (used in 'I')
+            P = target - ticksPerTime;
 
-            // find 'p'
-            difference = target - ticksPerTime;
+            // find 'i' value
+            I = (I * (timeInt - (time - timeTwo)) + P * (time - timeTwo)) / timeInt;
+            ticksPerTimeAvg = (ticksPerTimeAvg*(timeInt - (time - timeTwo)) + ticksPerTime*(time - timeTwo)) / timeInt;
 
-            // find 'i'
-            I = (I * (timeInt - (time - timeTwo)) + difference * (time - timeTwo)) / timeInt;
+            // show when the wheel is spinning fast enough
+            if(Math.abs(ticksPerTimeAvg - target) < targetTolerance)
+            {
+                robot.LEDGreen.enable(true); // turn on LED when correct.
+            }
+            else
+            {
+                robot.LEDGreen.enable(false); // turn off LED when too fast or slow
 
-            // find speed
-            speed += (difference * pChangeFactor) + (I * iChangeFactor);
+            }
+            // update speed
+            speed += (P*pChangeFactor) + (I*iChangeFactor);
             speed = max(speed, minSpeed);
             speed = min(speed, maxSpeed);
 
             robot.motorShoot.setPower(speed);
 
-            //save old time & ticks
             timeTwo = time;
             ticksTwo = ticks;
         }
 
-
         // extend & retract lift
-        if (gamepad2.right_stick_y > robot.deadZone)
-        {
-            robot.motorLift.setPower(robot.liftMotorPower);
-        }
-
-        if (gamepad2.right_stick_y < robot.deadZone)
-        {
-            robot.motorLift.setPower(0.0);
-        }
+        robot.motorLift.setPower(gamepad2.right_stick_y);
 
         // flip 'forklift'
-        if(gamepad2.right_trigger > 0.2)
-        {
-            robot.flipServo.setPosition(robot.flipGo);
-        }
-        else
-        {
-            robot.flipServo.setPosition(robot.flipStore);
-        }
+        robot.motorFlip.setPower(gamepad2.left_stick_y/2);
 
-        //enable release
-        if(gamepad2.left_trigger > 0.2)
+        //enable release of lift
+        if(gamepad1.y && gamepad1.x)
         {
             robot.releaseServo.setPosition(robot.releaseOpen);
         }
-        else
+        else if(gamepad1.a && gamepad1.b)
         {
-            
+            robot.releaseServo.setPosition(robot.releaseClosed);
         }
 
         // beacon pushers
-        if (gamepad2.left_bumper || gamepad2.right_bumper) // trigger servo settings
+        // triggers both when one button is pressed (minimizes driver error)
+        if (gamepad2.left_bumper || gamepad2.right_bumper)
 		{
             robot.leftServo.setPosition(robot.leftPress);
             robot.rightServo.setPosition(robot.rightPress);
@@ -217,20 +210,20 @@ public class Build2TankDriveTwo extends OpMode {
         {
             robot.loadServo.setPosition(robot.loadClosed);
         }
-        if (gamepad2.b)
+        else if (gamepad2.b)
         {
             robot.loadServo.setPosition(robot.loadOpen);
         }
-
-
+        else if (gamepad2.x) // hold a particle in the loader
+        {
+            robot.loadServo.setPosition(robot.loadHalf);
+        }
 		// Send telemetry data back to driver station.
-        telemetry.addData("Drive Power", "Drive: " + String.format(Locale.US,"%.2f", maxSpeed));
-        telemetry.addData("Encoder Value:", robot.returnEncoderValue());
-        telemetry.addData("Heading:", robot.gyro.getIntegratedZValue());
-        telemetry.addData("speed", speed);
-        telemetry.addData("ticks over time", ticksPerTime);
+        telemetry.addData("Drive Power", "Drive: " + String.format(Locale.US,"%.2f", maxSpeed)); //drive current max speed
+        telemetry.addData("Encoder Value:","%6.0f", robot.returnEncoderValue()); // encoder value
+        telemetry.addData("Heading:","%4d", robot.gyro.getIntegratedZValue()); // gyro value
+        telemetry.addData("ticks/time","%6.3f", ticksPerTimeAvg); // shoot speed
         telemetry.update();
-
     }
 
     @Override
@@ -238,7 +231,7 @@ public class Build2TankDriveTwo extends OpMode {
 
     }
 
-    // holonomic tank drive
+    // convert joystick values into holonomic tank drive motor speeds
     public void teleDrive(float left, float side, float right) {
 
     /*

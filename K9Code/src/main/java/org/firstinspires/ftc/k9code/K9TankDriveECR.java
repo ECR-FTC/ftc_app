@@ -67,7 +67,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="K9bot: Telop Tank ECR", group="K9bot")
+@TeleOp(name="K9bot: Telop Tank ECR2", group="K9bot")
 //@Disabled
 public class K9TankDriveECR extends LinearOpMode {
 
@@ -77,10 +77,7 @@ public class K9TankDriveECR extends LinearOpMode {
     double          clawPosition    = HardwareK9botECR.CLAW_HOME;      // Servo safe position
     final double    CLAW_SPEED      = 0.01;                            // sets rate to move servo
     final double    ARM_SPEED       = 0.01;                            // sets rate to move servo
-
-
-
-
+    double          Speed           = 1.00;
 
 
 
@@ -92,9 +89,6 @@ public class K9TankDriveECR extends LinearOpMode {
         // populate the MediaPlayer object. The resource should be in the res/raw folder
         // and should be named "puppybarking.wav"
         mp = MediaPlayer.create(hardwareMap.appContext, R.raw.puppybarking);
-        waitForStart();
-
-
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
@@ -102,8 +96,8 @@ public class K9TankDriveECR extends LinearOpMode {
         robot.init(hardwareMap);
 
         // Send telemetry message to signify robot waiting;
-        telemetry.addData("Say", "Hello Driver");    //
-        telemetry.update();
+        //telemetry.addData("Say", "Hello Driver");    //
+        //telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -113,15 +107,15 @@ public class K9TankDriveECR extends LinearOpMode {
 
             // Run wheels in tank mode (note: The joystick goes negative when pushed forward, so negate it)
             // add /4 to slow down drive motors
-            left = -gamepad1.left_stick_y/4.0;
-            right = -gamepad1.right_stick_y/4.0;
+            left = -gamepad1.left_stick_y/Speed;
+            right = -gamepad1.right_stick_y/Speed;
             robot.leftMotor.setPower(left);
             robot.rightMotor.setPower(right);
             if (robot.touchR.isPressed()){
                 robot.leftMotor.setPower(0);
                 robot.rightMotor.setPower(0);
             }
-telemetry.addData("isPressed",String.valueOf(robot.touchR.isPressed()));
+
             // Use gamepad Y & A raise and lower the arm
             if (gamepad1.a)
                 armPosition += ARM_SPEED;
@@ -129,10 +123,10 @@ telemetry.addData("isPressed",String.valueOf(robot.touchR.isPressed()));
                 armPosition -= ARM_SPEED;
 
             // Use gamepad X & B to open and close the claw
-            //if (gamepad1.x)
-            //  clawPosition += CLAW_SPEED;
-            //else if (gamepad1.b)
-            //  clawPosition -= CLAW_SPEED;
+            if (gamepad1.x)
+              clawPosition += CLAW_SPEED;
+            else if (gamepad1.b)
+              clawPosition -= CLAW_SPEED;
 
             // Move both servos to new position.
             armPosition  = Range.clip(armPosition, HardwareK9botECR.ARM_MIN_RANGE, HardwareK9botECR.ARM_MAX_RANGE);
@@ -142,23 +136,40 @@ telemetry.addData("isPressed",String.valueOf(robot.touchR.isPressed()));
 
             if (gamepad1.left_bumper){
                 mp.start(); // this plays the sound
+                robot.LED2.enable(true); // turn on LED
             }
             if (gamepad1.right_bumper){
                 mp.start(); // this plays the sound
+                robot.LED2.enable(false); // turn off LED
             }
 
+            //change speed
+/*            if (gamepad1.dpad_up)
+            {
+                Speed = Speed + 0.01;
+            }
+            if (gamepad1.dpad_down)
+            {
+                Speed = Speed + 0.01;
+            }
+*/
+
             // Send telemetry message to signify robot running;
+//            telemetry.addData("isPressed",String.valueOf(robot.touchR.isPressed()));
             telemetry.addData("arm",   "%.2f", armPosition);
             telemetry.addData("claw",  "%.2f", clawPosition);
             telemetry.addData("left",  "%.2f", left);
             telemetry.addData("right", "%.2f", right);
-            telemetry.addData("touch", "%b", robot.touchR.isPressed());
+//            telemetry.addData("touch", "%b", robot.touchR.isPressed());
+            telemetry.addData("logLin1", "%.3f", robot.logLin1.getVoltage());
             telemetry.addData("4. h", "%03d", robot.gyro.getHeading());
+//            telemetry.addData("speed = speed /", Speed);
             telemetry.update();
 
             // Pause for metronome tick.  40 mS each cycle = update 25 times a second.
             robot.waitForTick(40);
             idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
         }
+        robot.LED2.enable(false);
     }
 }

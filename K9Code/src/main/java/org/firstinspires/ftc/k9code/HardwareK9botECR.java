@@ -1,7 +1,11 @@
 package org.firstinspires.ftc.k9code;
 
+import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.AnalogOutput;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.LED;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -34,6 +38,10 @@ public class HardwareK9botECR
     public DcMotor  rightMotor  = null;
     public Servo    arm         = null;
     public Servo    claw        = null;
+    public LED LED2 = null;
+    public AnalogInput logLin1 = null;
+//    public AnalogOutput led1 = null;
+
     //public SensorMRGyro gyro    = null;
     public GyroSensor gyro = null;
     public TouchSensor touchR = null;
@@ -68,6 +76,14 @@ public class HardwareK9botECR
         // Set all motors to zero power
         leftMotor.setPower(0);
         rightMotor.setPower(0);
+
+        logLin1 = hwMap.analogInput.get("logLin1");
+
+        // this works, but the output current is too low.
+  //      led1 = hwMap.analogOutput.get("led1");
+  //      led1.setAnalogOutputMode((byte)0);
+  //      led1.setAnalogOutputVoltage(1023);
+        LED2 = hwMap.led.get("led2");
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.

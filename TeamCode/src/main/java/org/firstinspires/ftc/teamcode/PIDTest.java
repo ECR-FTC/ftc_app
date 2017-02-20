@@ -16,7 +16,6 @@
         PID speeds the motor up.
 */
 
-
 //the imports necessary for the working of this PID
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -32,7 +31,7 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 @Autonomous(name="PID Test", group="K9")
-//@Disabled
+@Disabled
 public class PIDTest extends LinearOpMode {
 
     HardwareK9botECR robot = new HardwareK9botECR(); //our hardware map
@@ -43,7 +42,7 @@ public class PIDTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException
     {
 
-        int ticks = 0, ticksTwo = 0;
+        int ticks = 0, ticksTwo = 0; //ticks (new and old) recorded in loop.
         double time = 0, timeTwo = 0; //time (new and old) recorded in loop
         // ticks per time, ticks per milliseconds, avg calculates the average ticks per time for a given timeInt
         double ticksPerTime, ticksPerTimeAvg = 0;

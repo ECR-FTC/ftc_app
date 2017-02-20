@@ -90,8 +90,8 @@ public class Build2Auto1Redc extends LinearOpMode {
             autoGoOneTileForward(-.2);
             autoGyroTurn(25);
             autoDrive(0, (float) 1.0, 0, 800); // push into wall
-            autoGoToWhiteLine(1000, false, true);
-            autoBeacon(true);
+            autoGoToWhiteLine(1000, false, true);// goes to white line
+            autoBeacon(true);// does beacon
             autoGoOneTileForward(-1.0);
             autoDrive(0, (float) 1.0, 0, 800); // push into wall
             autoGoToWhiteLine(2000, false, true);

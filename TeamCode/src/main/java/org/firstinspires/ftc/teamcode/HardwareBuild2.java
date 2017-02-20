@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 //import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -42,9 +43,12 @@ public class HardwareBuild2
     public Servo rightServo;
     public Servo loadServo;
     public Servo fireServo;
+    public Servo releaseServo;
     public ColorSensor colorR;
     public ModernRoboticsI2cGyro gyro;   // Hardware Device Object
     public OpticalDistanceSensor ODS;
+    public AnalogInput rightRedSensor = null, rightBlueSensor = null; //red
+    public AnalogInput leftRedSensor = null, leftBlueSensor = null; //blue
 
 //    private double ENCODER_PORT_RESET;
 
@@ -52,19 +56,22 @@ public class HardwareBuild2
     public HardwareMap hwMap  = null;
     private ElapsedTime period  = new ElapsedTime();
 
-    public double deadZone = 0.05; // Min and Max Range to not do anything
-    public double leftPress = 0.9; // left button pusher "on" value
-    public double rightPress = 0.1; // right button pusher "on" value
-    public double leftStore = 0.3; // left button pusher "off" value
-    public double rightStore = 0.65;  // right button pusher "off" value
-    public double fireGo = 0.5; // setting to fire a ball into the launcher
-    public double fireStay = 0.0; // down setting for the fire servo
-    public double loadClosed = 0.8; // "up" setting for the ball loader
-    public double loadOpen = 0.1;  // "down" setting for the ball loader
-    public double shootPower = 0.35; // steady-state launcher motor power
-    public double shootRampPower = 1.0; // ramp-up launcher motor power
-    public double shootRampTime = 5;  // ramp-up time for launcher motor
-    public double fireServoTime = 0.5;  // delay time for the firing servo
+
+    public double leftPress      =  0.9;  // left button pusher "on" value
+    public double rightPress     =  0.1;  // right button pusher "on" value
+    public double leftStore      =  0.3;  // left button pusher "off" value
+    public double rightStore     =  0.65; // right button pusher "off" value
+    public double fireGo         =  0.5;  // setting to fire a ball into the launcher
+    public double fireStay       =  0.0;  // down setting for the fire servo
+    public double loadClosed     =  0.8;  // "up" setting for the ball loader
+    public double loadHalf       =  0.45; // load 1/2 way up
+    public double loadOpen       =  0.1;  // "down" setting for the ball loader
+    public double shootPower     = -0.15; // steady-state launcher motor power
+    public double shootRampPower = -1.0;  // ramp-up launcher motor power
+    public double shootRampTime  =  2.1;  // ramp-up time for launcher motor
+    public double fireServoTime  =  0.5;  // delay time for the firing servo
+    public double deadZone       =  0.25; // For lift motor.
+    public double colorThreshold =  0.45;  //Value that the sensor has to be to return positive.
 
     public int GO_ONE_TILE_PORT = 3150;
 
@@ -100,6 +107,14 @@ public class HardwareBuild2
 //        colorL = hwMap.colorSensor.get("sensorColorLeft");
         ODS = hwMap.opticalDistanceSensor.get("sensorODS");
 //        touch = hwMap.touchSensor.get("sensorTouch");
+        rightRedSensor = hwMap.analogInput.get("rightRed");
+        rightBlueSensor = hwMap.analogInput.get("rightBlue");
+        leftRedSensor = hwMap.analogInput.get("leftRed");
+        leftBlueSensor = hwMap.analogInput.get("leftBlue");
+
+        //telemetry.addData("rightRed", "%.3f", robot.rightRedSensor.getVoltage());
+        //telemetry.addData("rightBlue", "%.3f", robot.rightBlueSensor.getVoltage());
+
 
 /*        // Set all motors to zero power
         motorFrontLeft.setPower(0);
@@ -128,6 +143,8 @@ public class HardwareBuild2
         // set the button pushing servos to the store positions
         rightServo.setPosition(rightStore);
         leftServo.setPosition(leftStore);
+        fireServo.setPosition(fireStay);
+        loadServo.setPosition(loadOpen);
 
     }
 

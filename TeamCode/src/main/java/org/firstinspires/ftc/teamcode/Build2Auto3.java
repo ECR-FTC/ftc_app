@@ -19,7 +19,11 @@ import com.qualcomm.robotcore.util.Range;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 
-@Autonomous(name="BeaconsBlue", group="Linear Opmode")  // @Autonomous(...) is the other common choice
+// code for custom sensors
+//telemetry.addData("rightRed", "%.3f", robot.rightRedSensor.getVoltage());
+//telemetry.addData("rightBlue", "%.3f", robot.rightBlueSensor.getVoltage());
+
+@Autonomous(name="BeaconsRed", group="Linear Opmode")  // @Autonomous(...) is the other common choice
 //@Disabled
 public class Build2Auto3 extends LinearOpMode {
         HardwareBuild2 robot;
@@ -28,8 +32,7 @@ public class Build2Auto3 extends LinearOpMode {
         DcMotor motorFrontLeft;
         DcMotor motorBackRight;
         DcMotor motorBackLeft;
-
-
+        double color = 0;
         private ElapsedTime runtime = new ElapsedTime();
         // here we declare 2 things, the hardware map, and an elapsed time function
         boolean lineSeen;
@@ -44,7 +47,6 @@ public class Build2Auto3 extends LinearOpMode {
             } catch (InterruptedException e) {
             }
             // we call the hardware map here
-
             motorFrontRight = hardwareMap.dcMotor.get("frontRight");
             motorFrontLeft = hardwareMap.dcMotor.get("frontLeft");
             motorBackRight = hardwareMap.dcMotor.get("backRight");
@@ -54,7 +56,6 @@ public class Build2Auto3 extends LinearOpMode {
             motorBackRight.setDirection(DcMotor.Direction.REVERSE);
 
             // Set all motors to run without encoders.
-            // May want to use RUN_USING_ENCODERS if encoders are installed.
             motorFrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             motorFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             motorBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -71,16 +72,11 @@ public class Build2Auto3 extends LinearOpMode {
             telemetry.addData("Status", "Waiting for Start");
             telemetry.update();
 
-        /* eg: Initialize the hardware variables. Note that the strings used here as parameters
-         * to 'get' must correspond to the names assigned during the robot configuration
-         * step (using the FTC Robot Controller app on the phone).
-         */
-
             waitForStart();   // we set our servos in init and wait for start (the driver hitting play)
 
-            //this is a sample autonomous where the robot shoots 2 balls and pushes both beacons.
-            // this is a blue code
-            //autoGoOneTileForward(1);
+            //this is a sample autonomous where the robot shoots 2 balls and pushes one beacon.
+            // this is a red code
+
             /* Old Full Code
             autoFire(true, false); // spin up motor and shoot 1st ball
             delayLoop(4.0);
@@ -98,29 +94,74 @@ public class Build2Auto3 extends LinearOpMode {
             autoGoToWhiteLine(2000, true, false);
             autoBeacon(false);
             */
+            autoGoOneTileForward(-0.8);
+
+            autoFire();
+            autoFire();
+            robot.motorShoot.setPower(0.00);
+
+            autoGyroTurn(-45);
+            autoGoOneTileForward(-2.9);
+            autoGyroTurn(45);
+            autoDrive(0, (float)0.5, 0, 1000);
+
+            autoGoToWhiteLine(3.5, 0.2);
+            color = detectColor();
+            if(color == 1) //red
+            {
+                pushBeacon();
+                delayLoop(1);
+                pushBeacon();
+            }
+            else if (color == 2)
+            {
+                autoGoOneTileForward(-0.2);
+
+                color = detectColor();
+                if(color == 1) {
+                    pushBeacon();
+                    delayLoop(1);
+                    pushBeacon();
+                }
+            }
+/*
+            while(opModeIsActive())
+            {
+                telemetry.addData("Red side, Red Sensor:", "%.3f", robot.rightRedSensor.getVoltage());
+                telemetry.addData("Red side, Blue Sensor:", "%.3f", robot.rightBlueSensor.getVoltage());
+                telemetry.addData("returnValue", "%.3f", color);
+                if(color == 0)
+                {
+                    telemetry.addData("I see nothing", 0);
+                }
+                if(color == 1)
+                {
+                    telemetry.addData("I see red", 1);
+                }
+                if(color == 2)
+                {
+                    telemetry.addData("I see blue", 2);
+                }
+                if(color == 3)
+                {
+                    telemetry.addData("I see both", 3);
+                }
+                telemetry.update();
+            }
+            */
          }
 
     //
-    public void autoGoToWhiteLine (double waitFor, boolean isBlue, boolean isRed) // when this code is called, the robot goes to the white line and stops
+    public void autoGoToWhiteLine (double waitFor, double speed) // when this code is called, the robot goes to the white line and stops
     {
         runtime.reset(); // this is called allot, it resets 'runtime' to 0
 
-        while((robot.ODS.getRawLightDetected() < 0.2) & (runtime.seconds() < waitFor) )
+        while((robot.ODS.getRawLightDetected() < 0.2) & (runtime.seconds() < waitFor) & opModeIsActive())
         {
-            if (isBlue)
-            {
-                motorBackRight.setPower(-0.25);
-                motorBackLeft.setPower(-0.15);
-                motorFrontLeft.setPower(-0.25);
-                motorFrontRight.setPower(-0.15);
-            }
-            if (isRed)
-            {
-                motorBackRight.setPower(-0.25);
-                motorBackLeft.setPower(-0.15);
-                motorFrontLeft.setPower(-0.25);
-                motorFrontRight.setPower(-0.15);
-            }
+            motorBackRight.setPower(speed);
+            motorBackLeft.setPower(speed);
+            motorFrontLeft.setPower(speed);
+            motorFrontRight.setPower(speed);
             lineSeen = false;
             telemetry.addData("No white line:", robot.ODS.getRawLightDetected());
             // if the robot doesn't see the line, and still has time, it goes forward.
@@ -144,7 +185,7 @@ public class Build2Auto3 extends LinearOpMode {
 
         resetEncoderValue();
 
-        while ((Math.abs(returnEncoderValue()) < Math.abs(portTarget) - 5) )// ||
+        while ((Math.abs(returnEncoderValue()) < Math.abs(portTarget) - 5) & opModeIsActive())// ||
         {
             // speed is proportional to number of encoder steps away from target
             speedPort = 0.5 / ENCODER_ACCEL_CONST * (portTarget - returnEncoderValue());
@@ -173,14 +214,14 @@ public class Build2Auto3 extends LinearOpMode {
         heading = robot.gyro.getIntegratedZValue(); // getIntegratedZValue() works for any turn angle
 
         degrees = -degrees;
-        while ( (Math.abs(heading) < (Math.abs(degrees)-headingTolerance)))
+        while ( (Math.abs(heading) < (Math.abs(degrees)-headingTolerance)) && opModeIsActive())
         {
             // speed is proportional to angle away from target
             speedPort = (float)(.5 / 15 * (degrees - heading));
             // don't go faster than SPEED_NOMINAL
             speedPort = Math.signum(speedPort) * Math.min(Math.abs(speedPort), .5);
             // don't go slower than SPEED_MIN
-            speedPort = Math.signum(speedPort) * Math.max(Math.abs(speedPort), .15);
+            speedPort = Math.signum(speedPort) * Math.max(Math.abs(speedPort), .2);
 
             // set the speeds
             motorBackLeft.setPower(-speedPort);
@@ -199,26 +240,29 @@ public class Build2Auto3 extends LinearOpMode {
     }
     public int detectColor()
     {
-        int seeWhat = 0;
-        int redThreshold = 2;
-        int blueThreshold = 3;
-        if (robot.colorR.red() > redThreshold) {
-            telemetry.addData("Red", "Red");
-            telemetry.update();
-            seeWhat = 1;
-        }
-        if (robot.colorR.blue() > blueThreshold) {
-            telemetry.addData("Blue", "Blue");
-            telemetry.update();
-            seeWhat = -1;
-        }
-        if (robot.colorR.red() < redThreshold && robot.colorR.blue() < blueThreshold)
+        robot.rightServo.setPosition((robot.rightPress + robot.rightStore) / 2);
+        robot.leftServo.setPosition((robot.leftPress + robot.leftStore) / 2);
+        delayLoop(0.5);
+        int returnValue = 0;
+        double measurementRed = 0.0;
+        double measurementBlue = 0.0;
+        int n = 0;
+        for(n = 0; n < 10; n++)
         {
-            telemetry.addData("Nothing", "Nothing");
-            telemetry.update();
-            seeWhat = 0;
+            measurementRed += robot.rightRedSensor.getVoltage();
+            measurementBlue += robot.rightBlueSensor.getVoltage();
         }
-        return seeWhat;
+        measurementBlue = measurementBlue / 10.0;
+        measurementRed = measurementRed / 10.0;
+        if (measurementBlue > robot.colorThreshold)
+        {
+            returnValue += 2;
+        }
+        if (measurementRed > robot.colorThreshold)
+        {
+            returnValue += 1;
+        }
+        return returnValue;
     }
     public void pushBeacon()
     {
@@ -306,24 +350,16 @@ public class Build2Auto3 extends LinearOpMode {
     //          set false to leave motor on
     // output arguments: none
 
-    public void autoFire(boolean motorSpinUp, boolean motorTurnOff) {
-        if (motorSpinUp) {//spins up the motor at full speed for 2 seconds ro make it faster.
-            robot.motorShoot.setPower(robot.shootRampPower);
-            delayLoop(robot.shootRampTime);
-            }
+    public void autoFire() {
+        robot.motorShoot.setPower(0.4);
 
-        robot.motorShoot.setPower(robot.shootPower);//this sets the motor to firing speed
-        robot.fireServo.setPosition(robot.fireGo);// and we fire it here
-        delayLoop(robot.fireServoTime);
+        delayLoop(4);
+        robot.fireServo.setPosition(robot.fireGo);// the servo is retracted after firing here.
+        delayLoop(2 * robot.fireServoTime);
+        robot.fireServo.setPosition(robot.fireStay);
 
-        robot.fireServo.setPosition(robot.fireStay);// the servo is retracted after firing here.
-        delayLoop(2*robot.fireServoTime);
-
-        if (motorTurnOff)
-        {
-            robot.motorShoot.setPower(0.0);
-        }
     }
+
 
     public void autoDrive(float foward, float left, float turn, long waitFor){
         // this code runs the robot in all directions using a combination of forward, left, and turn

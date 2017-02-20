@@ -27,7 +27,7 @@ import java.util.Locale;
  */
 
 @Autonomous(name="StepRunnerAuto", group="K9bot")
-//@Disabled
+@Disabled
 public class StepRunnerAuto extends LinearOpMode {
 
     /* Declare OpMode members. */

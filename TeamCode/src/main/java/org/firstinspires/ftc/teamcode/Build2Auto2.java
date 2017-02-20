@@ -79,11 +79,12 @@ public class Build2Auto2 extends LinearOpMode {
 
             waitForStart();   // we set our servos in init and wait for start (the driver hitting play)
 
-            //this is a sample autonomous where the robot shoots 2 balls and pushes the cap ball off, and parks partway onboard..
-            // this is a blue code
+            //this is a sample autonomous where the robot shoots 2 balls
+            // this is a generic code
             autoGoOneTileForward(-1.5);
             autoFire();
             autoFire();
+            robot.motorShoot.setPower(0.00);
          }
 
     //
@@ -255,7 +256,7 @@ public class Build2Auto2 extends LinearOpMode {
     // output arguments: none
 
     public void autoFire() {
-        robot.motorShoot.setPower(0.45);
+        robot.motorShoot.setPower(0.40);
 
         delayLoop(4);
         robot.fireServo.setPosition(robot.fireGo);// the servo is retracted after firing here.

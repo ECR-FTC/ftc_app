@@ -21,6 +21,9 @@ abstract public class ParallelStep extends Step {
         stepList = theStepList;
     }
 
+    public void add(Step step) {
+        stepList.add(step);
+    }
     /* When ParallelStep starts, it starts all steps in its list. */
 
     public void start(Robot r) {

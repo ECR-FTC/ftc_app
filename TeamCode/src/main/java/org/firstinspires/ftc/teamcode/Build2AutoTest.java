@@ -10,6 +10,7 @@ package org.firstinspires.ftc.teamcode;
 
 //these are all the imports that we use to allow us to use all of the sensors and motors
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -17,10 +18,11 @@ import com.qualcomm.robotcore.util.Range;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
+import static java.lang.Math.min;
 
-@Autonomous(name="Build2AutoTests", group="Linear Opmode")  // @Autonomous(...) is the other common choice
-//@Disabled
-public class Build2Auto1c extends LinearOpMode {
+@Autonomous(name="GenericCode1", group="Linear Opmode")  // @Autonomous(...) is the other common choice
+@Disabled
+public class Build2AutoTest extends LinearOpMode {
         HardwareBuild2 robot;
         private double ENCODER_PORT_RESET;
         DcMotor motorFrontRight;
@@ -77,12 +79,12 @@ public class Build2Auto1c extends LinearOpMode {
 
             waitForStart();   // we set our servos in init and wait for start (the driver hitting play)
 
-            //this is a sample autonomous where the robot shoots 2 balls and pushes both beacons.
+            //this is a sample autonomous where the robot shoots 2 balls and pushes the cap ball off, and parks partway onboard..
             // this is a blue code
-            //autoGoOneTileForward(1);
-            autoGoToWhiteLine(1000, true, false);
-            autoBeacon(false);
-
+            autoGoOneTileForward(-1.5);
+            autoFire();
+            autoFire();
+            autoGoOneTileForward(-2.0);
          }
 
     //
@@ -218,7 +220,7 @@ public class Build2Auto1c extends LinearOpMode {
                 telemetry.update();
                 // if we see our color (blue) we drive forward
                 runtime.reset();
-                while ((runtime.seconds() < 0.5)) {
+                while ((runtime.seconds() < 0.4)) {
                     motorBackRight.setPower (-0.2 + 0.05); // slant into wall
                     motorBackLeft.setPower  (-0.2 - 0.05);
                     motorFrontLeft.setPower (-0.2 + 0.05);
@@ -253,23 +255,14 @@ public class Build2Auto1c extends LinearOpMode {
     //          set false to leave motor on
     // output arguments: none
 
-    public void autoFire(boolean motorSpinUp, boolean motorTurnOff) {
-        if (motorSpinUp) {//spins up the motor at full speed for 2 seconds ro make it faster.
-            robot.motorShoot.setPower(robot.shootRampPower);
-            delayLoop(robot.shootRampTime);
-            }
+    public void autoFire() {
+        robot.motorShoot.setPower(0.45);
 
-        robot.motorShoot.setPower(robot.shootPower);//this sets the motor to firing speed
-        robot.fireServo.setPosition(robot.fireGo);// and we fire it here
-        delayLoop(robot.fireServoTime);
+        delayLoop(4);
+        robot.fireServo.setPosition(robot.fireGo);// the servo is retracted after firing here.
+        delayLoop(2 * robot.fireServoTime);
+        robot.fireServo.setPosition(robot.fireStay);
 
-        robot.fireServo.setPosition(robot.fireStay);// the servo is retracted after firing here.
-        delayLoop(2*robot.fireServoTime);
-
-        if (motorTurnOff)
-        {
-            robot.motorShoot.setPower(0.0);
-        }
     }
 
     public void autoDrive(float foward, float left, float turn, long waitFor){

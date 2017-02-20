@@ -3,12 +3,19 @@ package org.firstinspires.ftc.teamcode.steprunner;
 /**
  * Created by ECR FTC 11096 on 10/31/2016.
  */
-public class MotorStep extends  Step {
+public class DriveStep extends  Step {
+
+    protected double driveSpeed = 0;
+
+    public DriveStep(double theSpeed)
+    {
+        driveSpeed = theSpeed;
+    }
 
     @Override
     public void start(Robot r) {
         super.start(r);
-        robot.motorLeftOn(.25);
+        robot.allMotorsOn(driveSpeed);
     }
 
     @Override
@@ -20,7 +27,7 @@ public class MotorStep extends  Step {
     @Override
     public void stop(){
         super.stop();
-        robot.motorLeftOff();
+        robot.allMotorsOff();
     };
 
 }

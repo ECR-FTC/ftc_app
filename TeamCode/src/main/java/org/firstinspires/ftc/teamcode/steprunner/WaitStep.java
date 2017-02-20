@@ -10,7 +10,8 @@ public class WaitStep extends Step {
 
     protected long waitTime = 0;
 
-    public WaitStep(long theWaitTime) {
+    public WaitStep(long theWaitTime)
+    {
         waitTime = theWaitTime;
     }
 

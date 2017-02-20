@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.steprunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,8 +13,16 @@ public class SequenceStep extends Step {
     protected List<Step> stepList;
     protected Integer currentStep = 0;
 
+    public SequenceStep() {
+        stepList = new ArrayList<Step>();
+    }
+
     public SequenceStep(List<Step> theStepList) {
         stepList = theStepList;
+    }
+
+    public void add(Step step) {
+        stepList.add(step);
     }
 
     /* When SequenceStep starts, it starts the first step in its list. */

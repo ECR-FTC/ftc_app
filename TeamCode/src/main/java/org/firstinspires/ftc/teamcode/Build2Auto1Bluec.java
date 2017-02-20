@@ -10,6 +10,7 @@ package org.firstinspires.ftc.teamcode;
 
 //these are all the imports that we use to allow us to use all of the sensors and motors
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -19,7 +20,7 @@ import static java.lang.Math.abs;
 import static java.lang.Math.max;
 
 @Autonomous(name="Blue1", group="Linear Opmode")  // @Autonomous(...) is the other common choice
-//@Disabled
+@Disabled
 public class Build2Auto1Bluec extends LinearOpMode {
         HardwareBuild2 robot;
         private double ENCODER_PORT_RESET;
@@ -29,7 +30,7 @@ public class Build2Auto1Bluec extends LinearOpMode {
         DcMotor motorBackLeft;
 
 
-    private ElapsedTime runtime = new ElapsedTime();
+        private ElapsedTime runtime = new ElapsedTime();
         // here we declare 2 things, the hardware map, and an elapsed time function
         boolean lineSeen;
 

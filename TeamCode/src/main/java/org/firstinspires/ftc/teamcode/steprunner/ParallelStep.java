@@ -17,6 +17,13 @@ abstract public class ParallelStep extends Step {
         stepList = new ArrayList<Step>();
     }
 
+    public ParallelStep(Step... steps) {
+        stepList = new ArrayList<Step>();
+        for (Step step: steps) {
+            stepList.add(step);
+        }
+    }
+
     public ParallelStep(List<Step> theStepList) {
         stepList = theStepList;
     }
@@ -26,7 +33,7 @@ abstract public class ParallelStep extends Step {
     }
     /* When ParallelStep starts, it starts all steps in its list. */
 
-    public void start(Robot r) {
+    public void start(StepRobot r) {
         super.start(r);
 
         for(Step step : stepList) {

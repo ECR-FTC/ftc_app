@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.steprunner;
 
 /**
  * Created by ECR FTC 11096 on 10/29/2016.
- *
+ * <p>
  * Runs a step as long as a condition is true
  */
 
@@ -10,15 +10,17 @@ public class WhileStep extends Step {
     protected Checker checker;
     protected Step repeatedStep;  // the step that we do repeatedly
 
-    public WhileStep(Step repeatedStep) {
+    public WhileStep(Step repeatedStep, Checker checker) {
         this.checker = checker;
         this.repeatedStep = repeatedStep;
     }
 
-    /* When WhileStep starts, check our condition, and start
-     * our repeatedStep unless we're stopped already. */
+    /*
+     * When WhileStep starts, check our condition, and start
+     * our repeatedStep unless we're stopped already.
+     */
 
-    public void start(Robot r) {
+    public void start(StepRobot r) {
         super.start(r);
         checker.start();
         if (checkContinue()) {
@@ -28,9 +30,10 @@ public class WhileStep extends Step {
         }
     }
 
-    /* When whileStep runs, it checks the condition to see if we should
-        contine or possibly restart our repeatedStep.
-    */
+    /*
+     * When whileStep runs, it checks the condition to see if we should
+     *   continue or possibly restart our repeatedStep.
+     */
     public void run() {
         super.run();
         if (repeatedStep.isRunning()) {
@@ -45,7 +48,8 @@ public class WhileStep extends Step {
         }
     }
 
-    /* When WhileStep is told to stop, stop our repeatedStep.
+    /*
+     * When WhileStep is told to stop, stop our repeatedStep.
      */
 
     public void stop() {
@@ -53,11 +57,12 @@ public class WhileStep extends Step {
         super.stop();
     }
 
-    /* Ask the checker whether we should keep going.
+    /*
+     * Ask the checker whether we should keep going.
      */
 
     boolean checkContinue() {
-        switch(checker.check()) {
+        switch (checker.check()) {
             case Checker.FALSE_CHOICE:
             case Checker.STOP_CHOICE:
                 return false;

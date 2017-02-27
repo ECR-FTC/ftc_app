@@ -1,66 +1,54 @@
 package org.firstinspires.ftc.teamcode.steprunner;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
-import java.util.Locale;
-
-
-
-import org.firstinspires.ftc.teamcode.steprunner.Robot;
-
 /**
  * Created by ECR FTC on 1/15/2017.
+ *
+ * This step drives a specified distance (in encoder ticks) using a Ramper to
+ * gradually increase power to start and decrease at end.
  */
-public class RamperDriveStep extends Step{
+
+public class RamperDriveStep extends Step {
     static final double DEFAULT_TUP    = 4000;
     static final double DEFAULT_TDOWN  = 4000;
-    static final double DEFAULT_MIN    =   0.15;
+    static final double DEFAULT_MIN    = 0.15;
 
     protected double maxPower;
     protected double distance;
-    protected double currentPos;
-    protected double currentPower;
 
     protected Ramper ramper;
 
-    public RamperDriveStep(double maxPower, double distance)
+    public RamperDriveStep(double distance, double maxPower)
     {
-        this.maxPower = maxPower;
         this.distance = distance;
-        this.currentPos = 0.00;
-        this.currentPower = 0.00;
+        this.maxPower = maxPower;
     }
 
     @Override
-    public void start(Robot r) {
+    public void start(StepRobot r) {
         super.start(r);
-        this.robot.bot.rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        this.robot.bot.rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        this.robot.bot.leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        this.robot.bot.leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
+        robot.resetDriveMotors();
+        robot.resetDriveEncoders();
         ramper = new Ramper(DEFAULT_TUP, DEFAULT_TDOWN, distance, DEFAULT_MIN, maxPower);
     }
 
     @Override
     public void run() {
         super.run();
-        if (Math.abs(robot.encoderRight()) >= distance) {
+        double driveEncoderValue = robot.getDriveEncoderValue();
+        if (driveEncoderValue >= distance) {
             stop();
         }
         else {
-            currentPos = Math.abs(robot.encoderRight());
-            currentPower = ramper.getRampValue(currentPos);
-            robot.allMotorsOn(currentPower);
+            double power = ramper.getRampValue(driveEncoderValue);
+            robot.driveStraight(power);
+            tell("Encoder=%.2f, Power=%.2f", driveEncoderValue, power);
         }
     }
     @Override
     public void stop(){
         super.stop();
-        robot.allMotorsOff();
+        robot.driveStop();
     }
-    public String getTelemetry(){
 
-        return String.format(Locale.US,"%.2f %.2f",(currentPos), currentPower );
-    }
 }
 

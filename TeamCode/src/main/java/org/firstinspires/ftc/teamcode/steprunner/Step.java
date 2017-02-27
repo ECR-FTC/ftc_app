@@ -1,37 +1,39 @@
 package org.firstinspires.ftc.teamcode.steprunner;
 
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 /**
  * Created by ECR FTC 11096 on 10/29/2016.
+ * Base class for all StepRunner Steps.
  */
 public class Step {
 
-    protected Robot robot;
+    protected StepRobot robot;
     private Boolean running = false;
-    private long startTime = 0;
 
+    public static ArrayList<TelMessage> telMessages = new ArrayList<TelMessage>();
 
     /*
-        start: method called when Step begins
+     * start: method called when Step begins
      */
-    public void start(Robot r) {
+    public void start(StepRobot r) {
         robot = r;
         running = true;
-        startTime = robot.currentTimeMillis();
-        log("start");
+        tell("start()");
     }
 
     /*
-        run: called repeatedly while Step is functioning.
-        Subclasses should check for completion and call setDone() if they're done.
+     * run: called repeatedly while Step is functioning.
+     * Subclasses should check for completion and call setDone() if they're done.
      */
     public void run() {
-        log("running");
     }
 
     /*
-        isRunning: Returns true if the step wants to continue to run.
+     * isRunning: Returns true if the step wants to continue to run.
      */
     public Boolean isRunning() {
         return running;
@@ -39,41 +41,33 @@ public class Step {
 
 
     /*
-        stop: called after Step's job is done OR to cancel the step. Allows for
-        cleanup, etc.
+     * stop: called after Step's job is done OR to cancel the step. Allows for
+     * cleanup, etc. Subclasses call super.stop()
      */
     public void stop() {
-        if (isRunning()) {
-            log("stop");
-            running = false;
-        }
+        running = false;
+        tell("stop()");
     }
 
     /*
-        Returns elapsed time since step start in milliseconds.
-        QUESTION: Is this a good name for this method? Should it be shorter,
-        like just "elapsed"?
+     * tell: add a telemetry message
      */
-    protected long elapsedTimeMillis() {
-        return robot.currentTimeMillis() - startTime;
+    public void tell(String msg) {
+        telMessages.add(new TelMessage(
+                this.getClass().getSimpleName(),
+                msg
+        ));
     }
 
+    public void tell(String fmt, Object... arguments) {
+        tell(String.format(Locale.US, fmt, arguments));
+    }
 
     /*
-        Log a debugging message. Method prefixes message with classname.
-        QUESTION: Why is this declared as 'protected' and not 'private'?
+     * Return all posted telemetry messages.
      */
-    protected void log(String message) {
-        String prefix = this.getClass().getSimpleName();
-        System.out.println(String.format(Locale.US,
-                "%-15s (t=%5d): %s",
-                prefix,
-                elapsedTimeMillis(),
-                message));
-        // Log.info(prefix + ":" + message);
+    public List<TelMessage> getMessages() {
+        return telMessages;
     }
-    public String getTelemetry(){
 
-        return null;
-    }
 }

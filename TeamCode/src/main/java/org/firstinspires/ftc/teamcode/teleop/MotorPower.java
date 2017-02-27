@@ -1,7 +1,8 @@
-package org.firstinspires.ftc.team11096code;
+package org.firstinspires.ftc.teamcode.teleop;
 
 /**
  * Created by ECR FTC on 10/16/2016.
+ * this object contains the motor power set points for a four-motor robot
  */
 public class MotorPower {
 
@@ -57,11 +58,11 @@ public class MotorPower {
         this.setMotorFrontLeft(motorFrontLeft);
         this.setMotorFrontRight(motorFrontRight);
     }
-    public MotorPower ()
+    public MotorPower()
     {
         init();
     }
-    public MotorPower (float motorBackLeft, float motorBackRight, float motorFrontLeft, float motorFrontRight)
+    public MotorPower(float motorBackLeft, float motorBackRight, float motorFrontLeft, float motorFrontRight)
     {
         this.setMotorValues(motorBackLeft, motorBackRight, motorFrontLeft, motorFrontRight);
     }

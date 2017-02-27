@@ -10,9 +10,15 @@ public class UntilAllDoneStep extends ParallelStep {
     public UntilAllDoneStep() {
         super();
     }
+
     public UntilAllDoneStep(List<Step> theStepList) {
         super(theStepList);
     }
+
+    public UntilAllDoneStep(Step... steps) {
+        super(steps);
+    }
+
     protected boolean untilAllDone() {
         return true;
     }

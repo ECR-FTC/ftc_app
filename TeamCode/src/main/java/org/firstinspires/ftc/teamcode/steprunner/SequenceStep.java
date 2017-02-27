@@ -17,9 +17,17 @@ public class SequenceStep extends Step {
         stepList = new ArrayList<Step>();
     }
 
+    public SequenceStep(Step... steps) {
+        stepList = new ArrayList<Step>();
+        for (Step step: steps) {
+            stepList.add(step);
+        }
+    }
+
     public SequenceStep(List<Step> theStepList) {
         stepList = theStepList;
     }
+
 
     public void add(Step step) {
         stepList.add(step);
@@ -27,7 +35,7 @@ public class SequenceStep extends Step {
 
     /* When SequenceStep starts, it starts the first step in its list. */
 
-    public void start(Robot r) {
+    public void start(StepRobot r) {
         super.start(r);
 
         // If we don't have an empty list, start the first step.

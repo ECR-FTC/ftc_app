@@ -24,7 +24,7 @@ public class IfElseStep extends Step {
     /* When IfElseStep starts, it clears out its chosenStep because
        we haven't chosen yet. */
 
-    public void start(Robot r) {
+    public void start(StepRobot r) {
         super.start(r);
         chosenStep = null;
     }

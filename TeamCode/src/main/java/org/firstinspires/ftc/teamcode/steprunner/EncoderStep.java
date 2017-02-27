@@ -2,33 +2,35 @@ package org.firstinspires.ftc.teamcode.steprunner;
 
 /**
  * Created by ECR FTC 11096 on 10/31/2016.
+ *
+ * This step stops when the drive encoder exceeds the specified value. Use in a
+ * ParallelStep along some driving step.
  */
-public class EncoderStep extends  Step {
+public class EncoderStep extends Step {
 
     protected double distance = 0;
 
-    public EncoderStep(int theDistance)
+    public EncoderStep(double distance)
     {
-        distance = theDistance;
+        this.distance = distance;
     }
 
     @Override
-    public void start(Robot r) {
+    public void start(StepRobot r) {
         super.start(r);
+        robot.resetDriveEncoders();
     }
 
     @Override
     public void run() {
         super.run();
-        if (robot.encoderRight() >= distance) {
-            stop();
-        }
-    }
+        double driveEncoderValue = robot.getDriveEncoderValue();
 
-    @Override
-    public void stop(){
-        super.stop();
-        robot.allMotorsOff();
+        if (driveEncoderValue >= distance) {
+            stop();
+        } else {
+            tell("Encoder=%.2f, Target=%.2f", driveEncoderValue, distance);
+        }
     }
 
 }

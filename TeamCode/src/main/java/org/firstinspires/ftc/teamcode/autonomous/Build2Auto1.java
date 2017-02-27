@@ -6,7 +6,7 @@ this code is used for developing autonomous functions for the competition robot
 
 
 */
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.autonomous;
 
 //these are all the imports that we use to allow us to use all of the sensors and motors
 
@@ -17,13 +17,15 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.MorganaBot;
+
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 
 @Autonomous(name="Auto1", group="Linear Opmode")  // @Autonomous(...) is the other common choice
 //@Disabled
 public class Build2Auto1 extends LinearOpMode {
-        HardwareBuild2 robot;
+        MorganaBot robot;
         private double ENCODER_PORT_RESET;
         DcMotor motorFrontRight;
         DcMotor motorFrontLeft;
@@ -37,7 +39,7 @@ public class Build2Auto1 extends LinearOpMode {
 
         @Override
         public void runOpMode() throws InterruptedException {
-            robot = new HardwareBuild2();          // Use Build2's Hardware file
+            robot = new MorganaBot();
 
 
             try {
@@ -94,7 +96,7 @@ public class Build2Auto1 extends LinearOpMode {
     {
         runtime.reset(); // this is called allot, it resets 'runtime' to 0
 
-        while((robot.ODS.getRawLightDetected() < 0.2) & (runtime.seconds() < waitFor) ) {
+        while((robot.odSensor.getRawLightDetected() < 0.2) & (runtime.seconds() < waitFor) ) {
             if (isBlue)
             {
                 motorBackRight.setPower(-0.25);
@@ -110,13 +112,13 @@ public class Build2Auto1 extends LinearOpMode {
                 motorFrontRight.setPower(-0.15);
             }
             lineSeen = false;
-            telemetry.addData("No white line:", robot.ODS.getRawLightDetected());
+            telemetry.addData("No white line:", robot.odSensor.getRawLightDetected());
             // if the robot doesn't see the line, and still has time, it goes forward.
         }
 
         driveMotorStop();
         lineSeen = true;
-        telemetry.addData("I see the line:", robot.ODS.getRawLightDetected());
+        telemetry.addData("I see the line:", robot.odSensor.getRawLightDetected());
         telemetry.update();
         // if the robot does see the line, it stops.
         return;
@@ -193,7 +195,7 @@ public class Build2Auto1 extends LinearOpMode {
         int blueThreshold = 3;
 
         if(isAllianceRed) { // red alliance
-            if (robot.colorR.red() > redThreshold) {
+            if (robot.colorRight.red() > redThreshold) {
                 telemetry.addData("Red","Red");
                 telemetry.update();
                 beaconFound = true;
@@ -207,7 +209,7 @@ public class Build2Auto1 extends LinearOpMode {
                 }
                 driveMotorStop();
             }
-            else if (robot.colorR.blue() > blueThreshold) {
+            else if (robot.colorRight.blue() > blueThreshold) {
                 telemetry.addData("Blue","Blue");
                 telemetry.update();
                 // if we see blue, we are in the right place
@@ -216,7 +218,7 @@ public class Build2Auto1 extends LinearOpMode {
         }
 
         if(!isAllianceRed) { // blue alliance
-            if (robot.colorR.blue() > blueThreshold) {
+            if (robot.colorRight.blue() > blueThreshold) {
                 beaconFound = true;
                 telemetry.addData("Blue","Blue");
                 telemetry.update();
@@ -230,7 +232,7 @@ public class Build2Auto1 extends LinearOpMode {
                 driveMotorStop();
             }
 
-            else if (robot.colorR.red() > redThreshold) {
+            else if (robot.colorRight.red() > redThreshold) {
                 telemetry.addData("Red","Red");
                 telemetry.update();
                 beaconFound = true;
@@ -240,12 +242,12 @@ public class Build2Auto1 extends LinearOpMode {
         if (beaconFound) {
             runtime.reset();
             while ((runtime.seconds() < 0.5)) {
-                robot.rightServo.setPosition(robot.rightPress);
-                robot.leftServo.setPosition(robot.leftPress);
+                robot.rightServo.setPosition(robot.RIGHT_PRESS);
+                robot.leftServo.setPosition(robot.LEFT_PRESS);
             }
             // put the servos back when we are done
-            robot.rightServo.setPosition(robot.rightStore);
-            robot.leftServo.setPosition(robot.leftStore);
+            robot.rightServo.setPosition(robot.RIGHT_STORE);
+            robot.leftServo.setPosition(robot.LEFT_STORE);
         }
     }
 
@@ -261,13 +263,13 @@ public class Build2Auto1 extends LinearOpMode {
         robot.motorShoot.setPower(0.425);
 
         delayLoop(4);
-        robot.fireServo.setPosition(robot.fireGo);// the servo is retracted after firing here.
-        delayLoop(2 * robot.fireServoTime);
-        robot.fireServo.setPosition(robot.fireStay);
+        robot.fireServo.setPosition(robot.FIRE_GO);// the servo is retracted after firing here.
+        delayLoop(2 * robot.FIRE_SERVO_TIME);
+        robot.fireServo.setPosition(robot.FIRE_STAY);
 
     }
 
-    public void autoDrive(float foward, float left, float turn, long waitFor){
+/*    public void autoDrive(float foward, float left, float turn, long waitFor){
         // this code runs the robot in all directions using a combination of forward, left, and turn
         // combined with a time. It runs off of time.
         float a, b, c;
@@ -291,7 +293,7 @@ public class Build2Auto1 extends LinearOpMode {
         driveMotorStop();
         delayLoop(0.25);
 
-    }
+    }*/
 
     public void driveMotorStop()
     { // this stops our motors to make it easier to write (one line instead of 4)
@@ -308,7 +310,7 @@ public class Build2Auto1 extends LinearOpMode {
         }
     }
 
-    public MotorPower motorScale(float motorFL, float motorBL, float motorFR, float motorBR, float maxSpeed) {
+/*    public MotorPower motorScale(float motorFL, float motorBL, float motorFR, float motorBR, float maxSpeed) {
         float norm; // this is a code that normalizes motor speeds.
         float motorFLadj = 0, motorBLadj = 0, motorFRadj = 0, motorBRadj = 0;
         // Normalise by the largest motor power.
@@ -321,7 +323,7 @@ public class Build2Auto1 extends LinearOpMode {
         motorBRadj = (Range.clip((motorBR) / norm, -maxSpeed, maxSpeed));
         MotorPower returnMotorPower = new MotorPower(motorBLadj, motorBRadj, motorFLadj, motorFRadj);
         return returnMotorPower;
-    }
+    }*/
 
     private void WaitForInputDebug()
     {   // this code can be inserted into our master code to make it so the robot waits for you

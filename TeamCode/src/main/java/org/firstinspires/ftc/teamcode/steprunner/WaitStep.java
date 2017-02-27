@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.steprunner;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 /**
  * Created by ECR FTC 11096 on 10/31/2016.
  *
@@ -8,23 +10,26 @@ package org.firstinspires.ftc.teamcode.steprunner;
 
 public class WaitStep extends Step {
 
-    protected long waitTime = 0;
+    protected double waitTime = 0.0;
+    protected ElapsedTime timer;
 
-    public WaitStep(long theWaitTime)
+    public WaitStep(double theWaitTime)
     {
         waitTime = theWaitTime;
+        timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     }
 
     @Override
-    public void start(Robot r) {
+    public void start(StepRobot r) {
         super.start(r);
-        log(String.format("waiting %d ms", waitTime));
+        timer.reset();
+        tell("Waiting for %.2f ms", waitTime);
     }
 
     @Override
     public void run() {
         super.run();
-        if (elapsedTimeMillis() >= waitTime) {
+        if (timer.time() >= waitTime) {
             stop();
         }
     }

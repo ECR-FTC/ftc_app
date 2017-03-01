@@ -24,6 +24,8 @@ import static java.util.Arrays.asList;
 
 public class MorganaBot extends StepRobot {
 
+    // Hardware map provided by opmode
+    public HardwareMap hwMap;
 
     // Interfaces to the devices on the robot
 
@@ -77,8 +79,9 @@ public class MorganaBot extends StepRobot {
      *   hardware map and then setting them to starting values.
      */
     @Override
-    public void init(HardwareMap theHwMap) throws InterruptedException {
-        super.init(theHwMap);
+    public void init(Object map) throws InterruptedException {
+
+        hwMap = (HardwareMap) map;
 
         // Get access to the devices through the hardware map.
         motorFrontRight = hwMap.dcMotor.get("frontRight");

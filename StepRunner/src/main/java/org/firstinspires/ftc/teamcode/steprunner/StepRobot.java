@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.steprunner;
 
-import com.qualcomm.robotcore.hardware.HardwareMap;
-
 /**
  * Created by ECR FTC 11096 on 10/29/2016.
  * <p>
@@ -14,22 +12,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public abstract class StepRobot {
 
 
-    public HardwareMap hwMap;   // Hardware map provided by opmode
-
-    public StepRobot() {
-    }
+    public StepRobot() {}
 
     /*
-     *  Initialize the robot. Subclasses MUST call super.init first before
-     *  doing their own thing.
+     *  Initialize the robot, given some kind of map.
      */
-    public void init(HardwareMap hwMap) throws InterruptedException {
-        this.hwMap = hwMap;
-    }
-
-    /*
-     *   Abstract methods used by Steps -- these need to be overridden by subclasses
-     */
+    abstract public void init(Object map) throws InterruptedException;
 
     /*
      *  Reset and stop all drive motors.

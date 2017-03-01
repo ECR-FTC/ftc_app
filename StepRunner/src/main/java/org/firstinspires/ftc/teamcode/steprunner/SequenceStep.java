@@ -39,6 +39,7 @@ public class SequenceStep extends Step {
         super.start(r);
 
         // If we don't have an empty list, start the first step.
+        currentStep = 0;
         if (stepsLeft()) {
             stepList.get(currentStep).start(robot);
         }

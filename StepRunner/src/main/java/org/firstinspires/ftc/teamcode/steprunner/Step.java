@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.steprunner;
 
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -13,8 +15,16 @@ public class Step {
 
     protected StepRobot robot;
     private Boolean running = false;
+    private static Boolean tellConsole = false;
 
     public static ArrayList<TelMessage> telMessages = new ArrayList<TelMessage>();
+
+    /*
+     * Use console, rather than deferred telemetry output, for status messages.
+     */
+    public static void useConsole(Boolean useConsole) {
+        tellConsole = useConsole;
+    }
 
     /*
      * start: method called when Step begins
@@ -53,10 +63,17 @@ public class Step {
      * tell: add a telemetry message
      */
     public void tell(String msg) {
-        telMessages.add(new TelMessage(
-                this.getClass().getSimpleName(),
-                msg
-        ));
+        if (tellConsole) {
+            System.out.println(
+                    String.format(">> %s: %s",
+                            this.getClass().getSimpleName(),
+                            msg));
+        } else {
+            telMessages.add(new TelMessage(
+                    this.getClass().getSimpleName(),
+                    msg
+            ));
+        }
     }
 
     public void tell(String fmt, Object... arguments) {

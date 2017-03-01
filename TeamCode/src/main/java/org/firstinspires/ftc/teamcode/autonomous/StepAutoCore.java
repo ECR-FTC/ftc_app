@@ -5,13 +5,13 @@ East Cobb Robotics 11096
 this code is used for developing autonomous functions for the competition robot
 
 */
-package org.firstinspires.ftc.teamcode.steprunner;
+package org.firstinspires.ftc.teamcode.autonomous;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.steprunner.Step;
 import org.firstinspires.ftc.teamcode.steprunner.StepRobot;
+import org.firstinspires.ftc.teamcode.steprunner.TelMessage;
 
 import java.util.List;
 

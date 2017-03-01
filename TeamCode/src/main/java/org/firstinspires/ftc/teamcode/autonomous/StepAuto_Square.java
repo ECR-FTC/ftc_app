@@ -7,9 +7,8 @@ import org.firstinspires.ftc.teamcode.steprunner.Step;
 import org.firstinspires.ftc.teamcode.steprunner.SequenceStep;
 import org.firstinspires.ftc.teamcode.steprunner.CountLoopStep;
 import org.firstinspires.ftc.teamcode.steprunner.RamperDriveStep;
-import org.firstinspires.ftc.teamcode.steprunner.StepAutoCore;
 import org.firstinspires.ftc.teamcode.steprunner.TurnStep;
-import org.firstinspires.ftc.teamcode.steprunner.WaitStep;
+import org.firstinspires.ftc.teamcode.steps.WaitStep;
 
 /**
  * ECR FTC 11096 - 2016 - 2017 Velocity Vortex - basic StepRunner autonomous test

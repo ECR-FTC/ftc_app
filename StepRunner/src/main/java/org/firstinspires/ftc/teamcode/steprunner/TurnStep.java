@@ -4,9 +4,9 @@ package org.firstinspires.ftc.teamcode.steprunner;
  * Created by ECR FTC on 1/15/2017.
  */
 public class TurnStep extends Step{
-    static final double DEFAULT_TUP    = 45;
-    static final double DEFAULT_TDOWN  = 45;
-    static final double DEFAULT_MIN    = 0.15;
+    static final double DEFAULT_TUP    = 15;
+    static final double DEFAULT_TDOWN  = 15;
+    static final double DEFAULT_MIN    = 0.5;
 
     protected double maxPower;
     protected double heading;

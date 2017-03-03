@@ -8,9 +8,9 @@ package org.firstinspires.ftc.teamcode.steprunner;
  */
 
 public class RamperDriveStep extends Step {
-    static final double DEFAULT_TUP    = 4000;
-    static final double DEFAULT_TDOWN  = 4000;
-    static final double DEFAULT_MIN    = 0.15;
+    static final double DEFAULT_TUP    = 2000;
+    static final double DEFAULT_TDOWN  = 2000;
+    static final double DEFAULT_MIN    = 0.25;
 
     protected double maxPower;
     protected double distance;

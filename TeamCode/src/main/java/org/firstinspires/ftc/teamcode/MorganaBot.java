@@ -135,22 +135,18 @@ public class MorganaBot extends StepRobot {
 
             // Docs say this mode does not attempt to use encoders to regulate
             // motor speed.
-            // motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-            // Docs say this mode attempts to use encoders to regulate
-            // motor speed.
-            motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
             // Set the motor to brake on zero power.
-            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            // motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
             // And set the power to zero.
             motor.setPower(0.0);
         }
 
-        // Right-side motors run in reverse mode
-        motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
-        motorBackRight.setDirection(DcMotor.Direction.REVERSE);
+        // Left-side motors run in reverse mode
+        motorFrontLeft.setDirection(DcMotor.Direction.REVERSE);
+        motorBackLeft.setDirection(DcMotor.Direction.REVERSE);
     }
 
     /*
@@ -186,11 +182,13 @@ public class MorganaBot extends StepRobot {
 
     /*
      * Reset drive motor encoders.
+     * TODO: do we have to wait until the encoder values are reset?
      */
     @Override
     public void resetDriveEncoders() {
         for (DcMotor motor : driveMotors) {
             motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
     }
 

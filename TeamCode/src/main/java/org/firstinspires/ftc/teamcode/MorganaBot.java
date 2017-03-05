@@ -76,7 +76,7 @@ public class MorganaBot extends StepRobot {
     public static final double FIRE_SERVO_TIME = 0.5;  // delay time for the firing servo
     public static final double DEAD_ZONE = 0.25; // for lift motor
     public static final double COLOR_THRESHOLD = 0.45; // value that the sensor has to be to return positive.
-
+    public static final double WHITE_LINE_THRESHOLD = 0.2;      // above this means we see white line
 
     public static final int GO_ONE_TILE_PORT = 3150;
 
@@ -240,5 +240,8 @@ public class MorganaBot extends StepRobot {
         servoList.get(servoId).setPosition(position);
     }
 
-
+    @Override
+    public boolean checkWhiteLine() {
+        return odSensor.getRawLightDetected() > WHITE_LINE_THRESHOLD;
+    }
 }

@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.steps.WaitStep;
  * Move all servos through their full range 10 times.
  */
 
-@Autonomous(name = "ServoRangeTest", group = "StepAuto")
+@Autonomous(name = "ServoRangeTest", group = "StepTests")
 public class StepAuto_ServoRangeTest extends StepAutoCore {
 
     @Override

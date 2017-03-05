@@ -106,9 +106,15 @@ public class MockRobot extends StepRobot {
         say(String.format("setServo: servoId=%d, position=%.2f", servoId, position));
 
     }
+
+    @Override
+    public boolean checkWhiteLine() {
+        return false;
+    }
+
     /*
-     * Update the model.
-     */
+         * Update the model.
+         */
     protected void updateModel() {
         double now = System.currentTimeMillis();
         double elapsed = now - lastModelCheckTime;

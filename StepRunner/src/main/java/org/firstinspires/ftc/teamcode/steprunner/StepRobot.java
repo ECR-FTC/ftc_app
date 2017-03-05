@@ -66,5 +66,12 @@ public abstract class StepRobot {
      * Set servo position
      */
     abstract public void setServo(int servoId, double position);
+
+    /*
+     * Do you see a white line?
+     */
+    abstract public boolean checkWhiteLine();
 }
+
+
 

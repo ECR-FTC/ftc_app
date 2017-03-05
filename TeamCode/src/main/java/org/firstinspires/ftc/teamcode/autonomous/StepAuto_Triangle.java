@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.steps.WaitStep;
  * This one just drives in a square, waiting a second after each side.
  */
 
-@Autonomous(name = "Triangle", group = "StepAuto")
+@Autonomous(name = "Triangle", group = "StepTests")
 public class StepAuto_Triangle extends StepAutoCore {
 
     @Override

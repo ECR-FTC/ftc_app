@@ -76,6 +76,12 @@ public abstract class StepRobot {
      * Set shooter power
      */
     abstract public void setShootPower(double power);
+
+    /*
+     * Get color
+     */
+    abstract public int getColorSeen();
+
 }
 
 

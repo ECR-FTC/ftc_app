@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.hardware.Sensor;
+
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -77,6 +79,9 @@ public class MorganaBot extends StepRobot {
     public static final double DEAD_ZONE = 0.25; // for lift motor
     public static final double COLOR_THRESHOLD = 0.45; // value that the sensor has to be to return positive.
     public static final double WHITE_LINE_THRESHOLD = 0.2;      // above this means we see white line
+    public static final double RED_THRESHOLD = 0.2;     // above this means we see red
+    public static final double BLUE_THRESHOLD = 0.2;     // above this means we see blue
+
 
     public static final int GO_ONE_TILE_PORT = 3150;
 
@@ -248,5 +253,20 @@ public class MorganaBot extends StepRobot {
     @Override
     public void setShootPower(double power) {
         motorShoot.setPower(power);
+    }
+
+    @Override
+    public int getColorSeen() {
+        // TODO: set which sensors (left or right) to check, for now, just right
+
+        if (rightRedSensor.getVoltage() > RED_THRESHOLD) {
+            return 1;       // TODO: better name
+        }
+        if (rightBlueSensor.getVoltage() > BLUE_THRESHOLD) {
+            return 2;       // TODO: better name
+        }
+
+        return -1;          // we don't know yet
+
     }
 }

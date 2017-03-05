@@ -12,7 +12,8 @@ package org.firstinspires.ftc.teamcode.steprunner;
 public abstract class StepRobot {
 
 
-    public StepRobot() {}
+    public StepRobot() {
+    }
 
     /*
      *  Initialize the robot, given some kind of map.
@@ -61,6 +62,9 @@ public abstract class StepRobot {
     abstract public double getGyroHeading();
 
 
-    // TODO: get/set servo
-    // TODO: get sensor values
+    /*
+     * Set servo position
+     */
+    abstract public void setServo(int servoId, double position);
 }
+

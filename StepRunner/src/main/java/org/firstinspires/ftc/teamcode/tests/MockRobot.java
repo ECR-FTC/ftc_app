@@ -100,6 +100,12 @@ public class MockRobot extends StepRobot {
         return gyroHeading;
     }
 
+    @Override
+    public void setServo(int servoId, double position) {
+        updateModel();
+        say(String.format("setServo: servoId=%d, position=%.2f", servoId, position));
+
+    }
     /*
      * Update the model.
      */

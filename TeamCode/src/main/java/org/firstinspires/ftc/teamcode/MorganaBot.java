@@ -53,6 +53,12 @@ public class MorganaBot extends StepRobot {
     public AnalogInput leftRedSensor;
     public AnalogInput leftBlueSensor;
 
+    // List of Servos and their Id's.
+    public List<Servo> servoList;
+    public final static int LEFT_SERVO = 0;
+    public final static int RIGHT_SERVO = 1;
+    public final static int LOAD_SERVO = 2;
+    public final static int FIRE_SERVO = 3;
 
     // Constants
     public static final double LEFT_PRESS = 0.9;  // left button pusher "on" value
@@ -95,8 +101,8 @@ public class MorganaBot extends StepRobot {
         motorShoot = hwMap.dcMotor.get("shootMotor");
         leftServo = hwMap.servo.get("servoLeft");
         rightServo = hwMap.servo.get("servoRight");
-        fireServo = hwMap.servo.get("servoFire");
         loadServo = hwMap.servo.get("servoLoad");
+        fireServo = hwMap.servo.get("servoFire");
 
         gyro = (ModernRoboticsI2cGyro) hwMap.gyroSensor.get("sensorGyro");
         colorRight = hwMap.colorSensor.get("sensorColorRight");
@@ -105,6 +111,10 @@ public class MorganaBot extends StepRobot {
         rightBlueSensor = hwMap.analogInput.get("rightBlue");
         leftRedSensor = hwMap.analogInput.get("leftRed");
         leftBlueSensor = hwMap.analogInput.get("leftBlue");
+
+        // Make a list of the Servos, so we can refer to them by number.
+        // Make sure they are in the right order.
+        servoList = asList(leftServo, rightServo, loadServo, fireServo);
 
         // Reset all drive motors
         resetDriveMotors();
@@ -219,5 +229,16 @@ public class MorganaBot extends StepRobot {
     public double getGyroHeading() {
         return gyro.getIntegratedZValue();
     }
+
+    /*
+     * Set servo position
+     */
+    @Override
+    public void setServo(int servoId, double position) {
+        // Servo s = servoList.get(servoId);
+        // s.setPosition(position);
+        servoList.get(servoId).setPosition(position);
+    }
+
 
 }

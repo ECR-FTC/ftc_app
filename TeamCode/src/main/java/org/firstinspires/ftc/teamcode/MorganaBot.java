@@ -244,4 +244,9 @@ public class MorganaBot extends StepRobot {
     public boolean checkWhiteLine() {
         return odSensor.getRawLightDetected() > WHITE_LINE_THRESHOLD;
     }
+
+    @Override
+    public void setShootPower(double power) {
+        motorShoot.setPower(power);
+    }
 }

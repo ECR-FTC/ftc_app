@@ -71,6 +71,11 @@ public abstract class StepRobot {
      * Do you see a white line?
      */
     abstract public boolean checkWhiteLine();
+
+    /*
+     * Set shooter power
+     */
+    abstract public void setShootPower(double power);
 }
 
 

@@ -20,6 +20,7 @@ public class StopShooterStep extends Step {
     @Override
     public void run() {
          super.run();
+        stop();
 
     }
 

@@ -24,14 +24,14 @@ public class StepAuto_WhiteLineTest extends StepAutoCore {
     public void runOpMode() throws InterruptedException {
 
         Step toWhiteLineStep = new UntilOneDoneStep(
-                new RamperDriveStep(20000, 1.0),
+                new RamperDriveStep(20000, 0.2),
                 new FindWhiteLineStep()
         );
 
         Step backAndForthStep = new SequenceStep(
                 toWhiteLineStep,
                 new WaitStep(1000),
-                new RamperDriveStep(4000, -1.0),
+                new RamperDriveStep(4000, -0.2),
                 new WaitStep(1000)
         );
         Step mainStep = new CountLoopStep(backAndForthStep, 4);

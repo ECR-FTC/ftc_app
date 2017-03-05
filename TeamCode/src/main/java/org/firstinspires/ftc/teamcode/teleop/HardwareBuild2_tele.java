@@ -32,6 +32,8 @@ public class HardwareBuild2_tele
 
     public DcMotor motorLift;
     public DcMotor motorShoot;
+
+
     public Servo leftServo;
     public Servo rightServo;
     public Servo loadServo;

@@ -21,6 +21,7 @@ public class JavaWaitStep extends Step {
 
     @Override
     public void start(StepRobot r) {
+        //It sets startTime and also gives telemetry.
         super.start(r);
         startTime = System.currentTimeMillis();
         tell("Waiting for %.2f ms", waitTime);
@@ -28,6 +29,7 @@ public class JavaWaitStep extends Step {
 
     @Override
     public void run() {
+        //run() finds the elapsed time and gives telemetry, as well as stops the robot if elapsed time is greater than wait time.
         super.run();
         double elapsed = System.currentTimeMillis() - startTime;
 

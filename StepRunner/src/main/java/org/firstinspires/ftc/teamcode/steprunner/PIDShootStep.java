@@ -36,6 +36,7 @@ public class PIDShootStep extends Step {
 
     @Override
     public void run() {
+        // This defines the ticks and time for our getNewSpeed method in our PID class to allow PID to run
         super.run();
         ticks = robot.getDriveEncoderValue();
         time = System.currentTimeMillis();
@@ -43,6 +44,7 @@ public class PIDShootStep extends Step {
     }
     @Override
     public void stop(){
+        //This stops our PID.
         super.stop();
         robot.driveStop();
     }

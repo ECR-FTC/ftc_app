@@ -17,3 +17,6 @@ apply from: '../build.common.gradle'
 dependencies {
     compile project(path: ':StepRunner')
 }
+android {
+    buildToolsVersion '25.0.0'
+}

@@ -9,12 +9,12 @@ import java.util.Locale;
  * This one uses the Java class rather than the robot core ElapsedTime class.
  */
 
-public class JavaWaitStep extends Step {
+public class WaitStep extends Step {
 
     protected double waitTime = 0.0;
     protected double startTime;
 
-    public JavaWaitStep(double theWaitTime)
+    public WaitStep(double theWaitTime)
     {
         waitTime = theWaitTime;
     }

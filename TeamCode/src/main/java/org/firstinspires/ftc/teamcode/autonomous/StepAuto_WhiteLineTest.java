@@ -7,10 +7,9 @@ import org.firstinspires.ftc.teamcode.steprunner.CountLoopStep;
 import org.firstinspires.ftc.teamcode.steprunner.FindWhiteLineStep;
 import org.firstinspires.ftc.teamcode.steprunner.RamperDriveStep;
 import org.firstinspires.ftc.teamcode.steprunner.SequenceStep;
-import org.firstinspires.ftc.teamcode.steprunner.ServoStep;
 import org.firstinspires.ftc.teamcode.steprunner.Step;
 import org.firstinspires.ftc.teamcode.steprunner.UntilOneDoneStep;
-import org.firstinspires.ftc.teamcode.steps.WaitStep;
+import org.firstinspires.ftc.teamcode.steprunner.WaitStep;
 
 /**
  * ECR FTC 11096 - 2016 - 2017 Velocity Vortex - White line test

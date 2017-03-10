@@ -1,17 +1,7 @@
 package org.firstinspires.ftc.teamcode.tests;
 
-import org.firstinspires.ftc.teamcode.steprunner.CountLoopStep;
-import org.firstinspires.ftc.teamcode.steprunner.DriveStep;
-import org.firstinspires.ftc.teamcode.steprunner.EncoderStep;
-import org.firstinspires.ftc.teamcode.steprunner.JavaWaitStep;
-import org.firstinspires.ftc.teamcode.steprunner.RamperDriveStep;
-import org.firstinspires.ftc.teamcode.steprunner.SequenceStep;
+import org.firstinspires.ftc.teamcode.steprunner.WaitStep;
 import org.firstinspires.ftc.teamcode.steprunner.Step;
-import org.firstinspires.ftc.teamcode.steprunner.TelMessage;
-import org.firstinspires.ftc.teamcode.steprunner.TurnStep;
-import org.firstinspires.ftc.teamcode.steprunner.UntilOneDoneStep;
-
-import java.util.List;
 
 public class StepRunnerTest {
 
@@ -31,13 +21,17 @@ public class StepRunnerTest {
         // the telemetry stuff
         Step.useConsole(true);
 
-        Step oneSide = new SequenceStep(
-                new RamperDriveStep(1000, 0.75),
-                new TurnStep(90, 0.75),
-                new JavaWaitStep(200.0)
-        );
 
-        Step mainStep = new CountLoopStep(oneSide, 4);
+        // RamperDriveStep and turn test.
+//        Step oneSide = new SequenceStep(
+//                new RamperDriveStep(1000, 0.75),
+//                new TurnStep(90, 0.75),
+//                new WaitStep(200.0)
+//        );
+//
+//        Step mainStep = new CountLoopStep(oneSide, 4);
+
+        Step mainStep = new WaitStep(2000);
 
         long startTime = System.currentTimeMillis();
 

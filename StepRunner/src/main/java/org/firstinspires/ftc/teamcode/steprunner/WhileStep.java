@@ -7,70 +7,64 @@ package org.firstinspires.ftc.teamcode.steprunner;
  */
 
 public class WhileStep extends Step {
-    protected Checker checker;
-    protected Step repeatedStep;  // the step that we do repeatedly
+    protected Step controlStep;     // the step that controls whether we continue
+    protected Step repeatedStep;    // the step that we do repeatedly
+    protected boolean checking;     // true if checking condition; false if running repeatedStep
 
-    public WhileStep(Step repeatedStep, Checker checker) {
-        this.checker = checker;
+    public WhileStep(Step controlStep, Step repeatedStep) {
+        this.controlStep = controlStep;
         this.repeatedStep = repeatedStep;
     }
 
     /*
-     * When WhileStep starts, check our condition, and start
-     * our repeatedStep unless we're stopped already.
+     * When WhileStep starts, start our control step.
      */
 
     public void start(StepRobot r) {
         super.start(r);
-        checker.start();
-        if (checkContinue()) {
-            repeatedStep.start(robot);
-        } else {
-            stop();
-        }
+        checking = true;
+        controlStep.start(robot);
     }
 
     /*
-     * When whileStep runs, it checks the condition to see if we should
-     *   continue or possibly restart our repeatedStep.
+     * When WhileStep runs, if we're "checking", give our controlStep
+     * a chance to run and see if we should continue -- which we do
+     * if its result is positive. If we're not "checking", give our
+     * repeatedStep a chance to run, and if it's done, we start
+     * checking again.
      */
     public void run() {
         super.run();
-        if (repeatedStep.isRunning()) {
-            repeatedStep.run();
-        } else {
-            repeatedStep.stop();
-            if (checkContinue()) {
-                repeatedStep.start(robot);
-            } else {
-                stop();
+        if (checking) {
+            controlStep.run();
+            if (!controlStep.isRunning()) {             // if control step is ready to check,
+                if (controlStep.getResult() <= 0) {     // see if we should stop looping
+                    stop();                             // yes, we're all done
+                } else {                                // control says we should keep going
+                    checking = false;
+                    repeatedStep.start(robot);          // start up the repeated step
+                }
             }
+        } else {                                    // but if we're running the repeatedStep,
+            repeatedStep.run();
+            if (repeatedStep.isRunning()) {
+                return;                             // still working on our repeated step
+            }
+            checking = true;                        // repeated step is done; check again
+            controlStep.start(robot);               // TODO: use restart method?
         }
     }
 
     /*
-     * When WhileStep is told to stop, stop our repeatedStep.
+     * When WhileStep is told to stop, stop both of our steps.
      */
 
     public void stop() {
-        repeatedStep.stop();
         super.stop();
-    }
-
-    /*
-     * Ask the checker whether we should keep going.
-     */
-
-    boolean checkContinue() {
-        switch (checker.check()) {
-            case Checker.FALSE_CHOICE:
-            case Checker.STOP_CHOICE:
-                return false;
-            case Checker.CONTINUE_CHOICE:
-            case Checker.TRUE_CHOICE:
-                return true;
-            default:
-                return false;
+        if (!checking) {
+            repeatedStep.stop();
         }
+        controlStep.stop();
     }
+
 }

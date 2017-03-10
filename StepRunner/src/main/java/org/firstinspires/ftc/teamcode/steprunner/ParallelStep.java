@@ -42,7 +42,8 @@ abstract public class ParallelStep extends Step {
     }
 
     /* When ParallelStep runs, it first checks to see if it should continue,
-        and if so it runs all of the steps that aren't stopped yet. */
+     * and if so it runs all of the steps that aren't stopped yet.
+     */
 
     public void run() {
         super.run();
@@ -63,7 +64,8 @@ abstract public class ParallelStep extends Step {
             }
         }
 
-        // Either stop or run all of the running steps.
+        // Either stop or run all of the running steps, and inherit the
+        // result from whoever runs. So last step running sets the result.
 
         if (stopNow) {
             stop();
@@ -71,6 +73,7 @@ abstract public class ParallelStep extends Step {
             for (Step step: stepList) {
                 if (step.isRunning()) {
                     step.run();
+                    setResult(step.getResult());
                 }
             }
         }

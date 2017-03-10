@@ -26,6 +26,7 @@ public class CountLoopStep extends Step {
 
     @Override
     public void run() {
+        super.run();
         repeatedStep.run();
         if (repeatedStep.isRunning()) {
             return;                             // it's still going

@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.tests;
 
 import org.firstinspires.ftc.teamcode.steprunner.CountLoopStep;
+import org.firstinspires.ftc.teamcode.steprunner.SayStep;
+import org.firstinspires.ftc.teamcode.steprunner.SequenceStep;
+import org.firstinspires.ftc.teamcode.steprunner.SwitchStep;
 import org.firstinspires.ftc.teamcode.steprunner.WaitStep;
 import org.firstinspires.ftc.teamcode.steprunner.Step;
 import org.firstinspires.ftc.teamcode.steprunner.WhileStep;
@@ -39,7 +42,19 @@ public class StepRunnerTest {
 //                new WaitStep(200)
 //        );
 
-        Step mainStep = new CountLoopStep(new WaitStep(200), 4);
+        // Test CountLoopStep
+        // Step mainStep = new CountLoopStep(new WaitStep(200), 4);
+
+        // Test SwitchStep
+        Step oneTest = new SwitchStep(new RandomResultStep(0, 3),
+                new SayStep("rolled a zero"),
+                null,
+                new SayStep("rolled a two")
+                );
+        Step mainStep = new CountLoopStep(new SequenceStep(
+                oneTest,
+                new SayStep("--------------------")
+        ), 4);
 
         long startTime = System.currentTimeMillis();
 

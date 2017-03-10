@@ -13,10 +13,10 @@ public class Step {
     protected StepRobot robot;
     private Boolean running = false;
 
+    // Stock result codes.
     public static final int RESULT_DONE = 0;
     public static final int RESULT_CONTINUE = 1;
-    public static final int RESULT_RUNNING = -1;
-    public static final int RESULT_FAIL = -2;
+    public static final int RESULT_FAIL = -1;
 
     private int result = RESULT_DONE;
 
@@ -37,8 +37,8 @@ public class Step {
     public void start(StepRobot r) {
         robot = r;
         running = true;
-        setResult(RESULT_RUNNING);
-        tell("start()");
+        setResult(RESULT_DONE);     // assume step ends normally
+        tell("starting");
     }
 
     /*
@@ -54,25 +54,17 @@ public class Step {
         return running;
     }
 
-
     /*
      * stop: called after Step's job is done OR to cancel the step. Allows for
-     * cleanup, etc. Subclasses call super.stop(), and can then set their result
-     * to something other than RESULT_DONE if appropriate.
+     * cleanup, etc.
      */
     public void stop() {
-        running = false;
-        setResult(RESULT_DONE);
-        tell("stop()");
-    }
-
-    /*
-     * Stop and set a result.
-     */
-    public void stopWithResult(int result) {
-        stop();
-        setResult(result);
-        tell("stopped with result %d", result);
+        if (running) {
+            running = false;
+            tell("stopping with result %d", result);
+        } else {
+            tell("already stopped with result %d", result);
+        }
     }
 
     /*

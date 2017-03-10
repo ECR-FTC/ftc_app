@@ -19,12 +19,14 @@ public class RandomTestStep extends Step {
         switch (roll) {
             case 1:
                 tell("Rolled %d, now done", roll);
-                stopWithResult(RESULT_DONE);
+                setResult(RESULT_DONE);
+                stop();
                 break;
             case 2:
             case 3:
                 tell("Rolled %d, continue loop", roll);
-                stopWithResult(RESULT_CONTINUE);
+                setResult(RESULT_CONTINUE);
+                stop();
                 break;
             default:
                 tell("Rolled %d, continuing to check", roll);

@@ -6,8 +6,7 @@ package org.firstinspires.ftc.teamcode.steprunner;
 public class StopShooterStep extends Step {
 
 
-    public StopShooterStep()
-    {
+    public StopShooterStep() {
 
     }
 
@@ -19,15 +18,17 @@ public class StopShooterStep extends Step {
 
     @Override
     public void run() {
-         super.run();
+        super.run();
         stop();
 
     }
 
     @Override
-    public void stop(){
+    public void stop() {
         super.stop();
 
-    };
+    }
+
+    ;
 
 }

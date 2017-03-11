@@ -19,7 +19,23 @@ public class UntilAllDoneStep extends ParallelStep {
         super(steps);
     }
 
-    protected boolean untilAllDone() {
-        return true;
+    public void run() {
+        super.run();
+
+        // Go through each step and run any that are still running. If there aren't any,
+        // stop.
+        Boolean stopNow = true;
+        for (Step step: stepList) {
+            if (step.isRunning()) {
+                step.run();
+                setResult(step.getResult());    // use the last result
+                stopNow = false;                // and we will keep going
+            }
+        }
+
+        if (stopNow) {
+            stop();
+        }
+
     }
 }

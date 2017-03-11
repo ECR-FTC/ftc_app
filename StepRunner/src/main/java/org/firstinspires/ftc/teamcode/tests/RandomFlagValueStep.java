@@ -25,7 +25,6 @@ public class RandomFlagValueStep extends Step {
     public void run() {
         int roll = (int)(Math.random() * (maxVal - minVal + 1) + minVal);
         setFlag(name, roll);
-        tell("flag %s set to %d", name, roll);
     }
 
 }

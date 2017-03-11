@@ -20,7 +20,21 @@ public class UntilOneDoneStep extends ParallelStep {
         super(steps);
     }
 
-    protected boolean untilAllDone() {
-        return false;
+    public void run() {
+        super.run();
+
+        Boolean stopNow = false;
+        for (Step step : stepList) {
+            if (step.isRunning()) {
+                step.run();
+            } else {
+                setResult(step.getResult());    // inherit result of first stopped step
+                stopNow = true;
+            }
+        }
+
+        if (stopNow) {
+            stop();
+        }
     }
 }

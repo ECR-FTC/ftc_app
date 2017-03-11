@@ -35,52 +35,18 @@ abstract public class ParallelStep extends Step {
 
     public void start(StepRobot r) {
         super.start(r);
-
         for(Step step : stepList) {
            step.start(robot);
         }
     }
 
-    /* When ParallelStep runs, it first checks to see if it should continue,
-     * and if so it runs all of the steps that aren't stopped yet.
-     */
+    /* Each ParallelStep subclass handles its own run logic. */
 
     public void run() {
         super.run();
-
-        Boolean stopNow = untilAllDone();
-
-        for (Step step: stepList) {
-            if (step.isRunning()) {
-                if (stopNow) {
-                    stopNow = false;
-                    break;
-                }
-            } else {
-                if (!stopNow) {
-                    stopNow = true;
-                    break;
-                }
-            }
-        }
-
-        // Either stop or run all of the running steps, and inherit the
-        // result from whoever runs. So last step running sets the result.
-
-        if (stopNow) {
-            stop();
-        } else {
-            for (Step step: stepList) {
-                if (step.isRunning()) {
-                    step.run();
-                    setResult(step.getResult());
-                }
-            }
-        }
-
     }
 
-    /* When ParallelStop is told to stop, we stop all of our steps
+    /* When a ParallelStop is told to stop, we stop all of our steps
         that are running, and then stop ourselves.
      */
 
@@ -92,9 +58,5 @@ abstract public class ParallelStep extends Step {
         }
         super.stop();
     }
-
-    // Whether we run until all done or just one. Must be
-    // implemented by a subclass.
-    abstract protected boolean untilAllDone();
 
 }

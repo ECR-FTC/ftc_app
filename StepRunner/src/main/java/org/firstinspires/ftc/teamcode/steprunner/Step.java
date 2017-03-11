@@ -106,6 +106,7 @@ public class Step {
 
     public void setResult(int result) {
         this.result = result;
+        tell("result set to %d", result);
     }
 
     /*
@@ -113,6 +114,7 @@ public class Step {
      */
     public void setFlag(String name, int value) {
         flags.put(name, value);
+        tell("flag %s set to %d", name, value);
     }
 
     public Integer getFlag(String name) {
@@ -121,6 +123,7 @@ public class Step {
 
     public void clearFlag(String name) {
         flags.remove(name);
+        tell("flag %s cleared", name);
     }
 
 }

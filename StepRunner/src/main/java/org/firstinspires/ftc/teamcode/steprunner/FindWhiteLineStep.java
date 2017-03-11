@@ -6,18 +6,12 @@ package org.firstinspires.ftc.teamcode.steprunner;
  */
 public class FindWhiteLineStep extends Step {
 
-    public FindWhiteLineStep() {
-    }
-
-
     @Override
     public void run() {
         super.run();
-
         if (robot.checkWhiteLine()){
+            tell("white line detected");
             stop();
-        } else {
-            // tell("Encoder=%.2f, Target=%.2f", driveEncoderValue, distance);
         }
     }
 

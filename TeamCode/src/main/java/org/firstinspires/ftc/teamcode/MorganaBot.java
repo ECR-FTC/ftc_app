@@ -70,14 +70,8 @@ public class MorganaBot extends StepRobot {
     public static final double FIRE_GO = 0.5;  // setting to fire a ball into the launcher
     public static final double FIRE_STAY = 0.0;  // down setting for the fire servo
     public static final double LOAD_CLOSED = 0.8;  // "up" setting for the ball loader
-    public static final double LOAD_HALF = 0.45; // load 1/2 way up
     public static final double LOAD_OPEN = 0.1;  // "down" setting for the ball loader
-    public static final double SHOOT_POWER = -0.15; // steady-state launcher motor power
-    public static final double SHOOT_RAMP_POWER = -1.0;  // ramp-up launcher motor power
-    public static final double SHOOT_RAMP_TIME = 2.1;  // ramp-up time for launcher motor
     public static final double FIRE_SERVO_TIME = 0.5;  // delay time for the firing servo
-    public static final double DEAD_ZONE = 0.25; // for lift motor
-    public static final double COLOR_THRESHOLD = 0.45; // value that the sensor has to be to return positive.
     public static final double WHITE_LINE_THRESHOLD = 0.2;      // above this means we see white line
     public static final double RED_THRESHOLD = 0.2;     // above this means we see red
     public static final double BLUE_THRESHOLD = 0.2;     // above this means we see blue
@@ -240,8 +234,6 @@ public class MorganaBot extends StepRobot {
      */
     @Override
     public void setServo(int servoId, double position) {
-        // Servo s = servoList.get(servoId);
-        // s.setPosition(position);
         servoList.get(servoId).setPosition(position);
     }
 
@@ -260,13 +252,12 @@ public class MorganaBot extends StepRobot {
         // TODO: set which sensors (left or right) to check, for now, just right
 
         if (rightRedSensor.getVoltage() > RED_THRESHOLD) {
-            return 1;       // TODO: better name
+            return RED_SEEN;
         }
         if (rightBlueSensor.getVoltage() > BLUE_THRESHOLD) {
-            return 2;       // TODO: better name
+            return BLUE_SEEN;
         }
-
-        return -1;          // we don't know yet
+        return NONE_SEEN;          // we don't know yet
 
     }
 }

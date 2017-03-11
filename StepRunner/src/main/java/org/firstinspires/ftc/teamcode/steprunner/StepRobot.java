@@ -80,6 +80,11 @@ public abstract class StepRobot {
     /*
      * Get color
      */
+
+    public static final int NONE_SEEN = 0;
+    public static final int RED_SEEN = 1;
+    public static final int BLUE_SEEN = 2;
+
     abstract public int getColorSeen();
 
 }

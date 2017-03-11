@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.steprunner;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by ECR FTC 11096 on 10/29/2016.
@@ -21,8 +23,8 @@ public class Step {
     private int result = RESULT_DONE;
 
     private static Boolean tellConsole = false;
-
     public static ArrayList<TelMessage> telMessages = new ArrayList<TelMessage>();
+    private static HashMap<String, Integer> flags = new HashMap<String, Integer>();
 
     /*
      * Use console, rather than deferred telemetry output, for status messages.
@@ -105,4 +107,20 @@ public class Step {
     public void setResult(int result) {
         this.result = result;
     }
+
+    /*
+     * Get, set, clear global flags
+     */
+    public void setFlag(String name, int value) {
+        flags.put(name, value);
+    }
+
+    public Integer getFlag(String name) {
+        return flags.get(name);
+    }
+
+    public void clearFlag(String name) {
+        flags.remove(name);
+    }
+
 }

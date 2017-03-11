@@ -4,6 +4,8 @@ import org.firstinspires.ftc.teamcode.steprunner.CountLoopStep;
 import org.firstinspires.ftc.teamcode.steprunner.SayStep;
 import org.firstinspires.ftc.teamcode.steprunner.SequenceStep;
 import org.firstinspires.ftc.teamcode.steprunner.SwitchStep;
+import org.firstinspires.ftc.teamcode.steprunner.UntilOneDoneStep;
+import org.firstinspires.ftc.teamcode.steprunner.WaitForFlagStep;
 import org.firstinspires.ftc.teamcode.steprunner.WaitStep;
 import org.firstinspires.ftc.teamcode.steprunner.Step;
 import org.firstinspires.ftc.teamcode.steprunner.WhileStep;
@@ -46,15 +48,24 @@ public class StepRunnerTest {
         // Step mainStep = new CountLoopStep(new WaitStep(200), 4);
 
         // Test SwitchStep
-        Step oneTest = new SwitchStep(new RandomResultStep(0, 3),
-                new SayStep("rolled a zero"),
-                null,
-                new SayStep("rolled a two")
-                );
-        Step mainStep = new CountLoopStep(new SequenceStep(
-                oneTest,
-                new SayStep("--------------------")
-        ), 4);
+//        Step oneTest = new SwitchStep(new RandomResultStep(0, 3),
+//                new SayStep("rolled a zero"),
+//                null,
+//                new SayStep("rolled a two")
+//                );
+//        Step mainStep = new CountLoopStep(new SequenceStep(
+//                oneTest,
+//                new SayStep("--------------------")
+//        ), 4);
+
+        // Test WaitForFlagStep; "roll" D20 until we see a 10 or a 15.
+
+        Step mainStep = new UntilOneDoneStep(
+            new RandomFlagValueStep("test_flag", 1, 20),
+            new SequenceStep(new WaitForFlagStep("test_flag", 10), new SayStep("got 10")),
+            new SequenceStep(new WaitForFlagStep("test_flag", 15), new SayStep("got 15"))
+        );
+
 
         long startTime = System.currentTimeMillis();
 

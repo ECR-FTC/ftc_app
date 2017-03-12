@@ -18,11 +18,13 @@ public class SetFlagStep extends Step {
 
     @Override
     public void run() {
+        super.run();
         if (value == null) {
             clearFlag(name);
         } else {
             setFlag(name, value);
         }
-        super.run();
+        stop();
+
     }
 }

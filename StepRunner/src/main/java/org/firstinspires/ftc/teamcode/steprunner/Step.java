@@ -15,13 +15,6 @@ public class Step {
     protected StepRobot robot;
     private Boolean running = false;
 
-    // Stock result codes.
-    public static final int RESULT_DONE = 0;
-    public static final int RESULT_CONTINUE = 1;
-    public static final int RESULT_FAIL = -1;
-
-    private int result = RESULT_DONE;
-
     private static Boolean tellConsole = false;
     public static ArrayList<TelMessage> telMessages = new ArrayList<TelMessage>();
     private static HashMap<String, Integer> flags = new HashMap<String, Integer>();
@@ -39,7 +32,6 @@ public class Step {
     public void start(StepRobot r) {
         robot = r;
         running = true;
-        setResult(RESULT_DONE);     // assume step ends normally
         tell("starting");
     }
 
@@ -63,9 +55,9 @@ public class Step {
     public void stop() {
         if (running) {
             running = false;
-            tell("stopping with result %d", result);
+            tell("stopping");
         } else {
-            tell("already stopped with result %d", result);
+            tell("already stopped");
         }
     }
 
@@ -97,21 +89,12 @@ public class Step {
         return telMessages;
     }
 
-    /*
-     * Getter and setter for step result
-     */
-    public int getResult() {
-        return result;
-    }
-
-    public void setResult(int result) {
-        this.result = result;
-        tell("result set to %d", result);
-    }
 
     /*
-     * Get, set, clear global flags
+     * Get, set, clear global flags used for branching and conditionals
      */
+
+
     public void setFlag(String name, int value) {
         flags.put(name, value);
         tell("flag %s set to %d", name, value);

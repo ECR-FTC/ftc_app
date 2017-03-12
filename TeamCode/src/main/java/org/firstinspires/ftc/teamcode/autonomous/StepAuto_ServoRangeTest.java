@@ -21,7 +21,7 @@ public class StepAuto_ServoRangeTest extends StepAutoCore {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        Step pauseStep = new WaitStep(2000.0);
+        Step pauseStep = new WaitStep(750.0);
 
         Step servoFlipStep = new SequenceStep(
                 new ServoStep(MorganaBot.LEFT_SERVO, MorganaBot.LEFT_PRESS),

@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.MorganaBot;
  * Check values returned by color sensors.
  */
 
-@Autonomous(name = "ColorTest", group = "StepTests")
-public class StepAuto_ColorTest extends StepAutoCore {
+@Autonomous(name = "ShowColorValues", group = "StepTests")
+public class ShowColorValues extends StepAutoCore {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -29,8 +29,8 @@ public class StepAuto_ColorTest extends StepAutoCore {
         waitForStart();
 
         while (opModeIsActive()) {
-            double red = robot.leftRedSensor.getVoltage();
-            double blue = robot.leftBlueSensor.getVoltage();
+            double red = robot.rightRedSensor.getVoltage();
+            double blue = robot.rightBlueSensor.getVoltage();
             telemetry.addData("Colors", "Red=%.2f", red);
             telemetry.addData("Colors", "Blue=%.2f", blue);
             telemetry.update();

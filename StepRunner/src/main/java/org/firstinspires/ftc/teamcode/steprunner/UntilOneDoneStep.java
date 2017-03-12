@@ -28,7 +28,6 @@ public class UntilOneDoneStep extends ParallelStep {
             if (step.isRunning()) {
                 step.run();
             } else {
-                setResult(step.getResult());    // inherit result of first stopped step
                 stopNow = true;
             }
         }

@@ -28,7 +28,6 @@ public class UntilAllDoneStep extends ParallelStep {
         for (Step step: stepList) {
             if (step.isRunning()) {
                 step.run();
-                setResult(step.getResult());    // use the last result
                 stopNow = false;                // and we will keep going
             }
         }

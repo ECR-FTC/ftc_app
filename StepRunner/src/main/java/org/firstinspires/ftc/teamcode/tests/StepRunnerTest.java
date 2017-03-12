@@ -1,14 +1,10 @@
 package org.firstinspires.ftc.teamcode.tests;
 
-import org.firstinspires.ftc.teamcode.steprunner.CountLoopStep;
 import org.firstinspires.ftc.teamcode.steprunner.SayStep;
 import org.firstinspires.ftc.teamcode.steprunner.SequenceStep;
-import org.firstinspires.ftc.teamcode.steprunner.SwitchStep;
 import org.firstinspires.ftc.teamcode.steprunner.UntilOneDoneStep;
 import org.firstinspires.ftc.teamcode.steprunner.WaitForFlagStep;
-import org.firstinspires.ftc.teamcode.steprunner.WaitStep;
 import org.firstinspires.ftc.teamcode.steprunner.Step;
-import org.firstinspires.ftc.teamcode.steprunner.WhileStep;
 
 public class StepRunnerTest {
 
@@ -38,11 +34,6 @@ public class StepRunnerTest {
 //
 //        Step mainStep = new CountLoopStep(oneSide, 4);
 
-        // Test WhileStep
-//        Step mainStep = new WhileStep(
-//                new RandomTestStep(),
-//                new WaitStep(200)
-//        );
 
         // Test CountLoopStep
         // Step mainStep = new CountLoopStep(new WaitStep(200), 4);

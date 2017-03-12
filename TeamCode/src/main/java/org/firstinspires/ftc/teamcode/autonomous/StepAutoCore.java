@@ -50,7 +50,7 @@ abstract public class StepAutoCore extends LinearOpMode {
     protected static final double DISTANCE_TO_SHOOT_POSITION = 4000;
     protected static final double DISTANCE_TO_PLATFORM = 5000;
     protected static final double SHOOTER_SPINUP_TIME = 2000;
-    protected static final double SHOOTER_POWER = 0.7;
+    protected static final double SHOOTER_POWER = 0.6;
 
     protected static final double BEACON_SCAN_SPEED = 0.15;
 
@@ -87,11 +87,12 @@ abstract public class StepAutoCore extends LinearOpMode {
 
         // Shoot a particle.
         shootParticle = new SequenceStep(
-                // new WaitForFlagStep("shooterReady"),
-                new WaitStep(2000),
+                new WaitForFlagStep("shooterReady"),
+                new WaitStep(500),
                 new ServoStep(MorganaBot.FIRE_SERVO, MorganaBot.FIRE_GO),
                 new WaitStep(1000),
-                new ServoStep(MorganaBot.FIRE_SERVO, MorganaBot.FIRE_STAY)
+                new ServoStep(MorganaBot.FIRE_SERVO, MorganaBot.FIRE_STAY),
+                new WaitStep(500)
         );
 
         // Stop shooter.

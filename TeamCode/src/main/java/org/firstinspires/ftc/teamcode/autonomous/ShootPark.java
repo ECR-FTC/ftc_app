@@ -32,6 +32,7 @@ public class ShootPark extends StepAutoCore {
                 driveToShootPosition,
                 startShooter,
                 shootParticle,
+                waitFor(2000),
                 shootParticle,
                 driveToPlatform
         );

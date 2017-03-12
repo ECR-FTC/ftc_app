@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.MorganaBot;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 
-@Autonomous(name="Auto1", group="Competition")
+@Autonomous(name="Auto1", group="Old")
 //@Disabled
 public class Build2Auto1 extends LinearOpMode {
         MorganaBot robot;

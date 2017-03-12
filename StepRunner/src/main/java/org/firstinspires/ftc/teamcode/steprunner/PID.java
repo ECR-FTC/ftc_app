@@ -10,7 +10,7 @@ public class PID
 {
     protected double minSpeed, maxSpeed, pChangeFactor, iChangeFactor, dChangeFactor;
 
-    int ticks = 0, ticksTwo = 0;
+    double ticks = 0, ticksTwo = 0;
     double time = 0, timeTwo = -50;
     double ticksPerTime;
     double speed = 1.0;
@@ -24,7 +24,7 @@ public class PID
         this.minSpeed = tMin;
         this.maxSpeed = tMax;
     }
-    public double getNewSpeed (int currentTicks, int currentTicks2, double currentTime, double currentTime2, double target)
+    public double getNewSpeed (double currentTicks, double currentTicks2, double currentTime, double currentTime2, double target)
     { //user needs: private ElapsedTime runtime = new ElapsedTime();
 
         // PID: see PIDTest.java for full details

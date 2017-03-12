@@ -1,8 +1,9 @@
-package org.firstinspires.ftc.teamcode.autonomous;
+package org.firstinspires.ftc.teamcode.autonomous.tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.MorganaBot;
+import org.firstinspires.ftc.teamcode.autonomous.StepAutoCore;
 import org.firstinspires.ftc.teamcode.steprunner.CountLoopStep;
 import org.firstinspires.ftc.teamcode.steprunner.SequenceStep;
 import org.firstinspires.ftc.teamcode.steprunner.ServoStep;
@@ -16,7 +17,7 @@ import org.firstinspires.ftc.teamcode.steprunner.WaitStep;
  */
 
 @Autonomous(name = "ServoRangeTest", group = "StepTests")
-public class StepAuto_ServoRangeTest extends StepAutoCore {
+public class ServoRangeTest extends StepAutoCore {
 
     @Override
     public void runOpMode() throws InterruptedException {

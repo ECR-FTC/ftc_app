@@ -1,8 +1,9 @@
-package org.firstinspires.ftc.teamcode.autonomous;
+package org.firstinspires.ftc.teamcode.autonomous.tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.MorganaBot;
+import org.firstinspires.ftc.teamcode.autonomous.StepAutoCore;
 import org.firstinspires.ftc.teamcode.steprunner.SequenceStep;
 import org.firstinspires.ftc.teamcode.steprunner.StartShooterStep;
 import org.firstinspires.ftc.teamcode.steprunner.Step;
@@ -15,18 +16,16 @@ import org.firstinspires.ftc.teamcode.steprunner.WaitStep;
  */
 
 @Autonomous(name = "Shooter", group = "StepTests")
-public class StepAuto_Shooter extends StepAutoCore {
+public class ShooterTest extends StepAutoCore {
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-
-
-        // This step does one side, pauses, turns, pauses...
         Step mainStep = new SequenceStep(
-                new StartShooterStep(1.0),
-                new WaitStep(5000),
-                new StopShooterStep()
+                startShooter,
+                shootParticle,
+                shootParticle,
+                stopShooter
         );
 
         // Create the robot and run our routine

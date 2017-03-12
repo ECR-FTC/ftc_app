@@ -1,12 +1,13 @@
-package org.firstinspires.ftc.teamcode.autonomous;
+package org.firstinspires.ftc.teamcode.autonomous.tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.MorganaBot;
-import org.firstinspires.ftc.teamcode.steprunner.Step;
-import org.firstinspires.ftc.teamcode.steprunner.SequenceStep;
+import org.firstinspires.ftc.teamcode.autonomous.StepAutoCore;
 import org.firstinspires.ftc.teamcode.steprunner.CountLoopStep;
 import org.firstinspires.ftc.teamcode.steprunner.RamperDriveStep;
+import org.firstinspires.ftc.teamcode.steprunner.SequenceStep;
+import org.firstinspires.ftc.teamcode.steprunner.Step;
 import org.firstinspires.ftc.teamcode.steprunner.TurnStep;
 import org.firstinspires.ftc.teamcode.steprunner.WaitStep;
 
@@ -16,8 +17,8 @@ import org.firstinspires.ftc.teamcode.steprunner.WaitStep;
  * This one just drives in a square, waiting a second after each side.
  */
 
-@Autonomous(name = "Square", group = "StepTests")
-public class StepAuto_Square extends StepAutoCore {
+@Autonomous(name = "Triangle", group = "StepTests")
+public class DriveTriangle extends StepAutoCore {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -28,18 +29,18 @@ public class StepAuto_Square extends StepAutoCore {
 
         // This step does one side, pauses, turns, pauses...
         Step oneSideStep = new SequenceStep(
-                new RamperDriveStep(6000, 1.0),
+                new RamperDriveStep(4000, 1.0),
                 pauseStep,
-                new TurnStep(90.0, 1.0),
+                new TurnStep(120.0, 1.0),
                 pauseStep
         );
 
         // ... so our main step repeats that four times.
-        Step mainStep = new CountLoopStep(oneSideStep, 4);
+        Step mainStep = new CountLoopStep(oneSideStep, 3);
 
         // Create the robot and run our routine
         MorganaBot robot = new MorganaBot();
-        runStepAutonomous("Square", robot, mainStep);
+        runStepAutonomous("Triangle", robot, mainStep);
     }
 
 }

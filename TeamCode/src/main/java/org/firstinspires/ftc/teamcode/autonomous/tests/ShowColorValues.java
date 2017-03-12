@@ -1,8 +1,9 @@
-package org.firstinspires.ftc.teamcode.autonomous;
+package org.firstinspires.ftc.teamcode.autonomous.tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.MorganaBot;
+import org.firstinspires.ftc.teamcode.autonomous.StepAutoCore;
 
 /**
  * ECR FTC 11096 - 2016 - 2017 Velocity Vortex - Color test

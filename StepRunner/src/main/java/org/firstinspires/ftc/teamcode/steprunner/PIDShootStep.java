@@ -4,8 +4,7 @@ package org.firstinspires.ftc.teamcode.steprunner;
 /**
  * Created by ECR FTC on 1/15/2017.
  *
- * This step drives a specified distance (in encoder ticks) using a Ramper to
- * gradually increase power to start and decrease at end.
+ * This step tries to maintain a target speed on the shooter using a PID controller.
  */
 
 public class PIDShootStep extends Step {
@@ -21,16 +20,11 @@ public class PIDShootStep extends Step {
 
     public PID pid;
 
-    public PIDShootStep()
-    {
-        //this. _.______ = _.______
-    }
 
     @Override
     public void start(StepRobot r) {
         super.start(r);
-        robot.resetDriveMotors();
-        robot.resetDriveEncoders();
+        robot.setShootPower(0);
         pid = new PID(DEFAULT_TMAX, DEFAULT_TMIN, DEFAULT_P_CHANGE, DEFAULT_I_CHANGE, DEFAULT_D_CHANGE);
     }
 
@@ -40,13 +34,13 @@ public class PIDShootStep extends Step {
         super.run();
         ticks = robot.getDriveEncoderValue();
         time = System.currentTimeMillis();
-        pid.getNewSpeed((int)ticks, (int)ticks2, time, time2, DEFAULT_TARGET);
+        double power = pid.getNewSpeed(ticks, ticks2, time, time2, DEFAULT_TARGET);
+        robot.setShootPower(power);
+
     }
     @Override
     public void stop(){
-        //This stops our PID.
         super.stop();
-        robot.driveStop();
     }
 
 }

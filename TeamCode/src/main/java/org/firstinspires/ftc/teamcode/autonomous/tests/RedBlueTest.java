@@ -1,8 +1,9 @@
-package org.firstinspires.ftc.teamcode.autonomous;
+package org.firstinspires.ftc.teamcode.autonomous.tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.MorganaBot;
+import org.firstinspires.ftc.teamcode.autonomous.StepAutoCore;
 import org.firstinspires.ftc.teamcode.steprunner.CountLoopStep;
 import org.firstinspires.ftc.teamcode.steprunner.DriveStep;
 import org.firstinspires.ftc.teamcode.steprunner.FindRedBlueStep;
@@ -20,16 +21,11 @@ import org.firstinspires.ftc.teamcode.steprunner.WaitStep;
  */
 
 @Autonomous(name = "RedBlueTest", group = "StepTests")
-public class StepAuto_RedBlueTest extends StepAutoCore {
+public class RedBlueTest extends StepAutoCore {
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-
-        Step driveUntilColorFound = new UntilOneDoneStep(
-                new DriveStep(0.2),
-                new FindRedBlueStep()
-        );
 
         // Our signal step - flip the loader closed and open
         Step signalStep = new SequenceStep(
@@ -41,13 +37,12 @@ public class StepAuto_RedBlueTest extends StepAutoCore {
 
         // What to do for red and blue. Red is one flip; blue is two.
 
-
         Step redPlan = new CountLoopStep(signalStep, 1);
         Step bluePlan = new CountLoopStep(signalStep, 2);
         Step defaultPlan = new SayStep("no color seen");
 
         Step mainStep = new SequenceStep(
-                driveUntilColorFound,
+                driveToBeacon,
                 new SwitchStep("colorFound", defaultPlan, redPlan, bluePlan)
         );
 

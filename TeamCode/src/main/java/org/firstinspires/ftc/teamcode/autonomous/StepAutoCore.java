@@ -9,20 +9,108 @@ package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.MorganaBot;
+import org.firstinspires.ftc.teamcode.steprunner.DriveStep;
+import org.firstinspires.ftc.teamcode.steprunner.FindRedBlueStep;
+import org.firstinspires.ftc.teamcode.steprunner.RamperDriveStep;
+import org.firstinspires.ftc.teamcode.steprunner.SayStep;
+import org.firstinspires.ftc.teamcode.steprunner.SequenceStep;
+import org.firstinspires.ftc.teamcode.steprunner.ServoStep;
+import org.firstinspires.ftc.teamcode.steprunner.SetFlagStep;
+import org.firstinspires.ftc.teamcode.steprunner.StartShooterStep;
 import org.firstinspires.ftc.teamcode.steprunner.Step;
 import org.firstinspires.ftc.teamcode.steprunner.StepRobot;
+import org.firstinspires.ftc.teamcode.steprunner.StopShooterStep;
 import org.firstinspires.ftc.teamcode.steprunner.TelMessage;
+import org.firstinspires.ftc.teamcode.steprunner.UntilOneDoneStep;
+import org.firstinspires.ftc.teamcode.steprunner.WaitForFlagStep;
+import org.firstinspires.ftc.teamcode.steprunner.WaitStep;
 
 import java.util.List;
 
 /*
  *  This is the base class for all StepRunner-based autonomous classes. The actual logic
  *  for initializing the robot and running the main Step is here; child classes just create
- *  the robot and step in their runOpMode method and call runStepAutonomous with those.
+ *  the robot and step in their runOpMode method and call runStepAutonomous with those:
  *
+ *      SomeRobot robot = new SomeRobot();
+ *      Step step = new SomeStep(...);
+ *      runStepAutonomous(robot, mainStep);
+ *
+ *  The class also contains common steps that can be used by all autonomous variants so
+ *  they don't have to create them separately. Remember not to use a particular step instance
+ *  in parallel with itself.
  */
 
-public class StepAutoCore extends LinearOpMode {
+
+abstract public class StepAutoCore extends LinearOpMode {
+
+    // Parameters to tweak
+    protected static final double INITIAL_WAIT = 0;
+    protected static final double DISTANCE_TO_SHOOT_POSITION = 4000;
+    protected static final double DISTANCE_TO_PLATFORM = 5000;
+    protected static final double SHOOTER_SPINUP_TIME = 2000;
+    protected static final double SHOOTER_POWER = 0.7;
+
+    protected static final double BEACON_SCAN_SPEED = 0.15;
+
+
+    // Common steps
+    protected Step initialWait;
+    protected Step driveToShootPosition;
+    protected Step startShooter;
+    protected Step shootParticle;
+    protected Step stopShooter;
+    protected Step driveToPlatform;
+    protected Step driveToBeacon;
+
+    public StepAutoCore() {
+
+        // Define all the common steps we use in our routines
+
+        // Wait before starting to allow alliance partner to go.
+        initialWait = new SequenceStep(
+                new SayStep(String.format("Waiting %.2f ms for partner", INITIAL_WAIT)),
+                new WaitStep(INITIAL_WAIT)
+        );
+
+        // Drive to the starting shoot position.
+        driveToShootPosition = new RamperDriveStep(DISTANCE_TO_SHOOT_POSITION, 0.8);
+
+        // Start shooter. This one just sets speed and waits a bit for it to get to speed.
+        // Soon use the PID one instead.
+        startShooter = new SequenceStep(
+                new StartShooterStep(SHOOTER_POWER),
+                new WaitStep(SHOOTER_SPINUP_TIME),
+                new SetFlagStep("shooterReady", 1)
+        );
+
+        // Shoot a particle.
+        shootParticle = new SequenceStep(
+                // new WaitForFlagStep("shooterReady"),
+                new WaitStep(2000),
+                new ServoStep(MorganaBot.FIRE_SERVO, MorganaBot.FIRE_GO),
+                new WaitStep(1000),
+                new ServoStep(MorganaBot.FIRE_SERVO, MorganaBot.FIRE_STAY)
+        );
+
+        // Stop shooter.
+        stopShooter = new SequenceStep(
+                new StopShooterStep(),
+                new SetFlagStep("shooterReady", null)
+        );
+
+        // Drive to platform.
+        driveToPlatform = new RamperDriveStep(DISTANCE_TO_PLATFORM, 1.0);
+
+        // Drive until we see the red or blue beacon. Currently using non-ramping drive.
+        driveToBeacon = new UntilOneDoneStep(
+                new DriveStep(BEACON_SCAN_SPEED),
+                new FindRedBlueStep()
+        );
+
+    }
+
 
     public void runStepAutonomous(String autoName, StepRobot robot, Step mainStep) {
 
@@ -62,21 +150,15 @@ public class StepAutoCore extends LinearOpMode {
         // Stop the main step
         showMessage("Stopping main step");
         mainStep.stop();
-
-
     }
 
-    @Override
-    public void runOpMode() throws InterruptedException {
-        /*
-         * SUBCLASSES OVERRIDE THIS METHOD LIKE:
-         *
-         * SomeRobot robot = new SomeRobot();
-         * SomeStep step = new SomeStep(...);
-         * runStepAutonomous(robot, mainStep);
-         *
-         */
+    /*
+     * Create a wait step; looks nicer
+     */
+    protected WaitStep waitFor(double duration) {
+        return new WaitStep(duration);
     }
+
 
     /*
      * Show a telemetry message

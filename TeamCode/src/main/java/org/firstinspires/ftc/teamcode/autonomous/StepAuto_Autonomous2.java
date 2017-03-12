@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.steprunner.StopShooterStep;
  * waits for 1 second, and allows the fire servo to be at the position of Fire Stay.
  */
 
-@Autonomous(name = "Auto 2", group = "StepTests")
+@Autonomous(name = "Auto 2", group = "Competition")
 public class StepAuto_Autonomous2 extends StepAutoCore {
 
     @Override

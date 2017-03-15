@@ -16,8 +16,8 @@ import org.firstinspires.ftc.teamcode.steprunner.WaitStep;
  * Move all servos through their full range 10 times.
  */
 
-@Autonomous(name = "ServoRangeTest", group = "StepTests")
-public class ServoRangeTest extends StepAutoCore {
+@Autonomous(name = "TestServoRange", group = "StepTests")
+public class TestServoRange extends StepAutoCore {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -41,7 +41,7 @@ public class ServoRangeTest extends StepAutoCore {
 
         // Create the robot and run our routine
         MorganaBot robot = new MorganaBot();
-        runStepAutonomous("ServoRangeTest", robot, mainStep);
+        runStepAutonomous("TestServoRange", robot, mainStep);
     }
 
 }

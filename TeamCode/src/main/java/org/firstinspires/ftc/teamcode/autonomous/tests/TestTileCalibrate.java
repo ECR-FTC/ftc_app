@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.steprunner.WaitStep;
  * This one just drives one tile distance for calibration.
  */
 
-@Autonomous(name = "TestTileCalibrate3", group = "StepTests")
+@Autonomous(name = "TestTileCalibrate", group = "StepTests")
 public class TestTileCalibrate extends StepAutoCore {
 
     @Override
@@ -24,7 +24,7 @@ public class TestTileCalibrate extends StepAutoCore {
 
         Step mainStep = new RamperDriveStep(1.0, 0.5);
         MorganaBot robot = new MorganaBot();
-        runStepAutonomous("TestTileCalibrate2", robot, mainStep);
+        runStepAutonomous("TestTileCalibrate", robot, mainStep);
     }
 
 }

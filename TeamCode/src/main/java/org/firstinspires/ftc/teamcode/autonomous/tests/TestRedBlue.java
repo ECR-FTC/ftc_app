@@ -20,8 +20,8 @@ import org.firstinspires.ftc.teamcode.steprunner.WaitStep;
  * Checks red/blue
  */
 
-@Autonomous(name = "RedBlueTest", group = "StepTests")
-public class RedBlueTest extends StepAutoCore {
+@Autonomous(name = "TestRedBlue", group = "StepTests")
+public class TestRedBlue extends StepAutoCore {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -48,7 +48,7 @@ public class RedBlueTest extends StepAutoCore {
 
         // Create the robot and run our routine
         MorganaBot robot = new MorganaBot();
-        runStepAutonomous("RedBlueTest", robot, mainStep);
+        runStepAutonomous("TestRedBlue", robot, mainStep);
     }
 
 

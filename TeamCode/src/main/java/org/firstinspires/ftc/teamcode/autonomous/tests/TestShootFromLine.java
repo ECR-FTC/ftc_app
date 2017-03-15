@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.steprunner.CountLoopStep;
 import org.firstinspires.ftc.teamcode.steprunner.FindWhiteLineStep;
 import org.firstinspires.ftc.teamcode.steprunner.RamperDriveStep;
 import org.firstinspires.ftc.teamcode.steprunner.SequenceStep;
+import org.firstinspires.ftc.teamcode.steprunner.ServoStep;
 import org.firstinspires.ftc.teamcode.steprunner.Step;
 import org.firstinspires.ftc.teamcode.steprunner.UntilOneDoneStep;
 import org.firstinspires.ftc.teamcode.steprunner.WaitStep;
@@ -17,27 +18,32 @@ import org.firstinspires.ftc.teamcode.steprunner.WaitStep;
  * Test white line detection steps.
  */
 
-@Autonomous(name = "WhiteLineTest", group = "StepTests")
-public class WhiteLineTest extends StepAutoCore {
+@Autonomous(name = "TestShootFromLine", group = "StepTests")
+public class TestShootFromLine extends StepAutoCore {
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-        Step toWhiteLineStep = new UntilOneDoneStep(
-                new RamperDriveStep(6.0, 0.2),
+        Step toWhiteLine = new UntilOneDoneStep(
+                new RamperDriveStep(6.0, 0.2),      // look whole length of the field
                 new FindWhiteLineStep()
         );
 
-        Step backAndForthStep = new SequenceStep(
-                toWhiteLineStep,
-                new WaitStep(1000),
-                new RamperDriveStep(1.5, -0.2),
-                new WaitStep(1000)
-        );
-        Step mainStep = new CountLoopStep(backAndForthStep, 4);
+
+        Step mainStep = new SequenceStep(
+                toWhiteLine,
+                startShooter,
+                shootParticle,
+                waitFor(2000),
+                shootParticle,
+                waitFor(1000),
+                stopShooter,
+                new ServoStep(MorganaBot.FIRE_SERVO, MorganaBot.FIRE_GO)
+                );
+
         // Create the robot and run our routine
         MorganaBot robot = new MorganaBot();
-        runStepAutonomous("WhiteLineTest", robot, mainStep);
+        runStepAutonomous("TestShootFromLine", robot, mainStep);
     }
 
 }

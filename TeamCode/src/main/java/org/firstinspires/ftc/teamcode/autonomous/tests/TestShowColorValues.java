@@ -10,8 +10,8 @@ import org.firstinspires.ftc.teamcode.autonomous.StepAutoCore;
  * Check values returned by color sensors.
  */
 
-@Autonomous(name = "ShowColorValues", group = "StepTests")
-public class ShowColorValues extends StepAutoCore {
+@Autonomous(name = "TestShowColorValues", group = "StepTests")
+public class TestShowColorValues extends StepAutoCore {
 
     @Override
     public void runOpMode() throws InterruptedException {

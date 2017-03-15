@@ -15,8 +15,8 @@ import org.firstinspires.ftc.teamcode.steprunner.WaitStep;
  * Starts and Stops particle shooter.
  */
 
-@Autonomous(name = "Shooter", group = "StepTests")
-public class ShooterTest extends StepAutoCore {
+@Autonomous(name = "TestShooter", group = "StepTests")
+public class TestShooter extends StepAutoCore {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -30,7 +30,7 @@ public class ShooterTest extends StepAutoCore {
 
         // Create the robot and run our routine
         MorganaBot robot = new MorganaBot();
-        runStepAutonomous("Shooter", robot, mainStep);
+        runStepAutonomous("TestShooter", robot, mainStep);
     }
 
 }

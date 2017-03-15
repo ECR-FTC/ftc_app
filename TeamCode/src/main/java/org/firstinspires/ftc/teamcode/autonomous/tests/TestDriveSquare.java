@@ -4,10 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.MorganaBot;
 import org.firstinspires.ftc.teamcode.autonomous.StepAutoCore;
+import org.firstinspires.ftc.teamcode.steprunner.Step;
+import org.firstinspires.ftc.teamcode.steprunner.SequenceStep;
 import org.firstinspires.ftc.teamcode.steprunner.CountLoopStep;
 import org.firstinspires.ftc.teamcode.steprunner.RamperDriveStep;
-import org.firstinspires.ftc.teamcode.steprunner.SequenceStep;
-import org.firstinspires.ftc.teamcode.steprunner.Step;
 import org.firstinspires.ftc.teamcode.steprunner.TurnStep;
 import org.firstinspires.ftc.teamcode.steprunner.WaitStep;
 
@@ -17,8 +17,8 @@ import org.firstinspires.ftc.teamcode.steprunner.WaitStep;
  * This one just drives in a square, waiting a second after each side.
  */
 
-@Autonomous(name = "Triangle", group = "StepTests")
-public class DriveTriangle extends StepAutoCore {
+@Autonomous(name = "TestDriveSquare", group = "StepTests")
+public class TestDriveSquare extends StepAutoCore {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -31,16 +31,16 @@ public class DriveTriangle extends StepAutoCore {
         Step oneSideStep = new SequenceStep(
                 new RamperDriveStep(1.0, 1.0),
                 pauseStep,
-                new TurnStep(120.0, 1.0),
+                new TurnStep(90.0, 1.0),
                 pauseStep
         );
 
         // ... so our main step repeats that four times.
-        Step mainStep = new CountLoopStep(oneSideStep, 3);
+        Step mainStep = new CountLoopStep(oneSideStep, 4);
 
         // Create the robot and run our routine
         MorganaBot robot = new MorganaBot();
-        runStepAutonomous("Triangle", robot, mainStep);
+        runStepAutonomous("TestDriveSquare", robot, mainStep);
     }
 
 }

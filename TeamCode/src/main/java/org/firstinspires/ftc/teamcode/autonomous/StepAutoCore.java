@@ -10,6 +10,7 @@ package org.firstinspires.ftc.teamcode.autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MorganaBot;
+import org.firstinspires.ftc.teamcode.steprunner.CountLoopStep;
 import org.firstinspires.ftc.teamcode.steprunner.DriveStep;
 import org.firstinspires.ftc.teamcode.steprunner.FindRedBlueStep;
 import org.firstinspires.ftc.teamcode.steprunner.RamperDriveStep;
@@ -46,33 +47,28 @@ import java.util.List;
 abstract public class StepAutoCore extends LinearOpMode {
 
     // Parameters to tweak
-    protected static final double INITIAL_WAIT = 0;
-    protected static final double DISTANCE_TO_SHOOT_POSITION = 4000;
-    protected static final double DISTANCE_TO_PLATFORM = 5000;
+    protected static final double DISTANCE_TO_SHOOT_POSITION = 1.6;
+    protected static final double DISTANCE_TO_PLATFORM = 2.0;
     protected static final double SHOOTER_SPINUP_TIME = 2000;
     protected static final double SHOOTER_POWER = 0.6;
 
     protected static final double BEACON_SCAN_SPEED = 0.15;
+    protected static final int BEACON_PUSH_REPEAT = 2;          // push it this many times
 
 
     // Common steps
-    protected Step initialWait;
     protected Step driveToShootPosition;
     protected Step startShooter;
     protected Step shootParticle;
     protected Step stopShooter;
     protected Step driveToPlatform;
     protected Step driveToBeacon;
+    protected Step pushBeaconButtonLeft;
+    protected Step pushBeaconButtonRight;
 
     public StepAutoCore() {
 
         // Define all the common steps we use in our routines
-
-        // Wait before starting to allow alliance partner to go.
-        initialWait = new SequenceStep(
-                new SayStep(String.format("Waiting %.2f ms for partner", INITIAL_WAIT)),
-                new WaitStep(INITIAL_WAIT)
-        );
 
         // Drive to the starting shoot position.
         driveToShootPosition = new RamperDriveStep(DISTANCE_TO_SHOOT_POSITION, 0.8);
@@ -110,6 +106,20 @@ abstract public class StepAutoCore extends LinearOpMode {
                 new FindRedBlueStep()
         );
 
+        // Repeatedly push the beacon button.
+        pushBeaconButtonLeft = new CountLoopStep(new SequenceStep(
+                new ServoStep(MorganaBot.LEFT_SERVO, MorganaBot.LEFT_PRESS),
+                new WaitStep(500),
+                new ServoStep(MorganaBot.LEFT_SERVO, MorganaBot.LEFT_STORE),
+                new WaitStep(500)
+        ), BEACON_PUSH_REPEAT);
+
+        pushBeaconButtonRight = new CountLoopStep(new SequenceStep(
+                new ServoStep(MorganaBot.RIGHT_SERVO, MorganaBot.RIGHT_PRESS),
+                new WaitStep(500),
+                new ServoStep(MorganaBot.RIGHT_SERVO, MorganaBot.RIGHT_STORE),
+                new WaitStep(500)
+        ), BEACON_PUSH_REPEAT);
     }
 
 

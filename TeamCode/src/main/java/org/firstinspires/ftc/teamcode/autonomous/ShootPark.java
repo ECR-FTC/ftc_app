@@ -28,7 +28,6 @@ public class ShootPark extends StepAutoCore {
         MorganaBot robot = new MorganaBot();
 
         Step mainStep = new SequenceStep(
-                initialWait,
                 driveToShootPosition,
                 startShooter,
                 shootParticle,

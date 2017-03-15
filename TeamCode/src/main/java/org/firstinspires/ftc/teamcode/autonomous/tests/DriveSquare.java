@@ -29,7 +29,7 @@ public class DriveSquare extends StepAutoCore {
 
         // This step does one side, pauses, turns, pauses...
         Step oneSideStep = new SequenceStep(
-                new RamperDriveStep(6000, 1.0),
+                new RamperDriveStep(1.0, 1.0),
                 pauseStep,
                 new TurnStep(90.0, 1.0),
                 pauseStep

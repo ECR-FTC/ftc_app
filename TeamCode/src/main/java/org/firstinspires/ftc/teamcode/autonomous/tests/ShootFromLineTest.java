@@ -25,7 +25,7 @@ public class ShootFromLineTest extends StepAutoCore {
     public void runOpMode() throws InterruptedException {
 
         Step toWhiteLine = new UntilOneDoneStep(
-                new RamperDriveStep(20000, 0.2),
+                new RamperDriveStep(6.0, 0.2),      // look whole length of the field
                 new FindWhiteLineStep()
         );
 

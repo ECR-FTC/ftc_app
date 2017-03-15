@@ -61,7 +61,6 @@ public abstract class StepRobot {
      */
     abstract public double getGyroHeading();
 
-
     /*
      * Set servo position
      */
@@ -86,6 +85,11 @@ public abstract class StepRobot {
     public static final int BLUE_SEEN = 2;
 
     abstract public int getColorSeen();
+
+    /*
+     * Get number of encoder ticks per tile.
+     */
+    abstract public double getTicksPerTile();
 
 }
 

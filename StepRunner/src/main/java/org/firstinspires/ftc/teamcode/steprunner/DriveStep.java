@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.steprunner;
 /**
  * Created by ECR FTC 11096 on 10/31/2016.
  */
-public class DriveStep extends  Step {
+public class DriveStep extends Step {
 
     protected double driveSpeed = 0.0;
 

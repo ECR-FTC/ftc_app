@@ -123,9 +123,14 @@ public class MockRobot extends StepRobot {
         return -1;
     }
 
+    @Override
+    public double getTicksPerTile() {
+        return 1000;
+    }
+
     /*
-                 * Update the model.
-                 */
+         * Update the model.
+         */
     protected void updateModel() {
         double now = System.currentTimeMillis();
         double elapsed = now - lastModelCheckTime;

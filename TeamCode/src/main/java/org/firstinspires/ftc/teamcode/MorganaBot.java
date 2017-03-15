@@ -75,7 +75,7 @@ public class MorganaBot extends StepRobot {
     public static final double WHITE_LINE_THRESHOLD = 0.2;      // above this means we see white line
     public static final double RED_THRESHOLD = 0.2;     // above this means we see red
     public static final double BLUE_THRESHOLD = 0.2;     // above this means we see blue
-
+    public static final double TICKS_PER_TILE = 1225;   // encoder ticks for one game tile
 
     public static final int GO_ONE_TILE_PORT = 3150;
 
@@ -259,5 +259,10 @@ public class MorganaBot extends StepRobot {
         }
         return NONE_SEEN;          // we don't know yet
 
+    }
+
+    @Override
+    public double getTicksPerTile() {
+        return TICKS_PER_TILE;
     }
 }

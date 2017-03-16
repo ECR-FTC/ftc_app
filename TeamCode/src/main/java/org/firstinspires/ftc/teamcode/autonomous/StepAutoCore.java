@@ -10,19 +10,23 @@ package org.firstinspires.ftc.teamcode.autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MorganaBot;
+import org.firstinspires.ftc.teamcode.steprunner.CheckColorStep;
 import org.firstinspires.ftc.teamcode.steprunner.CountLoopStep;
 import org.firstinspires.ftc.teamcode.steprunner.DriveStep;
 import org.firstinspires.ftc.teamcode.steprunner.FindRedBlueStep;
+import org.firstinspires.ftc.teamcode.steprunner.FindWhiteLineStep;
 import org.firstinspires.ftc.teamcode.steprunner.RamperDriveStep;
 import org.firstinspires.ftc.teamcode.steprunner.SayStep;
 import org.firstinspires.ftc.teamcode.steprunner.SequenceStep;
 import org.firstinspires.ftc.teamcode.steprunner.ServoStep;
 import org.firstinspires.ftc.teamcode.steprunner.SetFlagStep;
-import org.firstinspires.ftc.teamcode.steprunner.StartShooterStep;
+import org.firstinspires.ftc.teamcode.steprunner.RunShooterStep;
 import org.firstinspires.ftc.teamcode.steprunner.Step;
 import org.firstinspires.ftc.teamcode.steprunner.StepRobot;
 import org.firstinspires.ftc.teamcode.steprunner.StopShooterStep;
+import org.firstinspires.ftc.teamcode.steprunner.SwitchStep;
 import org.firstinspires.ftc.teamcode.steprunner.TelMessage;
+import org.firstinspires.ftc.teamcode.steprunner.TurnStep;
 import org.firstinspires.ftc.teamcode.steprunner.UntilOneDoneStep;
 import org.firstinspires.ftc.teamcode.steprunner.WaitForFlagStep;
 import org.firstinspires.ftc.teamcode.steprunner.WaitStep;
@@ -47,22 +51,35 @@ import java.util.List;
 abstract public class StepAutoCore extends LinearOpMode {
 
     // Parameters to tweak
-    protected static final double DISTANCE_TO_SHOOT_POSITION = 1.6;
-    protected static final double DISTANCE_TO_PLATFORM = 2.0;
+    protected static final double DISTANCE_TO_SHOOT_POSITION = 1.3;
+    protected static final double DISTANCE_TO_PLATFORM = 1.8;
+
     protected static final double SHOOTER_SPINUP_TIME = 2000;
-    protected static final double SHOOTER_POWER = 0.6;
+    protected static final double SHOOTER_TPS = 750;            // firing speed in ticks per second
+
+    protected static final double TURN_POWER = 0.8;
+    protected static final double CRUISE_POWER = 0.7;
+    protected static final double APPROACH_BEACON_POWER = 0.4;
 
     protected static final double BEACON_SCAN_SPEED = 0.15;
-    protected static final int BEACON_PUSH_REPEAT = 2;          // push it this many times
+    protected static final int BEACON_PUSH_REPEAT = 3;          // push it this many times
+
+    protected static final double WHITE_LINE_SCAN_SPEED = 0.2;  // how fast to go while looking for white line
 
 
     // Common steps
+    protected Step pause;
     protected Step driveToShootPosition;
     protected Step startShooter;
     protected Step shootParticle;
     protected Step stopShooter;
     protected Step driveToPlatform;
-    protected Step driveToBeacon;
+    protected Step driveToWhiteLine;
+    protected Step drivePastBeacon;
+    protected Step redDriveToBeacon;
+    protected Step blueDriveToBeacon;
+    protected Step findRedBeacon;
+    protected Step findBlueBeacon;
     protected Step pushBeaconButtonLeft;
     protected Step pushBeaconButtonRight;
 
@@ -70,16 +87,14 @@ abstract public class StepAutoCore extends LinearOpMode {
 
         // Define all the common steps we use in our routines
 
-        // Drive to the starting shoot position.
-        driveToShootPosition = new RamperDriveStep(DISTANCE_TO_SHOOT_POSITION, 0.8);
+        // Two-second pause for troubleshooting.
+        pause = new WaitStep(2000);
 
-        // Start shooter. This one just sets speed and waits a bit for it to get to speed.
-        // Soon use the PID one instead.
-        startShooter = new SequenceStep(
-                new StartShooterStep(SHOOTER_POWER),
-                new WaitStep(SHOOTER_SPINUP_TIME),
-                new SetFlagStep("shooterReady", 1)
-        );
+        // Drive to the starting shoot position.
+        driveToShootPosition = new RamperDriveStep(DISTANCE_TO_SHOOT_POSITION, CRUISE_POWER);
+
+        // Run the shooter up to speed.
+        startShooter = new RunShooterStep(SHOOTER_TPS, 0.5);
 
         // Shoot a particle.
         shootParticle = new SequenceStep(
@@ -100,23 +115,71 @@ abstract public class StepAutoCore extends LinearOpMode {
         // Drive to platform.
         driveToPlatform = new RamperDriveStep(DISTANCE_TO_PLATFORM, 1.0);
 
-        // Drive until we see the red or blue beacon. Currently using non-ramping drive.
-        driveToBeacon = new UntilOneDoneStep(
-                new DriveStep(BEACON_SCAN_SPEED),
-                new FindRedBlueStep()
+        // Drive from red shoot position to red side beacon
+        redDriveToBeacon = new SequenceStep(
+                new TurnStep(-45, TURN_POWER),
+                pause,
+                new RamperDriveStep(2.2, CRUISE_POWER),
+                pause,
+                new TurnStep(45, TURN_POWER),
+                pause,
+                new RamperDriveStep(1.4, APPROACH_BEACON_POWER),
+                pause,
+                new TurnStep(45, TURN_POWER)
         );
+
+        // Find the red beacon
+        findRedBeacon = new SequenceStep(
+                new ServoStep(MorganaBot.RIGHT_SERVO, MorganaBot.RIGHT_SCAN),
+                new WaitStep(500),
+                new UntilOneDoneStep(
+                        new DriveStep(BEACON_SCAN_SPEED),
+                        new SequenceStep(
+                                new FindRedBlueStep(),
+                                new SwitchStep("colorFound",
+                                        null,
+                                        null, //red is where we want to be
+                                        new WaitStep(750)
+                                )
+                        )
+                ),
+                new ServoStep(MorganaBot.RIGHT_SERVO, MorganaBot.RIGHT_STORE)
+        );
+
+        // Find the blue beacon
+        findBlueBeacon = new SequenceStep(
+
+                // TODO
+        );
+
+        drivePastBeacon = new SequenceStep(
+                new RamperDriveStep(0.25, CRUISE_POWER),
+                new TurnStep(-10, TURN_POWER),
+                new RamperDriveStep(0.25, CRUISE_POWER)
+        );
+
+        driveToWhiteLine = new UntilOneDoneStep(
+                new RamperDriveStep(6.0, WHITE_LINE_SCAN_SPEED),
+                new FindWhiteLineStep()
+        );
+
+        // Drive until we see the red or blue beacon. Currently using non-ramping drive.
+//        driveToBeacon = new UntilOneDoneStep(
+//                new DriveStep(BEACON_SCAN_SPEED),
+//                new FindRedBlueStep()
+//        );
 
         // Repeatedly push the beacon button.
         pushBeaconButtonLeft = new CountLoopStep(new SequenceStep(
                 new ServoStep(MorganaBot.LEFT_SERVO, MorganaBot.LEFT_PRESS),
-                new WaitStep(500),
+                new WaitStep(750),
                 new ServoStep(MorganaBot.LEFT_SERVO, MorganaBot.LEFT_STORE),
                 new WaitStep(500)
         ), BEACON_PUSH_REPEAT);
 
         pushBeaconButtonRight = new CountLoopStep(new SequenceStep(
                 new ServoStep(MorganaBot.RIGHT_SERVO, MorganaBot.RIGHT_PRESS),
-                new WaitStep(500),
+                new WaitStep(750),
                 new ServoStep(MorganaBot.RIGHT_SERVO, MorganaBot.RIGHT_STORE),
                 new WaitStep(500)
         ), BEACON_PUSH_REPEAT);
@@ -147,7 +210,7 @@ abstract public class StepAutoCore extends LinearOpMode {
             // If there are telemetry messages, show them and flush them.
             List<TelMessage> messages = mainStep.getMessages();
             if (!messages.isEmpty()) {
-                for (TelMessage tm: messages) {
+                for (TelMessage tm : messages) {
                     telemetry.addData(tm.caption, tm.message);
                 }
                 telemetry.update();

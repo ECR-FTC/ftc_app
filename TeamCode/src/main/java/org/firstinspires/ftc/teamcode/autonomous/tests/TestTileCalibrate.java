@@ -22,7 +22,7 @@ public class TestTileCalibrate extends StepAutoCore {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        Step mainStep = new RamperDriveStep(1.0, 0.5);
+        Step mainStep = new RamperDriveStep(3.0, 0.5);
         MorganaBot robot = new MorganaBot();
         runStepAutonomous("TestTileCalibrate", robot, mainStep);
     }

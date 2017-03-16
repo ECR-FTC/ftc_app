@@ -33,7 +33,7 @@ public class WaitStep extends Step {
         super.run();
         double elapsed = System.currentTimeMillis() - startTime;
 
-        tell("elapsed=%.2f", elapsed);
+        // tell("elapsed=%.2f", elapsed);
         if (elapsed >= waitTime) {
             stop();
         }

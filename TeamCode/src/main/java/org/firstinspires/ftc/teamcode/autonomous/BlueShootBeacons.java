@@ -25,8 +25,8 @@ public class BlueShootBeacons extends StepAutoCore {
                 driveToShootPosition,
                 startShooter,
                 shootParticle,
-                shootParticle,
-                driveToBeacon
+                shootParticle
+
 
                 // TODO: push blue side
         );

@@ -67,6 +67,9 @@ public class MorganaBot extends StepRobot {
     public static final double RIGHT_PRESS = 0.1;  // right button pusher "on" value
     public static final double LEFT_STORE = 0.3;  // left button pusher "off" value
     public static final double RIGHT_STORE = 0.65; // right button pusher "off" value
+    public static final double LEFT_SCAN = 0.6;     // left pusher scanning position
+    public static final double RIGHT_SCAN = 0.38;     // right pusher scanning position
+
     public static final double FIRE_GO = 0.5;  // setting to fire a ball into the launcher
     public static final double FIRE_STAY = 0.0;  // down setting for the fire servo
     public static final double LOAD_CLOSED = 0.8;  // "up" setting for the ball loader
@@ -75,9 +78,8 @@ public class MorganaBot extends StepRobot {
     public static final double WHITE_LINE_THRESHOLD = 0.2;      // above this means we see white line
     public static final double RED_THRESHOLD = 0.2;     // above this means we see red
     public static final double BLUE_THRESHOLD = 0.2;     // above this means we see blue
-    public static final double TICKS_PER_TILE = 1225;   // encoder ticks for one game tile
+    public static final double TICKS_PER_TILE = 1350;   // encoder ticks for one game tile
 
-    public static final int GO_ONE_TILE_PORT = 3150;
 
     /*
      *   Initialize the robot by getting access to all of its devices through the
@@ -240,6 +242,11 @@ public class MorganaBot extends StepRobot {
     @Override
     public boolean checkWhiteLine() {
         return odSensor.getRawLightDetected() > WHITE_LINE_THRESHOLD;
+    }
+
+    @Override
+    public double getShooterEncoderValue() {
+        return motorShoot.getCurrentPosition();
     }
 
     @Override

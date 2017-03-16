@@ -125,11 +125,11 @@ public class Build2Auto1 extends LinearOpMode {
     }
     public void autoGoOneTileForward(double tiles)
     {
-        float portTarget;
+        double portTarget;
         double speedPort, speedStar;
         float ENCODER_ACCEL_CONST = 500;
         //double ENCODER_PORT_RESET = motorFrontLeft.getCurrentPosition();
-        portTarget = (float)tiles * robot.GO_ONE_TILE_PORT;
+        portTarget = tiles * robot.TICKS_PER_TILE;
         //starTarget = (float)currentParameter * GO_ONE_TILE_STAR;
 
         resetEncoderValue();

@@ -4,51 +4,47 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 /**
- * Created by ECR FTC on 1/12/2017.
+ * Created by ECR FTC on 3/1/2017.
  */
 public class PID
 {
-    protected double minSpeed, maxSpeed, pChangeFactor, iChangeFactor, dChangeFactor;
+    protected double sp;    // desired setpoint
+    protected double kP;    // proportional coefficient
+    protected double kI;    // integral coefficient
+    protected double kD;    // differential coefficient
 
-    double ticks = 0, ticksTwo = 0;
-    double time = 0, timeTwo = -50;
-    double ticksPerTime;
-    double speed = 1.0;
-    double P = 0.5, I = 0;
-    int timeInt = 50;
-    double ticksPerTimeAvg;
-    double targetTolerance = 0.05;
+    protected double minVal;
+    protected double maxVal;    // bounds on the control variable
 
-    public PID(double tMax, double tMin, double pChange, double iChange, double dChange)
-    {
-        this.minSpeed = tMin;
-        this.maxSpeed = tMax;
+    protected double errorSum;
+    protected double lastError;
+
+    public PID(double sp, double kP, double kI, double kD, double minVal, double maxVal) {
+        this.sp = sp;
+        this.kP = kP;
+        this.kI = kI;
+        this.kD = kD;
+        this.minVal = minVal;
+        this.maxVal = maxVal;
+        reset();
     }
-    public double getNewSpeed (double currentTicks, double currentTicks2, double currentTime, double currentTime2, double target)
-    { //user needs: private ElapsedTime runtime = new ElapsedTime();
 
-        // PID: see PIDTest.java for full details
-        //get new time and ticks
-        ticks    = currentTicks;
-        ticksTwo = currentTicks2;
-        time     = currentTime;
-        timeTwo  = currentTime2;
-
-        //get updated ticks per time
-        // encoder ticks / milliseconds
-        ticksPerTime = ((ticks - ticksTwo) / (time - timeTwo));
-        // find 'p' value (used in 'I')
-        P = target - ticksPerTime;
-
-        // find 'i' value
-        I = (I * (timeInt - (time - timeTwo)) + P * (time - timeTwo)) / timeInt;
-        ticksPerTimeAvg = (ticksPerTimeAvg*(timeInt - (time - timeTwo)) + ticksPerTime*(time - timeTwo)) / timeInt;
-
-        // update speed
-        speed += (P*pChangeFactor) + (I*iChangeFactor);
-        speed = max(speed, minSpeed);
-        speed = min(speed, maxSpeed);
-
-        return speed;
+    public void reset() {
+        errorSum = 0;
+        lastError = 0;
     }
+
+    // Get the new control value given a time delta (dt) and the current process variable (pv).
+    public double getCV(double dt, double pv) {
+
+        double error = sp - pv;         // current error
+        errorSum += error * dt;
+        double dError = (error - lastError) / dt;
+        double cv = (kP * error) + (kI * errorSum) + (kD * dError);
+        cv = Math.min(Math.max(cv, minVal), maxVal);
+        return cv;
+
+    }
+
+
 }

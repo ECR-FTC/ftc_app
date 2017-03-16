@@ -72,6 +72,11 @@ public abstract class StepRobot {
     abstract public boolean checkWhiteLine();
 
     /*
+     * Get shooter encoder
+     */
+    abstract public double getShooterEncoderValue();
+
+    /*
      * Set shooter power
      */
     abstract public void setShootPower(double power);

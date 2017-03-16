@@ -113,6 +113,11 @@ public class MockRobot extends StepRobot {
     }
 
     @Override
+    public double getShooterEncoderValue() {
+        return 0;
+    }
+
+    @Override
     public void setShootPower(double power) {
         updateModel();
         say(String.format("setShootPower: power=%.2f", power));

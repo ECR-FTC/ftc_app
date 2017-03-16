@@ -10,8 +10,8 @@ import org.firstinspires.ftc.teamcode.steprunner.Step;
 import org.firstinspires.ftc.teamcode.steprunner.UntilOneDoneStep;
 
 /**
- * ECR FTC 11096 - 2016 - 2017 Velocity Vortex - basic StepRunner autonomous test
- * Starts and Stops particle shooter.
+ * ECR FTC 11096 - 2016 - 2017 Velocity Vortex
+ * Test shooter PID control
  */
 
 @Autonomous(name = "TestShooter", group = "StepTests")
@@ -22,18 +22,9 @@ public class TestShooter extends StepAutoCore {
 
         Step mainStep = new SequenceStep(
                 new UntilOneDoneStep(
-                        new RunShooterStep(750, 0.3),
-                        waitFor(10000)
+                        new RunShooterStep(750),
+                        waitFor(30000)
                 ),
-                new UntilOneDoneStep(
-                        new RunShooterStep(750, 0.5),
-                        waitFor(10000)
-                ),
-                new UntilOneDoneStep(
-                        new RunShooterStep(750, 0.7),
-                        waitFor(10000)
-                ),
-
                 stopShooter
         );
 

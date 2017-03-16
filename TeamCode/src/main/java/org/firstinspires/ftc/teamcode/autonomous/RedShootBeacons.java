@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.steprunner.Step;
  * ECR FTC 11096 - 2016 - 2017 Velocity Vortex
  */
 
-@Autonomous(name = "RedShootBeacons1", group = "Competition")
+@Autonomous(name = "RedShootBeacons", group = "Competition")
 public class RedShootBeacons extends StepAutoCore {
 
     @Override
@@ -35,7 +35,7 @@ public class RedShootBeacons extends StepAutoCore {
                 pushBeaconButtonRight
         );
 
-        runStepAutonomous("RedShootBeacons1", robot, mainStep);
+        runStepAutonomous("RedShootBeacons", robot, mainStep);
     }
 
 }

@@ -21,6 +21,7 @@ import org.firstinspires.ftc.teamcode.steprunner.SequenceStep;
 import org.firstinspires.ftc.teamcode.steprunner.ServoStep;
 import org.firstinspires.ftc.teamcode.steprunner.SetFlagStep;
 import org.firstinspires.ftc.teamcode.steprunner.RunShooterStep;
+import org.firstinspires.ftc.teamcode.steprunner.SimpleRunShooterStep;
 import org.firstinspires.ftc.teamcode.steprunner.Step;
 import org.firstinspires.ftc.teamcode.steprunner.StepRobot;
 import org.firstinspires.ftc.teamcode.steprunner.StopShooterStep;
@@ -94,7 +95,15 @@ abstract public class StepAutoCore extends LinearOpMode {
         driveToShootPosition = new RamperDriveStep(DISTANCE_TO_SHOOT_POSITION, CRUISE_POWER);
 
         // Run the shooter up to speed.
-        startShooter = new RunShooterStep(SHOOTER_TPS, 0.5);
+        // WHEN PID IS WORKING USE THIS:
+        //startShooter = new RunShooterStep(SHOOTER_TPS);
+
+        // dumb shooter step just starts at a power and waits to spin up
+        startShooter = new SequenceStep(
+                new SimpleRunShooterStep(0.6),
+                new WaitStep(2000),
+                new SetFlagStep("shooterReady", 1)
+        );
 
         // Shoot a particle.
         shootParticle = new SequenceStep(
@@ -118,13 +127,9 @@ abstract public class StepAutoCore extends LinearOpMode {
         // Drive from red shoot position to red side beacon
         redDriveToBeacon = new SequenceStep(
                 new TurnStep(-45, TURN_POWER),
-                pause,
                 new RamperDriveStep(2.2, CRUISE_POWER),
-                pause,
                 new TurnStep(45, TURN_POWER),
-                pause,
                 new RamperDriveStep(1.4, APPROACH_BEACON_POWER),
-                pause,
                 new TurnStep(45, TURN_POWER)
         );
 
@@ -146,10 +151,16 @@ abstract public class StepAutoCore extends LinearOpMode {
                 new ServoStep(MorganaBot.RIGHT_SERVO, MorganaBot.RIGHT_STORE)
         );
 
+        // Drive from blue shoot position to blue side beacon
+
+        blueDriveToBeacon = new SequenceStep(
+            // TODO: mirror from redDriveToBeacon
+
+        );
+
         // Find the blue beacon
         findBlueBeacon = new SequenceStep(
-
-                // TODO
+                // TODO: mirror from findRedBeacon
         );
 
         drivePastBeacon = new SequenceStep(

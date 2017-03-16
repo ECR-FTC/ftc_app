@@ -22,13 +22,9 @@ public class BlueShootBeacons extends StepAutoCore {
         MorganaBot robot = new MorganaBot();
 
         Step mainStep = new SequenceStep(
-                driveToShootPosition,
-                startShooter,
-                shootParticle,
-                shootParticle
 
+                // TODO: copy plan from RedShootBeacons but use blue steps instead
 
-                // TODO: push blue side
         );
 
         runStepAutonomous("BlueShootBeacons", robot, mainStep);

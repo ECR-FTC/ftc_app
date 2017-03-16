@@ -13,19 +13,14 @@ public class PID
     protected double kI;    // integral coefficient
     protected double kD;    // differential coefficient
 
-    protected double minVal;
-    protected double maxVal;    // bounds on the control variable
-
     protected double errorSum;
     protected double lastError;
 
-    public PID(double sp, double kP, double kI, double kD, double minVal, double maxVal) {
+    public PID(double sp, double kP, double kI, double kD) {
         this.sp = sp;
         this.kP = kP;
         this.kI = kI;
         this.kD = kD;
-        this.minVal = minVal;
-        this.maxVal = maxVal;
         reset();
     }
 
@@ -41,7 +36,6 @@ public class PID
         errorSum += error * dt;
         double dError = (error - lastError) / dt;
         double cv = (kP * error) + (kI * errorSum) + (kD * dError);
-        cv = Math.min(Math.max(cv, minVal), maxVal);
         return cv;
 
     }

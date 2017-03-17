@@ -101,7 +101,7 @@ abstract public class StepAutoCore extends LinearOpMode {
         // dumb shooter step just starts at a power and waits to spin up
         startShooter = new SequenceStep(
                 new SimpleRunShooterStep(0.6),
-                new WaitStep(2000),
+                new WaitStep(SHOOTER_SPINUP_TIME),
                 new SetFlagStep("shooterReady", 1)
         );
 

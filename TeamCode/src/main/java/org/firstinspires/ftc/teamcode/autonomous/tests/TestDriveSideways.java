@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.MorganaBot;
 import org.firstinspires.ftc.teamcode.autonomous.StepAutoCore;
+import org.firstinspires.ftc.teamcode.steprunner.RamperDriveSidewaysStep;
 import org.firstinspires.ftc.teamcode.steprunner.Step;
 import org.firstinspires.ftc.teamcode.steprunner.SequenceStep;
 import org.firstinspires.ftc.teamcode.steprunner.CountLoopStep;
@@ -17,8 +18,8 @@ import org.firstinspires.ftc.teamcode.steprunner.WaitStep;
  * This one just drives in a square, waiting a second after each side.
  */
 
-@Autonomous(name = "TestDriveSquare", group = "StepTests")
-public class TestDriveSquare extends StepAutoCore {
+@Autonomous(name = "TestDriveSideways", group = "StepTests")
+public class TestDriveSideways extends StepAutoCore {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -29,7 +30,7 @@ public class TestDriveSquare extends StepAutoCore {
 
         // This step does one side, pauses, turns, pauses...
         Step oneSideStep = new SequenceStep(
-                new RamperDriveStep(1.0, 1.0),
+                new RamperDriveSidewaysStep(1.0, 1.0),
                 pauseStep,
                 new TurnStep(90.0, 1.0),
                 pauseStep
@@ -40,7 +41,7 @@ public class TestDriveSquare extends StepAutoCore {
 
         // Create the robot and run our routine
         MorganaBot robot = new MorganaBot();
-        runStepAutonomous("TestDriveSquare", robot, mainStep);
+        runStepAutonomous("TestDriveSideways", robot, mainStep);
     }
 
 }

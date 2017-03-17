@@ -6,7 +6,7 @@ package org.firstinspires.ftc.teamcode.steprunner;
  * gradually increase power to start and decrease at end.
  */
 
-public class RamperDriveStep extends Step {
+public class RamperDriveSidewaysStep extends Step {
     static final double DEFAULT_TUP = 2000;
     static final double DEFAULT_TDOWN = 2000;
     static final double DEFAULT_MIN = 0.25;
@@ -17,7 +17,7 @@ public class RamperDriveStep extends Step {
 
     protected Ramper ramper;
 
-    public RamperDriveStep(double distance, double maxPower) {
+    public RamperDriveSidewaysStep(double distance, double maxPower) {
         this.distance = distance;
         this.maxPower = maxPower;
     }

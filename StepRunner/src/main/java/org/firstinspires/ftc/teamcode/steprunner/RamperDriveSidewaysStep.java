@@ -18,7 +18,7 @@ public class RamperDriveSidewaysStep extends Step {
 
 
     protected Ramper ramper;
-
+    
     public RamperDriveSidewaysStep(double distance, double maxPower, int direction) {
         this.distance = distance;
         this.maxPower = maxPower;

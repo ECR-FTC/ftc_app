@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.MorganaBot;
 import org.firstinspires.ftc.teamcode.autonomous.StepAutoCore;
+
 import org.firstinspires.ftc.teamcode.steprunner.CountLoopStep;
 import org.firstinspires.ftc.teamcode.steprunner.RamperDriveSidewaysStep;
 import org.firstinspires.ftc.teamcode.steprunner.RamperDriveStep;
@@ -31,13 +32,7 @@ public class TestDriveSideways extends StepAutoCore {
         Step RamperDriveSidewaysStep = new RamperDriveSidewaysStep(.5, 1, 1);
 
         // This step does one side, pauses, turns, pauses...
-/*        Step oneSideStep = new SequenceStep(
-                new RamperDriveSidewaysStep(.5, 1, 1),
-                pauseStep,
-                new RamperDriveSidewaysStep(.5, 1, 1),
-                pauseStep
-        );
-*/
+
         Step oneSideStep = new UntilOneDoneStep(
             new WaitStep(2000),
             new RamperDriveSidewaysStep(0.5, 1, 1)

@@ -98,13 +98,13 @@ public class Build2TankDriveTwo extends OpMode {
         teleDrive(gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.right_stick_y);
 
         // let the driver adjust the drive motor max speed
-        if (gamepad1.left_bumper) // lower max speed
+        if (gamepad1.left_bumper) //  max speed
         {
-            maxDSpeed = maxDSpeed - robot.drivePowerIncrement;
+            maxDSpeed = 1.0;
         }
-        if (gamepad1.right_bumper) // raise max speed
+        if (gamepad1.right_bumper) //  max speed
         {
-            maxDSpeed = maxDSpeed + robot.drivePowerIncrement;
+            maxDSpeed = 0.5;
         }
         maxDSpeed = Math.max(maxDSpeed, robot.driveMinPower); // apply a min speed
         maxDSpeed = Math.min(maxDSpeed, robot.driveMaxPower); // apply a max speed

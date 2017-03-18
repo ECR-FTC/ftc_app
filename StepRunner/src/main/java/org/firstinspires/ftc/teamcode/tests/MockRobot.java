@@ -32,6 +32,10 @@ public class MockRobot extends StepRobot {
     }
 
     @Override
+    public void driveSideways( double maxPower, int direction) {
+
+    }
+    @Override
     public void resetDriveMotors() {
         say("resetDriveMotors");
         updateModel();

@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.steprunner.CountLoopStep;
 import org.firstinspires.ftc.teamcode.steprunner.DriveStep;
 import org.firstinspires.ftc.teamcode.steprunner.FindRedBlueStep;
 import org.firstinspires.ftc.teamcode.steprunner.FindWhiteLineStep;
+import org.firstinspires.ftc.teamcode.steprunner.RamperDriveSidewaysStep;
 import org.firstinspires.ftc.teamcode.steprunner.RamperDriveStep;
 import org.firstinspires.ftc.teamcode.steprunner.SayStep;
 import org.firstinspires.ftc.teamcode.steprunner.SequenceStep;
@@ -54,6 +55,8 @@ abstract public class StepAutoCore extends LinearOpMode {
     // Parameters to tweak
     protected static final double DISTANCE_TO_SHOOT_POSITION = 1.3;
     protected static final double DISTANCE_TO_PLATFORM = 1.8;
+    protected static final double DISTANCE_TO_SHOOT_FROM_WALL = 1.0;
+
 
     protected static final double SHOOTER_SPINUP_TIME = 2000;
     protected static final double SHOOTER_TPS = 750;            // firing speed in ticks per second
@@ -70,6 +73,7 @@ abstract public class StepAutoCore extends LinearOpMode {
 
     // Common steps
     protected Step pause;
+    protected Step driveToShootPositionWall;
     protected Step driveToShootPosition;
     protected Step startShooter;
     protected Step shootParticle;
@@ -77,7 +81,8 @@ abstract public class StepAutoCore extends LinearOpMode {
     protected Step driveToPlatform;
     protected Step driveToWhiteLine;
     protected Step drivePastBeacon;
-    protected Step redDriveToBeacon;
+    protected Step redDriveToBeaconCorner;
+    protected Step redDriveToBeaconSide;
     protected Step blueDriveToBeacon;
     protected Step findRedBeacon;
     protected Step findBlueBeacon;
@@ -93,6 +98,9 @@ abstract public class StepAutoCore extends LinearOpMode {
 
         // Drive to the starting shoot position.
         driveToShootPosition = new RamperDriveStep(DISTANCE_TO_SHOOT_POSITION, CRUISE_POWER);
+
+        // Drive to the starting shoot position.
+        driveToShootPositionWall = new RamperDriveStep(DISTANCE_TO_SHOOT_FROM_WALL, CRUISE_POWER);
 
         // Run the shooter up to speed.
         // WHEN PID IS WORKING USE THIS:
@@ -124,13 +132,35 @@ abstract public class StepAutoCore extends LinearOpMode {
         // Drive to platform.
         driveToPlatform = new RamperDriveStep(DISTANCE_TO_PLATFORM, 1.0);
 
+        Step oneSideRedStep = new UntilOneDoneStep(
+                new WaitStep(1000),
+                new RamperDriveSidewaysStep(0.5, 1, -1)
+        );
+
         // Drive from red shoot position to red side beacon
-        redDriveToBeacon = new SequenceStep(
+        redDriveToBeaconCorner = new SequenceStep(
                 new TurnStep(-45, TURN_POWER),
                 new RamperDriveStep(2.2, CRUISE_POWER),
                 new TurnStep(45, TURN_POWER),
                 new RamperDriveStep(1.4, APPROACH_BEACON_POWER),
                 new TurnStep(45, TURN_POWER)
+        );
+        redDriveToBeaconSide = new SequenceStep(
+            /*    new TurnStep(-90, TURN_POWER),
+                new RamperDriveStep(1.5, CRUISE_POWER),
+                new TurnStep(45, TURN_POWER),
+                new RamperDriveStep(1.0, APPROACH_BEACON_POWER),
+                new TurnStep(45, TURN_POWER),
+                oneSideRedStep
+
+                */
+            // this is a last-second test to try to beat the 30 second limit
+                // run everything at full speed and get rid of one of the turns
+                new TurnStep(-60, 1.0),
+                new RamperDriveStep(2, 1.0),
+                new TurnStep(60, 1.0),
+                oneSideRedStep
+            // this actually worked - need to take out the rotation step for getting to the second beacon
         );
 
         // Find the red beacon

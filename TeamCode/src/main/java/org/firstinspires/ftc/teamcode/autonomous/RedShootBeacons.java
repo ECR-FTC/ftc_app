@@ -23,11 +23,11 @@ public class RedShootBeacons extends StepAutoCore {
 
         Step mainStep = new SequenceStep(
                 startShooter,
-                driveToShootPosition,
+                driveToShootPositionWall,
                 shootParticle,
                 shootParticle,
                 stopShooter,
-                redDriveToBeacon,
+                redDriveToBeaconSide,
                 findRedBeacon,
                 pushBeaconButtonRight,
                 drivePastBeacon,

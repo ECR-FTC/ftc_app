@@ -6,20 +6,23 @@ package org.firstinspires.ftc.teamcode.steprunner;
  * gradually increase power to start and decrease at end.
  */
 
-public class RamperDriveStep extends Step {
+public class RamperDriveSidewaysStep extends Step {
     static final double DEFAULT_TUP = 2000;
     static final double DEFAULT_TDOWN = 2000;
-    static final double DEFAULT_MIN = 0.25;
+    static final double DEFAULT_MIN = 0.5;
 
     protected double maxPower;
     protected double distance;
     protected double ticks;
+    protected int direction;
+
 
     protected Ramper ramper;
 
-    public RamperDriveStep(double distance, double maxPower) {
+    public RamperDriveSidewaysStep(double distance, double maxPower, int direction) {
         this.distance = distance;
         this.maxPower = maxPower;
+        this.direction = direction;
     }
 
     @Override
@@ -40,7 +43,7 @@ public class RamperDriveStep extends Step {
             stop();
         } else {
             double power = ramper.getRampValue(driveEncoderValue);
-            robot.driveStraight(power);
+            robot.driveSideways(power, direction);
             tell("Tiles=%.2f, Power=%.2f", tiles, power);
         }
     }

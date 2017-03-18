@@ -42,7 +42,7 @@ public class TestRedBlue extends StepAutoCore {
         Step defaultPlan = new SayStep("no color seen");
 
         Step mainStep = new SequenceStep(
-                redDriveToBeacon,
+                redDriveToBeaconCorner,
                 new SwitchStep("colorFound", defaultPlan, redPlan, bluePlan)
         );
 

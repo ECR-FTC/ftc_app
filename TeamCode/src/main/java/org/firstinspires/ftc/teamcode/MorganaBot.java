@@ -182,6 +182,20 @@ public class MorganaBot extends StepRobot {
     }
 
     /*
+ *  Set motors to drive (direction = -1) or right (direction = 1)
+ *    at a specified power
+ */
+    @Override
+    public void driveSideways(double power, int direction) {
+
+        double p = power * direction;
+        motorFrontRight.setPower(p);
+        motorBackRight.setPower(-p);
+        motorFrontLeft.setPower(-p);
+        motorBackLeft.setPower(p);
+    }
+
+    /*
      *   Drive straight at a set power
      */
     @Override

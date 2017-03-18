@@ -31,6 +31,11 @@ public abstract class StepRobot {
     abstract public void driveStraight(double power);
 
     /*
+     *  Drive sideways. Positive power value goes right, negative left.
+     */
+    abstract public void driveSideways(double power, int direction);
+
+    /*
      *  Stop driving.
      */
     abstract public void driveStop();

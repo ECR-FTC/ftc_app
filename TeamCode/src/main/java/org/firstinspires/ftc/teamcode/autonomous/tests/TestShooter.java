@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.MorganaBot;
 import org.firstinspires.ftc.teamcode.autonomous.StepAutoCore;
 import org.firstinspires.ftc.teamcode.steprunner.RunShooterStep;
 import org.firstinspires.ftc.teamcode.steprunner.SequenceStep;
+import org.firstinspires.ftc.teamcode.steprunner.ServoStep;
 import org.firstinspires.ftc.teamcode.steprunner.Step;
 import org.firstinspires.ftc.teamcode.steprunner.UntilOneDoneStep;
 
@@ -21,8 +22,9 @@ public class TestShooter extends StepAutoCore {
     public void runOpMode() throws InterruptedException {
 
         Step mainStep = new SequenceStep(
+                new ServoStep(MorganaBot.LOAD_SERVO, MorganaBot.LOAD_OPEN),
                 new UntilOneDoneStep(
-                        new RunShooterStep(750),
+                        new RunShooterStep(800),
                         waitFor(30000)
                 ),
                 stopShooter

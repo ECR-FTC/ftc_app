@@ -10,10 +10,11 @@ public class RunShooterStep extends Step {
     protected PID pid;
     protected long lastTime;
     protected double lastEncoder;
+    protected int readyCount;
 
     // TODO: MOVE TUNING PARAMS TO MORGANABOT?
-    protected static final double SHOOTER_KP = 0.005;
-    protected static final double SHOOTER_KI = 0;
+    protected static final double SHOOTER_KP = 0.0002;
+    protected static final double SHOOTER_KI = 0;       // KI NOT WORKING YET, LEAVE ZERO
     protected static final double SHOOTER_KD = 0;
 
     protected static final double MIN_POWER = 0.25;
@@ -22,6 +23,7 @@ public class RunShooterStep extends Step {
     protected static final double TPS_TOLERANCE = 40;
 
     protected static long MIN_SAMPLE_INTERVAL = 250;        // sample at 4Hz
+    protected static int READY_COUNT_NEEDED = 1;            // wnat to see 3 readings in range
 
     // Pass in how fast in ticks per second we want the shooter to run.
     public RunShooterStep(double tpsWanted) {
@@ -49,6 +51,7 @@ public class RunShooterStep extends Step {
         if (lastTime == 0) {
             lastTime = now;
             lastEncoder = encoderValue;
+            readyCount = 0;
             return;
         }
 
@@ -75,11 +78,15 @@ public class RunShooterStep extends Step {
         // See if we're within tolerance to show shooter ready
         double diff = Math.abs(tps - tpsWanted);
         if (diff < TPS_TOLERANCE) {
-            setFlag("shooterReady", 1);
-            tell("shooter ready");
+            readyCount++;
+            if (readyCount >= READY_COUNT_NEEDED) {
+                setFlag("shooterReady", 1);
+                tell("shooter ready");
+            }
         } else {
             clearFlag("shooterReady");
             tell("shooter not ready");
+            readyCount = 0;
         }
     }
 

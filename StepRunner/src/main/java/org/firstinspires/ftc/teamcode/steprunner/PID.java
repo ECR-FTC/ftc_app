@@ -33,7 +33,7 @@ public class PID
     public double getCV(double dt, double pv) {
 
         double error = sp - pv;         // current error
-        errorSum += error * dt;
+        errorSum += error * dt;         // TODO: THIS APPEARS INCORRECT
         double dError = (error - lastError) / dt;
         double cv = (kP * error) + (kI * errorSum) + (kD * dError);
         return cv;

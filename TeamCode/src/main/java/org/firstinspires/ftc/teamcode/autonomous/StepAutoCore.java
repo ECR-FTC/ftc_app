@@ -55,11 +55,10 @@ abstract public class StepAutoCore extends LinearOpMode {
     // Parameters to tweak
     protected static final double DISTANCE_TO_SHOOT_POSITION = 1.3;
     protected static final double DISTANCE_TO_PLATFORM = 1.8;
-    protected static final double DISTANCE_TO_SHOOT_FROM_WALL = 1.0;
-
+    protected static final double DISTANCE_TO_SHOOT_FROM_WALL = 0.7;
 
     protected static final double SHOOTER_SPINUP_TIME = 2000;
-    protected static final double SHOOTER_TPS = 750;            // firing speed in ticks per second
+    protected static final double SHOOTER_TPS = 800;            // firing speed in ticks per second
 
     protected static final double TURN_POWER = 0.8;
     protected static final double CRUISE_POWER = 0.7;
@@ -107,11 +106,13 @@ abstract public class StepAutoCore extends LinearOpMode {
         //startShooter = new RunShooterStep(SHOOTER_TPS);
 
         // dumb shooter step just starts at a power and waits to spin up
-        startShooter = new SequenceStep(
-                new SimpleRunShooterStep(0.6),
-                new WaitStep(SHOOTER_SPINUP_TIME),
-                new SetFlagStep("shooterReady", 1)
-        );
+//        startShooter = new SequenceStep(
+//                new SimpleRunShooterStep(0.6),
+//                new WaitStep(SHOOTER_SPINUP_TIME),
+//                new SetFlagStep("shooterReady", 1)
+//        );
+
+        startShooter = new RunShooterStep(SHOOTER_TPS);
 
         // Shoot a particle.
         shootParticle = new SequenceStep(
@@ -133,7 +134,7 @@ abstract public class StepAutoCore extends LinearOpMode {
         driveToPlatform = new RamperDriveStep(DISTANCE_TO_PLATFORM, 1.0);
 
         Step oneSideRedStep = new UntilOneDoneStep(
-                new WaitStep(1000),
+                new WaitStep(1500),
                 new RamperDriveSidewaysStep(0.5, 1, -1)
         );
 
@@ -146,19 +147,11 @@ abstract public class StepAutoCore extends LinearOpMode {
                 new TurnStep(45, TURN_POWER)
         );
         redDriveToBeaconSide = new SequenceStep(
-            /*    new TurnStep(-90, TURN_POWER),
-                new RamperDriveStep(1.5, CRUISE_POWER),
-                new TurnStep(45, TURN_POWER),
-                new RamperDriveStep(1.0, APPROACH_BEACON_POWER),
-                new TurnStep(45, TURN_POWER),
-                oneSideRedStep
-
-                */
             // this is a last-second test to try to beat the 30 second limit
                 // run everything at full speed and get rid of one of the turns
-                new TurnStep(-60, 1.0),
-                new RamperDriveStep(2, 1.0),
-                new TurnStep(60, 1.0),
+                new TurnStep(-55, 1.0),
+                new RamperDriveStep(2, 1.125),
+                new TurnStep(55, 1.0),
                 oneSideRedStep
             // this actually worked - need to take out the rotation step for getting to the second beacon
         );
@@ -194,9 +187,9 @@ abstract public class StepAutoCore extends LinearOpMode {
         );
 
         drivePastBeacon = new SequenceStep(
-                new RamperDriveStep(0.25, CRUISE_POWER),
-                new TurnStep(-10, TURN_POWER),
-                new RamperDriveStep(0.25, CRUISE_POWER)
+                new RamperDriveStep(1.5, CRUISE_POWER)
+   //             new TurnStep(-10, TURN_POWER),
+     //           new RamperDriveStep(0.25, CRUISE_POWER)
         );
 
         driveToWhiteLine = new UntilOneDoneStep(

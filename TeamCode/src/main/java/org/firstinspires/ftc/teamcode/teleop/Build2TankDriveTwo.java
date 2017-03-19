@@ -63,7 +63,7 @@ public class Build2TankDriveTwo extends OpMode {
     double target = 0.80;
     double speed = 1.0;
     double P = 0.5, I = 0;
-    double pChangeFactor = 0, iChangeFactor = 0.02;
+    double pChangeFactor = 0, iChangeFactor = 0.004;
     double maxSpeed = 1.0, minSpeed = 0.1;
     int timeInt = 50;
     double ticksPerTimeAvg;
@@ -104,7 +104,7 @@ public class Build2TankDriveTwo extends OpMode {
         }
         if (gamepad1.right_bumper) //  max speed
         {
-            maxDSpeed = 0.5;
+            maxDSpeed = 0.33;
         }
         maxDSpeed = Math.max(maxDSpeed, robot.driveMinPower); // apply a min speed
         maxDSpeed = Math.min(maxDSpeed, robot.driveMaxPower); // apply a max speed

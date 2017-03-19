@@ -72,8 +72,8 @@ public class MorganaBot extends StepRobot {
 
     public static final double FIRE_GO = 0.5;  // setting to fire a ball into the launcher
     public static final double FIRE_STAY = 0.0;  // down setting for the fire servo
-    public static final double LOAD_CLOSED = 0.8;  // "up" setting for the ball loader
-    public static final double LOAD_OPEN = 0.1;  // "down" setting for the ball loader
+    public static final double LOAD_CLOSED = 0.1;  // "up" setting for the ball loader
+    public static final double LOAD_OPEN = 0.8;  // "down" setting for the ball loader
     public static final double FIRE_SERVO_TIME = 0.5;  // delay time for the firing servo
     public static final double WHITE_LINE_THRESHOLD = 0.2;      // above this means we see white line
     public static final double RED_THRESHOLD = 0.2;     // above this means we see red
@@ -133,7 +133,7 @@ public class MorganaBot extends StepRobot {
         rightServo.setPosition(RIGHT_STORE);
         leftServo.setPosition(LEFT_STORE);
         fireServo.setPosition(FIRE_STAY);
-        loadServo.setPosition(LOAD_OPEN);
+        loadServo.setPosition(LOAD_CLOSED);
 
     }
 

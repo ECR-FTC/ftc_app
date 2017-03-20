@@ -59,9 +59,11 @@ abstract public class StepAutoCore extends LinearOpMode {
 
     protected static final double TURN_POWER = 0.8;
     protected static final double CRUISE_POWER = 0.7;
+    protected static final double FULL_POWER = 1.0;
+
     protected static final double APPROACH_BEACON_POWER = 0.4;
 
-    protected static final double BEACON_SCAN_SPEED = 0.15;
+    protected static final double BEACON_SCAN_SPEED = 0.125;
     protected static final int BEACON_PUSH_REPEAT = 3;          // push it this many times
 
     protected static final double WHITE_LINE_SCAN_SPEED = 0.2;  // how fast to go while looking for white line
@@ -98,22 +100,13 @@ abstract public class StepAutoCore extends LinearOpMode {
         // Drive to the starting shoot position.
         driveToShootPositionWall = new RamperDriveStep(DISTANCE_TO_SHOOT_FROM_WALL, CRUISE_POWER);
 
-
-        // dumb shooter step just starts at a power and waits to spin up
-//        startShooter = new SequenceStep(
-//                new SimpleRunShooterStep(0.6),
-//                new WaitStep(SHOOTER_SPINUP_TIME),
-//                new SetFlagStep("shooterReady", 1)
-//        );
-
         startShooter = new RunShooterStep(SHOOTER_TPS);
 
         // Shoot a particle.
         shootParticle = new SequenceStep(
                 new WaitForFlagStep("shooterReady"),
-                new WaitStep(500),
                 new ServoStep(MorganaBot.FIRE_SERVO, MorganaBot.FIRE_GO),
-                new WaitStep(1000),
+                new WaitStep(500),
                 new ServoStep(MorganaBot.FIRE_SERVO, MorganaBot.FIRE_STAY),
                 new WaitStep(500)
         );
@@ -127,11 +120,6 @@ abstract public class StepAutoCore extends LinearOpMode {
         // Drive to platform.
         driveToPlatform = new RamperDriveStep(DISTANCE_TO_PLATFORM, 1.0);
 
-        Step oneSideRedStep = new UntilOneDoneStep(
-                new WaitStep(1500),
-                new RamperDriveSidewaysStep(0.5, 1, -1)
-        );
-
         // Drive from red shoot position to red side beacon
         redDriveToBeaconCorner = new SequenceStep(
                 new TurnStep(-45, TURN_POWER),
@@ -140,19 +128,26 @@ abstract public class StepAutoCore extends LinearOpMode {
                 new RamperDriveStep(1.4, APPROACH_BEACON_POWER),
                 new TurnStep(45, TURN_POWER)
         );
+
         redDriveToBeaconSide = new SequenceStep(
-            // this is a last-second test to try to beat the 30 second limit
+                // this is a last-second test to try to beat the 30 second limit
                 // run everything at full speed and get rid of one of the turns
-                new TurnStep(-55, 1.0),
-                new RamperDriveStep(2, 1.125),
-                new TurnStep(55, 1.0),
-                oneSideRedStep
-            // this actually worked - need to take out the rotation step for getting to the second beacon
+                new TurnStep(-50, 1.0),
+                new RamperDriveStep(2.2, FULL_POWER),
+                new TurnStep(50, 1.0),
+                new UntilOneDoneStep(
+                        new WaitStep(1500),
+                        new RamperDriveSidewaysStep(0.5, 1, -1)
+                )
         );
 
         // Find the red beacon
         findRedBeacon = new SequenceStep(
                 new ServoStep(MorganaBot.RIGHT_SERVO, MorganaBot.RIGHT_SCAN),
+                new UntilOneDoneStep(
+                        new RamperDriveSidewaysStep(.25, 1, 1),
+                        new WaitStep(250)
+                ),
                 new WaitStep(500),
                 new UntilOneDoneStep(
                         new DriveStep(BEACON_SCAN_SPEED),
@@ -165,13 +160,17 @@ abstract public class StepAutoCore extends LinearOpMode {
                                 )
                         )
                 ),
+                new UntilOneDoneStep(
+                        new RamperDriveSidewaysStep(.25, 1, -1),
+                        new WaitStep(750)
+                ),
                 new ServoStep(MorganaBot.RIGHT_SERVO, MorganaBot.RIGHT_STORE)
         );
 
         // Drive from blue shoot position to blue side beacon
 
         blueDriveToBeacon = new SequenceStep(
-            // TODO: mirror from redDriveToBeacon
+                // TODO: mirror from redDriveToBeacon
 
         );
 
@@ -180,11 +179,7 @@ abstract public class StepAutoCore extends LinearOpMode {
                 // TODO: mirror from findRedBeacon
         );
 
-        drivePastBeacon = new SequenceStep(
-                new RamperDriveStep(1.5, CRUISE_POWER)
-   //             new TurnStep(-10, TURN_POWER),
-     //           new RamperDriveStep(0.25, CRUISE_POWER)
-        );
+        drivePastBeacon = new RamperDriveStep(1.5, CRUISE_POWER);
 
         driveToWhiteLine = new UntilOneDoneStep(
                 new RamperDriveStep(6.0, WHITE_LINE_SCAN_SPEED),

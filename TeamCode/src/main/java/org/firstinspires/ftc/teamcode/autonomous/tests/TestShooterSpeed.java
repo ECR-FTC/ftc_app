@@ -16,20 +16,16 @@ import org.firstinspires.ftc.teamcode.steprunner.UntilOneDoneStep;
  */
 
 @Autonomous(name = "TestShooter", group = "StepTests")
-public class TestShooter extends StepAutoCore {
+public class TestShooterSpeed extends StepAutoCore {
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-        // Ramp up and shoot twice.
         Step mainStep = new SequenceStep(
                 new ServoStep(MorganaBot.LOAD_SERVO, MorganaBot.LOAD_OPEN),
                 new UntilOneDoneStep(
-                        new RunShooterStep(SHOOTER_TPS),
-                        new SequenceStep(
-                                shootParticle,
-                                shootParticle
-                        )
+                        new RunShooterStep(800),
+                        waitFor(30000)
                 ),
                 stopShooter
         );

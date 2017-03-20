@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.steprunner;
 
+import java.util.ArrayList;
+
 /**
  * Created by ECR FTC 11096 on 03/05/2017.
  */
@@ -12,10 +14,11 @@ public class RunShooterStep extends Step {
     protected double lastEncoder;
     protected int readyCount;
 
-    // TODO: MOVE TUNING PARAMS TO MORGANABOT?
-    // protected static final double SHOOTER_KP = 0.0002;
+    // FOR NOW use our own PID, not the internal one
+    protected static boolean useInternalPID = false;
+
     protected static final double SHOOTER_KP = 0;
-    protected static final double SHOOTER_KI = 0;
+    protected static final double SHOOTER_KI = 0.0002;
     protected static final double SHOOTER_KD = 0;
 
     protected static final double MIN_POWER = 0.25;
@@ -27,7 +30,13 @@ public class RunShooterStep extends Step {
     protected static int READY_COUNT_NEEDED = 3;            // want to see 3 readings in range
     protected static int MAX_READY_COUNT = 6;               // but don't count more than this
 
-    protected static boolean useInternalPID = true;
+    // Fixed ramp up plan. Apply these power values until they run out,
+    // then start using our PID. Only applies when not using internal PID.
+    protected static final double[] rampPlan = {
+            1.0, 1.0, 1.0, 0.7,
+            0.5, 0.5, 0.3, 0.3
+    };
+    protected int rampIndex;
 
     // Pass in how fast in ticks per second we want the shooter to run.
     public RunShooterStep(double tpsWanted) {
@@ -39,7 +48,7 @@ public class RunShooterStep extends Step {
         super.start(r);
         lastTime = 0;
         lastEncoder = 0;
-
+        rampIndex = 0;
         robot.useInternalShooterPID(useInternalPID);
         if (useInternalPID) {
             currentPower = tpsWanted / 1000;        // 1000 is max shooter power!!
@@ -82,11 +91,18 @@ public class RunShooterStep extends Step {
         lastTime = now;
         lastEncoder = encoderValue;
 
-        // If we're using our own PID give it a chance to compute a change.
+        // If we're using our own PID give it a chance to compute a change, but use our hardcoded
+        // rampup values if there are any left.
         if (pid != null) {
-            change = pid.getCV(dt, tps);
-            currentPower += change;
-            currentPower = Math.min(Math.max(currentPower, MIN_POWER), MAX_POWER);
+            if (rampIndex < rampPlan.length) {
+                currentPower = rampPlan[rampIndex++];
+            } else {
+                double dts = dt / 1000;                     // TPS is in seconds, so DT should also be
+                change = pid.getCV(dts, tps);
+                tell("errorSum=%.2f", pid.getErrorSum());
+                currentPower += change;
+                currentPower = Math.min(Math.max(currentPower, MIN_POWER), MAX_POWER);
+            }
             robot.setShootPower(currentPower);
         }
 

@@ -10,19 +10,16 @@ package org.firstinspires.ftc.teamcode.autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MorganaBot;
-import org.firstinspires.ftc.teamcode.steprunner.CheckColorStep;
 import org.firstinspires.ftc.teamcode.steprunner.CountLoopStep;
 import org.firstinspires.ftc.teamcode.steprunner.DriveStep;
 import org.firstinspires.ftc.teamcode.steprunner.FindRedBlueStep;
 import org.firstinspires.ftc.teamcode.steprunner.FindWhiteLineStep;
 import org.firstinspires.ftc.teamcode.steprunner.RamperDriveSidewaysStep;
 import org.firstinspires.ftc.teamcode.steprunner.RamperDriveStep;
-import org.firstinspires.ftc.teamcode.steprunner.SayStep;
+import org.firstinspires.ftc.teamcode.steprunner.RunShooterStep;
 import org.firstinspires.ftc.teamcode.steprunner.SequenceStep;
 import org.firstinspires.ftc.teamcode.steprunner.ServoStep;
 import org.firstinspires.ftc.teamcode.steprunner.SetFlagStep;
-import org.firstinspires.ftc.teamcode.steprunner.RunShooterStep;
-import org.firstinspires.ftc.teamcode.steprunner.SimpleRunShooterStep;
 import org.firstinspires.ftc.teamcode.steprunner.Step;
 import org.firstinspires.ftc.teamcode.steprunner.StepRobot;
 import org.firstinspires.ftc.teamcode.steprunner.StopShooterStep;
@@ -101,9 +98,6 @@ abstract public class StepAutoCore extends LinearOpMode {
         // Drive to the starting shoot position.
         driveToShootPositionWall = new RamperDriveStep(DISTANCE_TO_SHOOT_FROM_WALL, CRUISE_POWER);
 
-        // Run the shooter up to speed.
-        // WHEN PID IS WORKING USE THIS:
-        //startShooter = new RunShooterStep(SHOOTER_TPS);
 
         // dumb shooter step just starts at a power and waits to spin up
 //        startShooter = new SequenceStep(

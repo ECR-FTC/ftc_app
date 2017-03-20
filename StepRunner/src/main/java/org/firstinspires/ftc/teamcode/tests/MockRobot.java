@@ -117,6 +117,11 @@ public class MockRobot extends StepRobot {
     }
 
     @Override
+    public void useInternalShooterPID(boolean useInternal) {
+
+    }
+
+    @Override
     public double getShooterEncoderValue() {
         return 0;
     }

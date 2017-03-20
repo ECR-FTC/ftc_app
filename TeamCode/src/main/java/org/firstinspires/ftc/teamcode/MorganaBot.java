@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.hardware.Sensor;
-
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -79,7 +77,7 @@ public class MorganaBot extends StepRobot {
     public static final double RED_THRESHOLD = 0.2;     // above this means we see red
     public static final double BLUE_THRESHOLD = 0.2;     // above this means we see blue
     public static final double TICKS_PER_TILE = 1350;   // encoder ticks for one game tile
-
+    public static final int SHOOTER_MAX_TPS = 1000;  // maximum TPS for shooter
 
     /*
      *   Initialize the robot by getting access to all of its devices through the
@@ -134,6 +132,9 @@ public class MorganaBot extends StepRobot {
         leftServo.setPosition(LEFT_STORE);
         fireServo.setPosition(FIRE_STAY);
         loadServo.setPosition(LOAD_CLOSED);
+
+        // By default, use internal encoder control on shooter motor.
+        useInternalShooterPID(true);
 
     }
 
@@ -258,6 +259,17 @@ public class MorganaBot extends StepRobot {
         return odSensor.getRawLightDetected() > WHITE_LINE_THRESHOLD;
     }
 
+    @Override
+    public void useInternalShooterPID(boolean useInternal) {
+
+        if (useInternal) {
+            motorShoot.setMaxSpeed(SHOOTER_MAX_TPS);
+            motorShoot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        } else {
+            motorShoot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
+
+    }
     @Override
     public double getShooterEncoderValue() {
         return motorShoot.getCurrentPosition();

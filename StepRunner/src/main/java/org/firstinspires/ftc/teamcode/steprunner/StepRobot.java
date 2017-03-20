@@ -77,6 +77,11 @@ public abstract class StepRobot {
     abstract public boolean checkWhiteLine();
 
     /*
+     * Enable or disable built-in shooter encoder control
+     */
+    abstract public void useInternalShooterPID(boolean useInternal);
+
+    /*
      * Get shooter encoder
      */
     abstract public double getShooterEncoderValue();

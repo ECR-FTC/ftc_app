@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.steprunner.UntilOneDoneStep;
  * Test shooter PID control
  */
 
-@Autonomous(name = "TestShooter", group = "StepTests")
+@Autonomous(name = "TestShooterSpeed", group = "StepTests")
 public class TestShooterSpeed extends StepAutoCore {
 
     @Override
@@ -32,7 +32,7 @@ public class TestShooterSpeed extends StepAutoCore {
 
         // Create the robot and run our routine
         MorganaBot robot = new MorganaBot();
-        runStepAutonomous("TestShooter", robot, mainStep);
+        runStepAutonomous("TestShooterSpeed", robot, mainStep);
     }
 
 }

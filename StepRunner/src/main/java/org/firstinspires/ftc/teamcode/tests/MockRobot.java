@@ -136,6 +136,10 @@ public class MockRobot extends StepRobot {
     public int getColorSeen() {
         return -1;
     }
+    @Override
+    public int getColorSeenLeft() {
+        return -1;
+    }
 
     @Override
     public double getTicksPerTile() {

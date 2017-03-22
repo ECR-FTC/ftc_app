@@ -101,6 +101,8 @@ public abstract class StepRobot {
 
     abstract public int getColorSeen();
 
+    abstract public int getColorSeenLeft();
+
     /*
      * Get number of encoder ticks per tile.
      */

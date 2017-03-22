@@ -295,6 +295,21 @@ public class MorganaBot extends StepRobot {
     }
 
     @Override
+    public int getColorSeenLeft() {
+        // TODO: set which sensors (left or right) to check, for now, just right
+        // TODO: as a last seccond fix, we swapped right_seen and blue_seen to make the code work right
+        // TODO: Yewell V. March 21, last seccond SUPER REGIONALS fix. I apologise for any mayhem I may have caused
+        if (leftRedSensor.getVoltage() > RED_THRESHOLD) {
+            return BLUE_SEEN;
+        }
+        if (leftBlueSensor.getVoltage() > BLUE_THRESHOLD) {
+            return RED_SEEN;
+        }
+        return NONE_SEEN;          // we don't know yet
+
+    }
+
+    @Override
     public double getTicksPerTile() {
         return TICKS_PER_TILE;
     }

@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.MorganaBot;
 import org.firstinspires.ftc.teamcode.steprunner.CountLoopStep;
 import org.firstinspires.ftc.teamcode.steprunner.DriveStep;
+import org.firstinspires.ftc.teamcode.steprunner.FindRedBlueOnBlueStep;
 import org.firstinspires.ftc.teamcode.steprunner.FindRedBlueStep;
 import org.firstinspires.ftc.teamcode.steprunner.FindWhiteLineStep;
 import org.firstinspires.ftc.teamcode.steprunner.RamperDriveSidewaysStep;
@@ -81,7 +82,7 @@ abstract public class StepAutoCore extends LinearOpMode {
     protected Step drivePastBeacon;
     protected Step redDriveToBeaconCorner;
     protected Step redDriveToBeaconSide;
-    protected Step blueDriveToBeacon;
+    protected Step blueDriveToBeaconSide;
     protected Step findRedBeacon;
     protected Step findBlueBeacon;
     protected Step pushBeaconButtonLeft;
@@ -144,10 +145,10 @@ abstract public class StepAutoCore extends LinearOpMode {
         // Find the red beacon
         findRedBeacon = new SequenceStep(
                 new ServoStep(MorganaBot.RIGHT_SERVO, MorganaBot.RIGHT_SCAN),
-                new UntilOneDoneStep(
+/*                new UntilOneDoneStep(
                         new RamperDriveSidewaysStep(.25, 1, 1),
                         new WaitStep(250)
-                ),
+                ),*/
                 new WaitStep(500),
                 new UntilOneDoneStep(
                         new DriveStep(BEACON_SCAN_SPEED),
@@ -169,14 +170,42 @@ abstract public class StepAutoCore extends LinearOpMode {
 
         // Drive from blue shoot position to blue side beacon
 
-        blueDriveToBeacon = new SequenceStep(
-                // TODO: mirror from redDriveToBeacon
-
+        blueDriveToBeaconSide = new SequenceStep(
+                // this is a last-second test to try to beat the 30 second limit
+                // run everything at full speed and get rid of one of the turns
+                new TurnStep(50, 1.0),
+                new RamperDriveStep(2.2, FULL_POWER),
+                new TurnStep(-50, 1.0),
+                new UntilOneDoneStep(
+                        new WaitStep(1500),
+                        new RamperDriveSidewaysStep(0.5, 1, 1)
+                )
         );
 
         // Find the blue beacon
         findBlueBeacon = new SequenceStep(
-                // TODO: mirror from findRedBeacon
+                new ServoStep(MorganaBot.LEFT_SERVO, MorganaBot.LEFT_SCAN),
+/*                new UntilOneDoneStep(
+                        new RamperDriveSidewaysStep(.25, 1, 1),
+                        new WaitStep(250)
+                ),*/
+                new WaitStep(500),
+                new UntilOneDoneStep(
+                        new DriveStep(BEACON_SCAN_SPEED),
+                        new SequenceStep(
+                                new FindRedBlueOnBlueStep(),
+                                new SwitchStep("colorFound",
+                                        null,
+                                        null, //red is where we want to be
+                                        new WaitStep(750)
+                                )
+                        )
+                ),
+                new UntilOneDoneStep(
+                        new RamperDriveSidewaysStep(.25, 1, 1),
+                        new WaitStep(750)
+                ),
+                new ServoStep(MorganaBot.RIGHT_SERVO, MorganaBot.RIGHT_STORE)
         );
 
         drivePastBeacon = new RamperDriveStep(1.5, CRUISE_POWER);

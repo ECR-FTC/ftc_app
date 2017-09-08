@@ -263,7 +263,8 @@ public class MorganaBot extends StepRobot {
     public void useInternalShooterPID(boolean useInternal) {
 
         if (useInternal) {
-            motorShoot.setMaxSpeed(SHOOTER_MAX_TPS);
+            // setMaxSpeed method no longer compiling - deprecated?
+            // motorShoot.setMaxSpeed(SHOOTER_MAX_TPS);
             motorShoot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         } else {
             motorShoot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

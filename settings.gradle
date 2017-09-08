@@ -1,3 +1,2 @@
-include ':FtcRobotController', ':ECRLib', ':TeamCode', ':Relic'
-include ':Velocity'
-include ':K9'
+include ':FtcRobotController', ':ECRLib', ':Relic'
+include ':K9', ':Velocity'

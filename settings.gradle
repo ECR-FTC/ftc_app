@@ -1,2 +1,2 @@
-include ':FtcRobotController', ':ECRLib', ':Relic'
+include ':FtcRobotController', ':ECRLib', ':Relic', ':Sandbox'
 include ':K9', ':Velocity'

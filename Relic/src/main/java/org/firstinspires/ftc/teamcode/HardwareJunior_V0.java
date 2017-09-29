@@ -52,10 +52,10 @@ public class HardwareJunior_V0
     private ElapsedTime period  = new ElapsedTime();
 
 
-    public double leftGrab         =  0.0;  // leftgrab grab value
-    public double rightGrab        =  0.0;  // rightgrab grab value
-    public double leftRelease      =  1.0;  // leftgrab release value
-    public double rightRelease     =  1.0;  // rightgrab release value
+    public double leftGrab         =  0.9;  // leftgrab grab value
+    public double rightGrab        =  0.1;  // rightgrab grab value
+    public double leftRelease      =  0.5;  // leftgrab release value
+    public double rightRelease     =  0.5;  // rightgrab release value
 
     public double topSpeed         =  0.7;  // top speed for drive
     public double glyphterSpeed    =  0.5;  // top speed for glyphter
@@ -75,8 +75,8 @@ public class HardwareJunior_V0
         motorBL = hwMap.dcMotor.get("motorBL");
         motorGlyphter = hwMap.dcMotor.get("motorGlyphter");
 
-        motorFR.setDirection(DcMotor.Direction.REVERSE);
-        motorBR.setDirection(DcMotor.Direction.REVERSE);
+        motorFL.setDirection(DcMotor.Direction.REVERSE);
+        motorBL.setDirection(DcMotor.Direction.REVERSE);
 
         servoLeftGrab = hwMap.servo.get("servoLeftGrab");
         servoRightGrab = hwMap.servo.get("servoRightGrab");

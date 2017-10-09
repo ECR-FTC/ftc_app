@@ -1,7 +1,7 @@
 /* Copyright (c) 2017 FIRST. All rights reserved.
  */
 
-package org.firstinspires.ftc.teamcode.teleop;
+package org.firstinspires.ftc.teamcode.Teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -18,17 +18,19 @@ import org.firstinspires.ftc.teamcode.HardwareJunior_V0;
 
 /**
  * Created by ECR FTC on 9/17/2017.
- */
+ **/
 
 public class JuniorTeleop extends LinearOpMode {
 
     /* Declare OpMode members. */
-    HardwareJunior_V0 robot = new HardwareJunior_V0();              // Use a K9'shardware
+    HardwareJunior_V0 robot = new HardwareJunior_V0();
 
     @Override
     public void runOpMode() {
         double left;
         double right;
+        double leftGlyphterArmPos = robot.leftRelease;
+        double rightGlyphterArmPos = robot.rightRelease;
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
@@ -71,22 +73,31 @@ public class JuniorTeleop extends LinearOpMode {
             //lift/retract glyphter
             robot.motorGlyphter.setPower(gamepad2.right_stick_y * robot.glyphterSpeed);
 
-            //grab/release glyphs
-            if (gamepad2.y)
+            //version 2 of grab controls, it is operated like the k-9 controls
+            //change the position of the glyphter servo by glyphterChangeSpeed
+            if (gamepad2.y) // open
             {
-                robot.servoRightGrab.setPosition(robot.rightGrab);
-                robot.servoLeftGrab.setPosition(robot.leftGrab);
+                leftGlyphterArmPos = leftGlyphterArmPos - robot.glyphterChangeSpeed;
+                rightGlyphterArmPos = rightGlyphterArmPos + robot.glyphterChangeSpeed;
             }
-            else if(gamepad2.b)
+            if (gamepad2.b) // close
             {
-                robot.servoRightGrab.setPosition(robot.rightRelease);
-                robot.servoLeftGrab.setPosition(robot.leftRelease);
+                leftGlyphterArmPos = leftGlyphterArmPos + robot.glyphterChangeSpeed;
+                rightGlyphterArmPos = rightGlyphterArmPos - robot.glyphterChangeSpeed;
             }
+            //make sure the servos don't go too far
+            leftGlyphterArmPos  = Range.clip(leftGlyphterArmPos, robot.leftGrab, robot.leftRelease);
+            rightGlyphterArmPos = Range.clip(rightGlyphterArmPos, robot.rightRelease, robot.rightGrab);
 
+            //set the position
+            robot.servoLeftGrab.setPosition(leftGlyphterArmPos);
+            robot.servoRightGrab.setPosition(rightGlyphterArmPos);
 
             // Send telemetry message to signify robot running;
             telemetry.addData("left", "%.2f", left);
             telemetry.addData("right", "%.2f", right);
+            telemetry.addData("left glyphter servo", "%.2f", robot.servoLeftGrab.getPosition());
+            telemetry.addData("right glyphter servo", "%.2f", robot.servoRightGrab.getPosition());
             telemetry.addData("top speed", "%.2f", robot.topSpeed);
             telemetry.update();
 

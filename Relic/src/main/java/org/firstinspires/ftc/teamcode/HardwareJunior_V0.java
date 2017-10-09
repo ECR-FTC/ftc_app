@@ -4,7 +4,10 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.GyroSensor;
+import com.qualcomm.robotcore.hardware.Gyroscope;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IntegratingGyroscope;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -46,20 +49,27 @@ public class HardwareJunior_V0
 
     public Servo servoLeftGrab;
     public Servo servoRightGrab;
+    public Servo servoLeftJewel;
+    public Servo servoRightJewel;
 
     /* Local OpMode members. */
     public HardwareMap hwMap  = null;
     private ElapsedTime period  = new ElapsedTime();
 
 
-    public double leftGrab         =  0.9;  // leftgrab grab value
-    public double rightGrab        =  0.1;  // rightgrab grab value
-    public double leftRelease      =  0.5;  // leftgrab release value
-    public double rightRelease     =  0.5;  // rightgrab release value
+    public double leftGrab           =  0.35;  // leftgrab grab value   .6 with out relic
+    public double leftRelease        =  0.90;  // leftgrab release value
+    public double rightGrab          =  0.55;  // rightgrab grab value  .4 without relic
+    public double rightRelease       =  0.00;  // rightgrab release value
+    public double glyphterSpeed      =  0.50;  // top speed for glyphter
+    public double glyphterChangeSpeed=  0.02;  // amount of change in the position of the glyphter arm
 
-    public double topSpeed         =  0.7;  // top speed for drive
-    public double glyphterSpeed    =  0.5;  // top speed for glyphter
+    public double leftJewelStore     =  1.00;  // leftjewel store value
+    public double leftJewelDown      =  0.00;  // leftjewel deployed value
+    public double rightJewelStore    =  0.25;  // rightjewel store value
+    public double rightJewelDown     =  1.00;  // rightjewel deployed value
 
+    public double topSpeed           =  0.70;  // top speed for drive
     /* Constructor */
     public HardwareJunior_V0() {
     }
@@ -81,6 +91,8 @@ public class HardwareJunior_V0
         servoLeftGrab = hwMap.servo.get("servoLeftGrab");
         servoRightGrab = hwMap.servo.get("servoRightGrab");
 
+        servoLeftJewel = hwMap.servo.get("servoLeftJewel");
+        servoRightJewel = hwMap.servo.get("servoRightJewel");
 
         // Set all motors to zero power
         motorFL.setPower(0);
@@ -108,6 +120,8 @@ public class HardwareJunior_V0
         // set the button pushing servos to the store positions
         servoRightGrab.setPosition(rightRelease);
         servoLeftGrab.setPosition(leftRelease);
+        servoRightJewel.setPosition(rightJewelStore);
+        servoLeftJewel.setPosition(leftJewelStore);
 
     }
 

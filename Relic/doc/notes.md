@@ -28,10 +28,15 @@
 - robot-specific steps should live in teamcode.autonomous.steps
 
 ## M2: find and review StepRobot class used by SR
+- moved a bunch of Velocity-specific methods into MorganaBot
 
 ## M3: create RelicRobot class based on StepRobot
+- added first RR-specific method to reset (stow) jewel arms
 
 ## M4: create or clone basic SR-based autonomous opmode in 'relic'
+- created HelloAuto to just move forward for two seconds
+- ported one test routine (TestDriveSquare)
+
 
 
 ------------------------------------------------------------------------

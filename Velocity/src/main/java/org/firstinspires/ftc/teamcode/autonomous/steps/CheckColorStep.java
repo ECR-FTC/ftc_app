@@ -1,4 +1,7 @@
-package org.eastcobbrobotics.ftc.ecrlib.steprunner;
+package org.firstinspires.ftc.teamcode.autonomous.steps;
+
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.Step;
+import org.firstinspires.ftc.teamcode.MorganaBot;
 
 /**
  * Created by ECR_FTC on 3/10/17.
@@ -13,7 +16,7 @@ public class CheckColorStep extends Step {
     @Override
     public void run() {
         super.run();
-        int color = robot.getColorSeen();
+        int color = ((MorganaBot) robot).getColorSeen();
         tell("color detected: %d", color);
         setFlag("colorFound", color);
     }

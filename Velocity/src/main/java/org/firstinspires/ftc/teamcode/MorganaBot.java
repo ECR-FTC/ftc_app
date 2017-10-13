@@ -255,11 +255,12 @@ public class MorganaBot extends StepRobot {
     }
 
     @Override
-    public boolean checkWhiteLine() {
-        return odSensor.getRawLightDetected() > WHITE_LINE_THRESHOLD;
+    public double getTicksPerTile() {
+        return TICKS_PER_TILE;
     }
 
-    @Override
+    // Velocity-specific methods
+
     public void useInternalShooterPID(boolean useInternal) {
 
         if (useInternal) {
@@ -271,17 +272,17 @@ public class MorganaBot extends StepRobot {
         }
 
     }
-    @Override
+
     public double getShooterEncoderValue() {
         return motorShoot.getCurrentPosition();
     }
 
-    @Override
     public void setShootPower(double power) {
         motorShoot.setPower(power);
     }
 
-    @Override
+
+
     public int getColorSeen() {
         // TODO: set which sensors (left or right) to check, for now, just right
 
@@ -295,7 +296,10 @@ public class MorganaBot extends StepRobot {
 
     }
 
-    @Override
+    public boolean checkWhiteLine() {
+        return odSensor.getRawLightDetected() > WHITE_LINE_THRESHOLD;
+    }
+
     public int getColorSeenLeft() {
         // TODO: set which sensors (left or right) to check, for now, just right
         // TODO: as a last seccond fix, we swapped right_seen and blue_seen to make the code work right
@@ -310,8 +314,6 @@ public class MorganaBot extends StepRobot {
 
     }
 
-    @Override
-    public double getTicksPerTile() {
-        return TICKS_PER_TILE;
-    }
+
+
 }

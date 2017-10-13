@@ -248,11 +248,11 @@ abstract public class StepAutoCore extends LinearOpMode {
         }
 
         // Show telemetry and wait for Start button to be pressed
-        showMessage("Waiting for start");
+        showMessage(autoName + ": waiting for start");
         waitForStart();
 
         // Start our main step
-        showMessage("Starting main step");
+        showMessage(autoName + ": starting main step");
         mainStep.start(robot);
 
         // Run until we're done
@@ -274,7 +274,7 @@ abstract public class StepAutoCore extends LinearOpMode {
         }
 
         // Stop the main step
-        showMessage("Stopping main step");
+        showMessage(autoName + ": stopping main step");
         mainStep.stop();
     }
 

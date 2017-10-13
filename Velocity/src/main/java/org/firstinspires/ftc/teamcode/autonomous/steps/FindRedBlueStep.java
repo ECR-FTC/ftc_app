@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.autonomous.steps;
 
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.Step;
+import org.firstinspires.ftc.teamcode.MorganaBot;
 
 import static org.eastcobbrobotics.ftc.ecrlib.steprunner.StepRobot.NONE_SEEN;
 
@@ -17,7 +18,7 @@ public class FindRedBlueStep extends Step {
     @Override
     public void run() {
         super.run();
-        int color = robot.getColorSeen();
+        int color = ((MorganaBot) robot).getColorSeen();
         if (color != NONE_SEEN) {
             tell("color detected: %d", color);
             setFlag("colorFound", color);

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.autonomous.steps;
 import org.eastcobbrobotics.ftc.ecrlib.PID;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.Step;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.StepRobot;
+import org.firstinspires.ftc.teamcode.MorganaBot;
 
 /**
  * Created by ECR FTC 11096 on 03/05/2017.
@@ -51,10 +52,10 @@ public class RunShooterStep extends Step {
         lastTime = 0;
         lastEncoder = 0;
         rampIndex = 0;
-        robot.useInternalShooterPID(useInternalPID);
+        ((MorganaBot) robot).useInternalShooterPID(useInternalPID);
         if (useInternalPID) {
             currentPower = tpsWanted / 1000;        // 1000 is max shooter power!!
-            robot.setShootPower(currentPower);
+            ((MorganaBot) robot).setShootPower(currentPower);
             pid = null;
         } else {
             currentPower = 0;
@@ -68,7 +69,7 @@ public class RunShooterStep extends Step {
         super.run();
 
         long now = System.currentTimeMillis();
-        double encoderValue = robot.getShooterEncoderValue();
+        double encoderValue = ((MorganaBot) robot).getShooterEncoderValue();
 
         // If we haven't read anything before don't do anything now; otherwise it
         // might be time to get a new cv.
@@ -105,7 +106,7 @@ public class RunShooterStep extends Step {
                 currentPower += change;
                 currentPower = Math.min(Math.max(currentPower, MIN_POWER), MAX_POWER);
             }
-            robot.setShootPower(currentPower);
+            ((MorganaBot) robot).setShootPower(currentPower);
         }
 
         // See if we're within tolerance to show shooter ready.

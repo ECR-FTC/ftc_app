@@ -112,43 +112,13 @@ public class MockRobot extends StepRobot {
     }
 
     @Override
-    public boolean checkWhiteLine() {
-        return false;
-    }
-
-    @Override
-    public void useInternalShooterPID(boolean useInternal) {
-
-    }
-
-    @Override
-    public double getShooterEncoderValue() {
-        return 0;
-    }
-
-    @Override
-    public void setShootPower(double power) {
-        updateModel();
-        say(String.format("setShootPower: power=%.2f", power));
-    }
-
-    @Override
-    public int getColorSeen() {
-        return -1;
-    }
-    @Override
-    public int getColorSeenLeft() {
-        return -1;
-    }
-
-    @Override
     public double getTicksPerTile() {
         return 1000;
     }
 
     /*
-         * Update the model.
-         */
+     * Update the model.
+     */
     protected void updateModel() {
         double now = System.currentTimeMillis();
         double elapsed = now - lastModelCheckTime;

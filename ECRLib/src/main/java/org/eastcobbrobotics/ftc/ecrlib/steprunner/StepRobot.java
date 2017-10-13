@@ -15,6 +15,11 @@ public abstract class StepRobot {
     public StepRobot() {
     }
 
+    /* Constants for color detection */
+    public static final int NONE_SEEN = 0;
+    public static final int RED_SEEN = 1;
+    public static final int BLUE_SEEN = 2;
+
     /*
      *  Initialize the robot, given some kind of map.
      */
@@ -70,38 +75,6 @@ public abstract class StepRobot {
      * Set servo position
      */
     abstract public void setServo(int servoId, double position);
-
-    /*
-     * Do you see a white line?
-     */
-    abstract public boolean checkWhiteLine();
-
-    /*
-     * Enable or disable built-in shooter encoder control
-     */
-    abstract public void useInternalShooterPID(boolean useInternal);
-
-    /*
-     * Get shooter encoder
-     */
-    abstract public double getShooterEncoderValue();
-
-    /*
-     * Set shooter power
-     */
-    abstract public void setShootPower(double power);
-
-    /*
-     * Get color
-     */
-
-    public static final int NONE_SEEN = 0;
-    public static final int RED_SEEN = 1;
-    public static final int BLUE_SEEN = 2;
-
-    abstract public int getColorSeen();
-
-    abstract public int getColorSeenLeft();
 
     /*
      * Get number of encoder ticks per tile.

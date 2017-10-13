@@ -6,9 +6,9 @@ package org.firstinspires.ftc.teamcode.autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.MorganaBot;
-import org.firstinspires.ftc.teamcode.steprunner.SequenceStep;
-import org.firstinspires.ftc.teamcode.steprunner.Step;
-import org.firstinspires.ftc.teamcode.steprunner.UntilOneDoneStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.SequenceStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.Step;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.UntilOneDoneStep;
 
 /**
  * ECR FTC 11096 - 2016 - 2017 Velocity Vortex

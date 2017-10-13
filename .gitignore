@@ -24,5 +24,8 @@ Thumbs.db
 .gradle
 build/
 
+# Other stuff
+*.swp
+
 *ASUS_PC_01*
 

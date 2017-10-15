@@ -52,6 +52,9 @@ public class HardwareJunior_V0
     public Servo servoLeftJewel;
     public Servo servoRightJewel;
 
+    public Servo servoLeftWrist;
+    public Servo servoRightWrist;
+
     /* Local OpMode members. */
     public HardwareMap hwMap  = null;
     private ElapsedTime period  = new ElapsedTime();
@@ -64,10 +67,19 @@ public class HardwareJunior_V0
     public double glyphterSpeed      =  0.50;  // top speed for glyphter
     public double glyphterChangeSpeed=  0.02;  // amount of change in the position of the glyphter arm
 
-    public double leftJewelStore     =  1.00;  // leftjewel store value
-    public double leftJewelDown      =  0.00;  // leftjewel deployed value
+    public double leftJewelStore     =  0.25;  // leftjewel store value
+    public double leftJewelDown      =  0.91;  // leftjewel deployed value
     public double rightJewelStore    =  0.25;  // rightjewel store value
     public double rightJewelDown     =  1.00;  // rightjewel deployed value
+
+    public double rightWristLeft     =  0.25;
+    public double rightWristCenter   =  0.50;
+    public double rightWristRight    =  0.75;
+    public double rightWristStore    =  1.00;
+    public double leftWristLeft      =  0.65;
+    public double leftWristCenter    =  0.44;
+    public double leftWristRight     =  0.20;
+    public double leftWristStore     =  0.00;
 
     public double topSpeed           =  0.70;  // top speed for drive
     /* Constructor */
@@ -93,6 +105,9 @@ public class HardwareJunior_V0
 
         servoLeftJewel = hwMap.servo.get("servoLeftJewel");
         servoRightJewel = hwMap.servo.get("servoRightJewel");
+
+        servoLeftWrist = hwMap.servo.get("servoLeftWrist");    // hwMap.servo.get("???")
+        servoRightWrist = hwMap.servo.get("servoRightWrist");   // hwMap.servo.get("???")
 
         // Set all motors to zero power
         motorFL.setPower(0);

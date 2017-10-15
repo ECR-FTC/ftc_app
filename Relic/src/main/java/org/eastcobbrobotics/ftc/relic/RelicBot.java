@@ -50,6 +50,7 @@ public class RelicBot extends StepRobot {
 
     // Sensors
     // public ColorSensor colorRight;
+    public ColorSensor colorLeft;
 
     // List of Servos and their Id's. NOTE THAT THE IDs ARE IN THE
     // ORDER added to servoList below!
@@ -63,6 +64,20 @@ public class RelicBot extends StepRobot {
 
     // Constants
     public static final double TICKS_PER_TILE = 1350;   // encoder ticks for one game tile
+
+    public static final double LEFT_JEWEL_STORE     =  0.25;  // leftjewel store value
+    public static final double LEFT_JEWEL_DOWN      =  0.91;  // leftjewel deployed value
+    public static final double RIGHT_JEWEL_STORE    =  0.25;  // rightjewel store value
+    public static final double RIGHT_JEWEL_DOWN     =  1.00;  // rightjewel deployed value
+
+    public static final double RIGHT_WRIST_LEFT     =  0.25;
+    public static final double RIGHT_WRIST_CENTER   =  0.50;
+    public static final double RIGHT_WRIST_RIGHT    =  0.75;
+    public static final double RIGHT_WRIST_STORE    =  1.00;
+    public static final double LEFT_WRIST_LEFT      =  0.65;
+    public static final double LEFT_WRIST_CENTER    =  0.44;
+    public static final double LEFT_WRIST_RIGHT     =  0.20;
+    public static final double LEFT_WRIST_STORE     =  0.00;
 
     /*
      *   Initialize the robot by getting access to all of its devices through the
@@ -92,15 +107,13 @@ public class RelicBot extends StepRobot {
         rightArmElbow = hwMap.servo.get("servoRightJewel");
 
         // TODO: add jewel wrist servos
-        leftArmWrist = null;    // hwMap.servo.get("???")
-        rightArmWrist = null;   // hwMap.servo.get("???")
+        leftArmWrist = hwMap.servo.get("servoLeftWrist");    // hwMap.servo.get("???")
+        rightArmWrist = hwMap.servo.get("servoRightWrist");   // hwMap.servo.get("???")
 
         // Make a list of the Servos, so we can refer to them by number.
         // Make sure they are in the right order! SEE COMMENT ABOVE!
         // TODO: add wrist servos by uncommenting line below
-        servoList = asList(leftGrab, rightGrab, leftArmElbow, rightArmElbow
-                // , leftArmWrist, rightArmWrist
-        );
+        servoList = asList(leftGrab, rightGrab, leftArmElbow, rightArmElbow, leftArmWrist, rightArmWrist);
 
         // Reset all drive motors
         resetDriveMotors();

@@ -34,6 +34,8 @@ public class JuniorServoCalibration extends LinearOpMode {
         double rightGrabPos = 0.5;
         double leftJewelPos = 0.5;
         double rightJewelPos = 0.5;
+        double leftWristPos = 0.5;
+        double rightWristPos = 0.5;
 
         double leftGlyphterArmPos = robot.leftRelease;
         double rightGlyphterArmPos = robot.rightRelease;
@@ -55,32 +57,46 @@ public class JuniorServoCalibration extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
             if (gamepad1.dpad_up) {
-                if (gamepad1.a) {
+                /*if (gamepad1.a) {
                     leftGrabPos = leftGrabPos + changeSpeed;
                 }
                 if (gamepad1.b) {
                     rightGrabPos = rightGrabPos + changeSpeed;
                 }
+                */
                 if (gamepad1.x) {
                     leftJewelPos = leftJewelPos + changeSpeed;
                 }
                 if (gamepad1.y) {
                     rightJewelPos = rightJewelPos + changeSpeed;
                 }
+                if (gamepad1.a) {
+                    rightWristPos = rightWristPos + changeSpeed;
+                }
+                if (gamepad1.b) {
+                    leftWristPos = leftWristPos + changeSpeed;
+                }
             }
 
+
             if (gamepad1.dpad_down) {
-                if (gamepad1.a) {
+                /*if (gamepad1.a) {
                     leftGrabPos = leftGrabPos - changeSpeed;
                 }
                 if (gamepad1.b) {
                     rightGrabPos = rightGrabPos - changeSpeed;
-                }
+                }*/
                 if (gamepad1.x) {
                     leftJewelPos = leftJewelPos - changeSpeed;
                 }
                 if (gamepad1.y) {
                     rightJewelPos = rightJewelPos - changeSpeed;
+                }
+                if (gamepad1.a) {
+                    rightWristPos = rightWristPos - changeSpeed;
+                }
+                if (gamepad1.b) {
+                    leftWristPos = leftWristPos - changeSpeed;
                 }
 
             }
@@ -89,16 +105,22 @@ public class JuniorServoCalibration extends LinearOpMode {
             rightGrabPos = Range.clip(rightGrabPos, 0, 1);
             leftJewelPos = Range.clip(leftJewelPos, 0, 1);
             rightJewelPos = Range.clip(rightJewelPos, 0, 1);
+            leftWristPos = Range.clip(leftWristPos, 0, 1);
+            rightWristPos = Range.clip(rightWristPos, 0, 1);
 
             robot.servoLeftGrab.setPosition(leftGrabPos);
             robot.servoRightGrab.setPosition(rightGrabPos);
             robot.servoLeftJewel.setPosition(leftJewelPos);
             robot.servoRightJewel.setPosition(rightJewelPos);
+            robot.servoRightWrist.setPosition(rightWristPos);
+            robot.servoLeftWrist.setPosition(leftWristPos);
 
             telemetry.addData("servoLeftGrab", ": %f", leftGrabPos);
             telemetry.addData("servoRightGrab", ": %f", rightGrabPos);
             telemetry.addData("servoLeftJewel", ": %f", leftJewelPos);
             telemetry.addData("servoRightJewel", ": %f", rightJewelPos);
+            telemetry.addData("servoLeftWrist", ": %f", leftWristPos);
+            telemetry.addData("servoRightWrist", ": %f", rightWristPos);
 
             telemetry.update();
             sleep(40);

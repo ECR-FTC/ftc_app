@@ -3,9 +3,12 @@ package org.eastcobbrobotics.ftc.relic.autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.DriveStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.SequenceStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.ServoStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.Step;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.UntilAllDoneStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.UntilOneDoneStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.WaitStep;
 import org.eastcobbrobotics.ftc.relic.RelicBot;
 
 /**
@@ -24,9 +27,12 @@ public class HelloAuto extends StepAutoCore {
     public void runOpMode() throws InterruptedException {
 
         RelicBot robot = new RelicBot();
-        Step mainStep = new UntilOneDoneStep(
-                waitFor(2000),
-                new DriveStep(0.8)
+        Step mainStep = new SequenceStep(
+                new UntilAllDoneStep(
+                        new WaitStep(2000),
+                        new ServoStep(4, RelicBot.LEFT_WRIST_CENTER),
+                        new ServoStep(2, RelicBot.LEFT_JEWEL_DOWN)
+                )
         );
 
         runStepAutonomous("HelloAuto", robot, mainStep);

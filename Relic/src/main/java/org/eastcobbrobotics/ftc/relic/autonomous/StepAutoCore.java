@@ -8,11 +8,17 @@ this code is used for developing autonomous functions for the competition robot
 package org.eastcobbrobotics.ftc.relic.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.Blinker;
 
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.SequenceStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.Step;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.StepRobot;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.TelMessage;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.WaitStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.UntilAllDoneStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.UntilOneDoneStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.ServoStep;
+import org.eastcobbrobotics.ftc.relic.RelicBot;
 
 import java.util.List;
 
@@ -112,7 +118,12 @@ abstract public class StepAutoCore extends LinearOpMode {
         return new WaitStep(duration);
     }
 
-
+    protected Step JewelKnockBlueTeam = new SequenceStep(
+            new UntilAllDoneStep(
+                    new ServoStep(4, RelicBot.LEFT_WRIST_CENTER),
+                    new ServoStep(2, RelicBot.LEFT_JEWEL_DOWN)
+            )
+    );
     /*
      * Show a telemetry message
      */

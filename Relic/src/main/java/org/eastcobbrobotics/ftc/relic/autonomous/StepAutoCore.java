@@ -123,6 +123,7 @@ abstract public class StepAutoCore extends LinearOpMode {
                     new ServoStep(4, RelicBot.LEFT_WRIST_CENTER),
                     new ServoStep(2, RelicBot.LEFT_JEWEL_DOWN)
             )
+
     );
     /*
      * Show a telemetry message

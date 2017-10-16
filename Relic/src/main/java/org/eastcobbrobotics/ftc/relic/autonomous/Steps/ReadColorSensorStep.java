@@ -1,7 +1,7 @@
-package org.firstinspires.ftc.teamcode.autonomous.steps;
+package org.eastcobbrobotics.ftc.relic.autonomous.Steps;
 
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.Step;
-import org.firstinspires.ftc.teamcode.MorganaBot;
+import org.eastcobbrobotics.ftc.relic.RelicBot;
 
 import static org.eastcobbrobotics.ftc.ecrlib.steprunner.StepRobot.NONE_SEEN;
 
@@ -13,16 +13,17 @@ import static org.eastcobbrobotics.ftc.ecrlib.steprunner.StepRobot.NONE_SEEN;
  * TODO: specify name of flag to set
  */
 
-public class FindRedBlueStep extends Step {
+public class ReadColorSensorStep extends Step {
 
     @Override
     public void run() {
         super.run();
-        int color = ((MorganaBot) robot).getColorSeen();
-        if (color != NONE_SEEN) {
+        int color = ((RelicBot) robot).readColor();
+        if (color != 0) {
             tell("color detected: %d", color);
             setFlag("colorFound", color);
             stop();
         }
     }
 }
+

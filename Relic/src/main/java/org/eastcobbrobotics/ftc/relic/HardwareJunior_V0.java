@@ -1,5 +1,6 @@
 package org.eastcobbrobotics.ftc.relic;
 
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cColorSensor;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -11,13 +12,15 @@ import com.qualcomm.robotcore.hardware.IntegratingGyroscope;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 
 //import com.qualcomm.robotcore.hardware.TouchSensor;
 
 //import com.qualcomm.robotcore.hardware.GyroSensor;
 
 //import org.firstinspires.ftc.robotcontroller.external.samples.SensorMRGyro;
-
+/*
+*/
 /**
  * This is NOT an opmode.
  *
@@ -55,6 +58,9 @@ public class HardwareJunior_V0
     public Servo servoLeftWrist;
     public Servo servoRightWrist;
 
+    //public ModernRoboticsI2cColorSensor ColorSensor;
+    public ColorSensor sensorColor;
+
     /* Local OpMode members. */
     public HardwareMap hwMap  = null;
     private ElapsedTime period  = new ElapsedTime();
@@ -81,6 +87,8 @@ public class HardwareJunior_V0
     public double leftWristRight     =  0.20;
     public double leftWristStore     =  0.00;
 
+
+
     public double topSpeed           =  0.70;  // top speed for drive
     /* Constructor */
     public HardwareJunior_V0() {
@@ -106,9 +114,10 @@ public class HardwareJunior_V0
         servoLeftJewel = hwMap.servo.get("servoLeftJewel");
         servoRightJewel = hwMap.servo.get("servoRightJewel");
 
-        servoLeftWrist = hwMap.servo.get("servoLeftWrist");    // hwMap.servo.get("???")
-        servoRightWrist = hwMap.servo.get("servoRightWrist");   // hwMap.servo.get("???")
+        servoLeftWrist = hwMap.servo.get("servoLeftWrist");
+        servoRightWrist = hwMap.servo.get("servoRightWrist");
 
+        sensorColor = hwMap.colorSensor.get("leftColorSensor");
         // Set all motors to zero power
         motorFL.setPower(0);
         motorFR.setPower(0);
@@ -138,6 +147,7 @@ public class HardwareJunior_V0
         servoRightJewel.setPosition(rightJewelStore);
         servoLeftJewel.setPosition(leftJewelStore);
 
+        sensorColor.enableLed(false);
     }
 
     /***

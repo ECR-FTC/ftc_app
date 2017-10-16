@@ -49,18 +49,20 @@ public class RelicBot extends StepRobot {
     public Servo rightArmWrist;
 
     // Sensors
-    // public ColorSensor colorRight;
-    public ColorSensor colorLeft;
+
+    public ColorSensor colorSensor;
+
+
 
     // List of Servos and their Id's. NOTE THAT THE IDs ARE IN THE
     // ORDER added to servoList below!
     public List<Servo> servoList;
-    public final static int LEFT_GRAB_SERVO = 0;
-    public final static int RIGHT_GRAB_SERVO = 1;
-    public final static int LEFT_ARM_ELBOW_SERVO = 2;
-    public final static int RIGHT_ARM_ELBOW_SERVO = 3;
-    public final static int LEFT_ARM_WRIST_SERVO = 4;
-    public final static int RIGHT_ARM_WRIST_SERVO = 5;
+    public final static int LEFT_GRAB_SERVO           = 0;
+    public final static int RIGHT_GRAB_SERVO          = 1;
+    public final static int LEFT_ARM_ELBOW_SERVO      = 2;
+    public final static int RIGHT_ARM_ELBOW_SERVO     = 3;
+    public final static int LEFT_ARM_WRIST_SERVO      = 4;
+    public final static int RIGHT_ARM_WRIST_SERVO     = 5;
 
     // Constants
     public static final double TICKS_PER_TILE = 1350;   // encoder ticks for one game tile
@@ -78,6 +80,9 @@ public class RelicBot extends StepRobot {
     public static final double LEFT_WRIST_CENTER    =  0.44;
     public static final double LEFT_WRIST_RIGHT     =  0.20;
     public static final double LEFT_WRIST_STORE     =  0.00;
+
+    public int seeRed                =100   ;
+    public int seeBlue               =100   ;
 
     /*
      *   Initialize the robot by getting access to all of its devices through the
@@ -106,13 +111,15 @@ public class RelicBot extends StepRobot {
         leftArmElbow = hwMap.servo.get("servoLeftJewel");
         rightArmElbow = hwMap.servo.get("servoRightJewel");
 
-        // TODO: add jewel wrist servos
+
         leftArmWrist = hwMap.servo.get("servoLeftWrist");    // hwMap.servo.get("???")
         rightArmWrist = hwMap.servo.get("servoRightWrist");   // hwMap.servo.get("???")
 
+        colorSensor = hwMap.colorSensor.get("sensorColorDistance");
+
         // Make a list of the Servos, so we can refer to them by number.
         // Make sure they are in the right order! SEE COMMENT ABOVE!
-        // TODO: add wrist servos by uncommenting line below
+
         servoList = asList(leftGrab, rightGrab, leftArmElbow, rightArmElbow, leftArmWrist, rightArmWrist);
 
         // Reset all drive motors
@@ -127,6 +134,7 @@ public class RelicBot extends StepRobot {
 //        while (gyro.isCalibrating()) {
 //            Thread.sleep(50);
 //        }
+        colorSensor.enableLed(true);
     }
 
     /*
@@ -155,6 +163,22 @@ public class RelicBot extends StepRobot {
     /*
      *   Stop driving.
      */
+    //@Override
+    public int readColor()
+    {
+        int color = 0; // -1 is blue, 0 is neither(or both), 1 is red
+        if(colorSensor.blue() >= seeBlue)
+        {
+            color = color - 1;
+        }
+        if(colorSensor.red() >= seeRed)
+        {
+            color = color + 1;
+        }
+        return color;
+    }
+
+
     @Override
     public void driveStop() {
         driveStraight(0.0);

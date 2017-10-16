@@ -78,10 +78,10 @@ public class HardwareJunior_V0
     public double rightJewelStore    =  0.25;  // rightjewel store value
     public double rightJewelDown     =  1.00;  // rightjewel deployed value
 
-    public double rightWristLeft     =  0.25;
-    public double rightWristCenter   =  0.50;
-    public double rightWristRight    =  0.75;
-    public double rightWristStore    =  1.00;
+    public double rightWristLeft     =  0.25;  // TODO DO THESE AD SEND TO AUTONOMOUS
+    public double rightWristCenter   =  0.50;  // TODO DO THESE AD SEND TO AUTONOMOUS
+    public double rightWristRight    =  0.75;  // TODO DO THESE AD SEND TO AUTONOMOUS
+    public double rightWristStore    =  1.00;  // TODO DO THESE AD SEND TO AUTONOMOUS
     public double leftWristLeft      =  0.65;
     public double leftWristCenter    =  0.44;
     public double leftWristRight     =  0.20;

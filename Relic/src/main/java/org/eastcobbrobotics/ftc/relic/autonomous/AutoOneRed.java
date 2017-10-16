@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.SequenceStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.ServoStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.Step;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.SwitchStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.UntilAllDoneStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.WaitStep;
 import org.eastcobbrobotics.ftc.relic.RelicBot;
@@ -29,11 +30,16 @@ public class AutoOneRed extends StepAutoCore {
         Step mainStep = new SequenceStep(
                 new UntilAllDoneStep(
                         new WaitStep(2000),
-                        new ServoStep(4, RelicBot.LEFT_WRIST_CENTER),
-                        new ServoStep(2, RelicBot.LEFT_JEWEL_DOWN)
+                        new ServoStep(5, RelicBot.RIGHT_WRIST_CENTER),
+                        new ServoStep(3, RelicBot.RIGHT_JEWEL_DOWN)
                 ),
-                new ReadColorSensorStep()//,
-                //new
+                new ReadColorSensorStep(),
+                new SwitchStep("colorFound",
+                        new ServoStep(5, RelicBot.RIGHT_WRIST_LEFT),
+                        null,
+                        new ServoStep(5, RelicBot.RIGHT_WRIST_RIGHT)
+                        )
+
         );
         runStepAutonomous("HelloAuto", robot, mainStep);
 

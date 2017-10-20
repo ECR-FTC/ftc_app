@@ -81,8 +81,7 @@ public class RelicBot extends StepRobot {
     public static final double LEFT_WRIST_RIGHT     =  0.20;
     public static final double LEFT_WRIST_STORE     =  0.00;
 
-    public int seeRed                =100   ;
-    public int seeBlue               =100   ;
+    public int colorDifference = 20;
 
     /*
      *   Initialize the robot by getting access to all of its devices through the
@@ -166,12 +165,16 @@ public class RelicBot extends StepRobot {
     //@Override
     public int readColor()
     {
-        int color = 0; // -1 is blue, 0 is neither(or both), 1 is red
-        if(colorSensor.blue() >= seeBlue)
+        int color = 1; // 0 is blue, 1 is neither(or both), 2 is red
+        float blue = colorSensor.blue();
+        float red = colorSensor.red();
+
+        if(blue - red > colorDifference)
         {
             color = color - 1;
         }
-        if(colorSensor.red() >= seeRed)
+        
+        if(red - blue > colorDifference)
         {
             color = color + 1;
         }

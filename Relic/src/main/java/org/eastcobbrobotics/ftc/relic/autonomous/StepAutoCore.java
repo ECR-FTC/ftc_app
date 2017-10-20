@@ -22,6 +22,9 @@ import org.eastcobbrobotics.ftc.relic.RelicBot;
 
 import java.util.List;
 
+import static org.eastcobbrobotics.ftc.relic.RelicBot.LEFT_ARM_ELBOW_SERVO;
+import static org.eastcobbrobotics.ftc.relic.RelicBot.LEFT_ARM_WRIST_SERVO;
+
 /*
  *  StepAutoCore for ECR FTC 11096 Relic Recovery 2017-2018 ('Junior')
  *
@@ -48,6 +51,8 @@ abstract public class StepAutoCore extends LinearOpMode {
 
     // Common steps
     protected Step pause;
+    protected Step deployLeftArmStep;
+    protected Step retractLeftArmStep;
 
     public StepAutoCore() {
 
@@ -57,8 +62,22 @@ abstract public class StepAutoCore extends LinearOpMode {
         pause = new WaitStep(2000);
 
         // TODO: define other common steps that are used in multiple
-        // autonomous routines. See StepAutoCore.java in Relic project
+        // autonomous routines. See StepAutoCore.java in Velocity project
         // for examples.
+        deployLeftArmStep = new UntilAllDoneStep(
+                new WaitStep(2000),
+                new SequenceStep(
+                        new WaitStep(100),
+                        new ServoStep(LEFT_ARM_WRIST_SERVO, RelicBot.LEFT_WRIST_CENTER)
+                ),
+                new ServoStep(LEFT_ARM_ELBOW_SERVO, RelicBot.LEFT_JEWEL_DOWN)
+        );
+        retractLeftArmStep = new UntilAllDoneStep(
+                new WaitStep(2000),
+                new ServoStep(LEFT_ARM_WRIST_SERVO, RelicBot.LEFT_WRIST_STORE),
+                new ServoStep(LEFT_ARM_ELBOW_SERVO, RelicBot.LEFT_JEWEL_STORE)
+        );
+
 
     }
 
@@ -118,13 +137,9 @@ abstract public class StepAutoCore extends LinearOpMode {
         return new WaitStep(duration);
     }
 
-    protected Step JewelKnockBlueTeam = new SequenceStep(
-            new UntilAllDoneStep(
-                    new ServoStep(4, RelicBot.LEFT_WRIST_CENTER),
-                    new ServoStep(2, RelicBot.LEFT_JEWEL_DOWN)
-            )
 
-    );
+
+
     /*
      * Show a telemetry message
      */

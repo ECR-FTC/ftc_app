@@ -15,16 +15,16 @@ import static org.eastcobbrobotics.ftc.relic.RelicBot.LEFT_ARM_ELBOW_SERVO;
 import static org.eastcobbrobotics.ftc.relic.RelicBot.LEFT_ARM_WRIST_SERVO;
 
 /**
- * ECR FTC 11096 - 2016 - 2017 Velocity Vortex
+ * ECR FTC 11096 - 2017 - 2018 Relic Recovery
  *
  * HelloAuto is a minimal autonomous routine, just to make sure we
  * can drive forward under StepRunner control.
  */
 
-@Autonomous(name = "REDONE", group = "Testing")
+@Autonomous(name = "AutoOneBlue", group = "Competition")
 //@Disabled
 
-public class AutoOneRed extends StepAutoCore {
+public class AutoOneBlue extends StepAutoCore {
 
     @Override
     public void runOpMode() throws InterruptedException {

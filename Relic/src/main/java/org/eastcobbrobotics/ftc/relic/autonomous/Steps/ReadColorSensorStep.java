@@ -19,7 +19,7 @@ public class ReadColorSensorStep extends Step {
     public void run() {
         super.run();
         int color = ((RelicBot) robot).readColor();
-        if (color != 0) {
+        if (color != 1) {
             tell("color detected: %d", color);
             setFlag("colorFound", color);
             stop();

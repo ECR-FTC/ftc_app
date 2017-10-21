@@ -17,8 +17,8 @@ import static org.eastcobbrobotics.ftc.relic.RelicBot.LEFT_ARM_WRIST_SERVO;
 /**
  * ECR FTC 11096 - 2017 - 2018 Relic Recovery
  *
- * HelloAuto is a minimal autonomous routine, just to make sure we
- * can drive forward under StepRunner control.
+ * AutoOneBlue is a minimal autonomous routine, which uses
+ * StepRunner to perform several competition processes.
  */
 
 @Autonomous(name = "AutoOneBlue", group = "Competition")
@@ -32,24 +32,11 @@ public class AutoOneBlue extends StepAutoCore {
         RelicBot robot = new RelicBot();
         Step mainStep = new SequenceStep(
                 deployLeftArmStep,
-                new UntilAllDoneStep(
-                        new ReadColorSensorStep(),
-                        new WaitStep(1000)
-                        ),
-                new UntilAllDoneStep(
-                        new WaitStep(1000),
-                        new SwitchStep("colorFound",
-                                new ServoStep(LEFT_ARM_WRIST_SERVO, RelicBot.LEFT_WRIST_LEFT),
-                                null,
-                                new ServoStep(LEFT_ARM_WRIST_SERVO, RelicBot.LEFT_WRIST_RIGHT)
-                        )
-                ),
-
-                retractLeftArmStep
-
+                flickLeftBallStep,
+                retractLeftArmStep,
+                grabGlyph,
+                releaseGlyph
         );
-        runStepAutonomous("HelloAuto", robot, mainStep);
-
+        runStepAutonomous("AutoOneBlue", robot, mainStep);
     }
-
 }

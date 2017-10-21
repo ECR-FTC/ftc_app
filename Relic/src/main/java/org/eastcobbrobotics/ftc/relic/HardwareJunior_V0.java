@@ -58,8 +58,6 @@ public class HardwareJunior_V0
     public Servo servoLeftWrist;
     public Servo servoRightWrist;
 
-    //public ModernRoboticsI2cColorSensor ColorSensor;
-    public ColorSensor sensorColor;
 
     /* Local OpMode members. */
     public HardwareMap hwMap  = null;
@@ -75,12 +73,12 @@ public class HardwareJunior_V0
 
     public double leftJewelStore     =  0.25;  // leftjewel store value
     public double leftJewelDown      =  0.91;  // leftjewel deployed value
-    public double rightJewelStore    =  0.25;  // rightjewel store value
-    public double rightJewelDown     =  1.00;  // rightjewel deployed value
+    public double rightJewelStore    =  0.84;  // rightjewel store value
+    public double rightJewelDown     =  0.11;  // rightjewel deployed value
 
-    public double rightWristLeft     =  0.25;  // TODO DO THESE AD SEND TO AUTONOMOUS
-    public double rightWristCenter   =  0.50;  // TODO DO THESE AD SEND TO AUTONOMOUS
-    public double rightWristRight    =  0.75;  // TODO DO THESE AD SEND TO AUTONOMOUS
+    public double rightWristLeft     =  0.75;  // TODO DO THESE AD SEND TO AUTONOMOUS
+    public double rightWristCenter   =  0.49;  // TODO DO THESE AD SEND TO AUTONOMOUS
+    public double rightWristRight    =  0.26;  // TODO DO THESE AD SEND TO AUTONOMOUS
     public double rightWristStore    =  1.00;  // TODO DO THESE AD SEND TO AUTONOMOUS
     public double leftWristLeft      =  0.65;
     public double leftWristCenter    =  0.44;
@@ -117,7 +115,6 @@ public class HardwareJunior_V0
         servoLeftWrist = hwMap.servo.get("servoLeftWrist");
         servoRightWrist = hwMap.servo.get("servoRightWrist");
 
-        sensorColor = hwMap.colorSensor.get("leftColorSensor");
         // Set all motors to zero power
         motorFL.setPower(0);
         motorFR.setPower(0);
@@ -147,7 +144,6 @@ public class HardwareJunior_V0
         servoRightJewel.setPosition(rightJewelStore);
         servoLeftJewel.setPosition(leftJewelStore);
 
-        sensorColor.enableLed(false);
     }
 
     /***

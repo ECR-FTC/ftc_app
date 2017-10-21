@@ -13,17 +13,23 @@ import com.qualcomm.robotcore.hardware.Blinker;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.SequenceStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.Step;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.StepRobot;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.SwitchStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.TelMessage;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.WaitStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.UntilAllDoneStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.UntilOneDoneStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.ServoStep;
 import org.eastcobbrobotics.ftc.relic.RelicBot;
+import org.eastcobbrobotics.ftc.relic.autonomous.Steps.ReadColorSensorStep;
 
 import java.util.List;
 
 import static org.eastcobbrobotics.ftc.relic.RelicBot.LEFT_ARM_ELBOW_SERVO;
 import static org.eastcobbrobotics.ftc.relic.RelicBot.LEFT_ARM_WRIST_SERVO;
+import static org.eastcobbrobotics.ftc.relic.RelicBot.LEFT_GRAB_SERVO;
+import static org.eastcobbrobotics.ftc.relic.RelicBot.RIGHT_ARM_ELBOW_SERVO;
+import static org.eastcobbrobotics.ftc.relic.RelicBot.RIGHT_ARM_WRIST_SERVO;
+import static org.eastcobbrobotics.ftc.relic.RelicBot.RIGHT_GRAB_SERVO;
 
 /*
  *  StepAutoCore for ECR FTC 11096 Relic Recovery 2017-2018 ('Junior')
@@ -51,8 +57,17 @@ abstract public class StepAutoCore extends LinearOpMode {
 
     // Common steps
     protected Step pause;
+
     protected Step deployLeftArmStep;
     protected Step retractLeftArmStep;
+    protected Step flickLeftBallStep;
+
+    protected Step flickRightBallStep;
+    protected Step deployRightArmStep;
+    protected Step retractRightArmStep;
+
+    protected Step grabGlyph;
+    protected Step releaseGlyph;
 
     public StepAutoCore() {
 
@@ -64,6 +79,8 @@ abstract public class StepAutoCore extends LinearOpMode {
         // TODO: define other common steps that are used in multiple
         // autonomous routines. See StepAutoCore.java in Velocity project
         // for examples.
+
+        //Left side code
         deployLeftArmStep = new UntilAllDoneStep(
                 new WaitStep(2000),
                 new SequenceStep(
@@ -77,8 +94,65 @@ abstract public class StepAutoCore extends LinearOpMode {
                 new ServoStep(LEFT_ARM_WRIST_SERVO, RelicBot.LEFT_WRIST_STORE),
                 new ServoStep(LEFT_ARM_ELBOW_SERVO, RelicBot.LEFT_JEWEL_STORE)
         );
+        flickLeftBallStep = new SequenceStep(
+                new UntilAllDoneStep(
+                        new ReadColorSensorStep(),
+                        new WaitStep(1000)
+                ),
+                new UntilAllDoneStep(
+                        new WaitStep(1000),
+                        new SwitchStep("colorFound",
+                                new ServoStep(LEFT_ARM_WRIST_SERVO, RelicBot.LEFT_WRIST_LEFT),
+                                null,
+                                new ServoStep(LEFT_ARM_WRIST_SERVO, RelicBot.LEFT_WRIST_RIGHT)
+                        )
+                )
+        );
 
+        //Right side code
+        deployRightArmStep = new UntilAllDoneStep(
+                new WaitStep(2000),
+                new SequenceStep(
+                        new WaitStep(200),
+                        new ServoStep(RIGHT_ARM_WRIST_SERVO, RelicBot.RIGHT_WRIST_CENTER)
+                ),
+                new ServoStep(RIGHT_ARM_ELBOW_SERVO, RelicBot.RIGHT_JEWEL_DOWN)
+        );
+        retractRightArmStep = new UntilAllDoneStep(
+                new WaitStep(2000),
+                new ServoStep(RIGHT_ARM_WRIST_SERVO, RelicBot.RIGHT_WRIST_STORE),
+                new ServoStep(RIGHT_ARM_ELBOW_SERVO, RelicBot.RIGHT_JEWEL_STORE)
+        );
+        flickRightBallStep = new SequenceStep(
+                new UntilAllDoneStep(
+                        new ReadColorSensorStep(),
+                        new WaitStep(1000)
+                ),
+                new UntilAllDoneStep(
+                        new WaitStep(1000),
+                        new SwitchStep("colorFound",
+                                new ServoStep(RIGHT_ARM_WRIST_SERVO, RelicBot.RIGHT_WRIST_LEFT),
+                                null,
+                                new ServoStep(RIGHT_ARM_WRIST_SERVO, RelicBot.RIGHT_WRIST_RIGHT)
+                        )
+                )
+        );
 
+        grabGlyph = new SequenceStep(
+                new UntilAllDoneStep(
+                        new WaitStep(1000),
+                        new ServoStep(LEFT_GRAB_SERVO, 0.60),
+                        new ServoStep(RIGHT_GRAB_SERVO, 0.40)
+                )
+        );
+
+        releaseGlyph = new SequenceStep(
+            new UntilAllDoneStep(
+                    new WaitStep(1000),
+                    new ServoStep(LEFT_GRAB_SERVO, 0.90),
+                    new ServoStep(RIGHT_GRAB_SERVO, 0.00)
+            )
+        );
     }
 
     /*

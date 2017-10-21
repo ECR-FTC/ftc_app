@@ -20,7 +20,9 @@ import org.eastcobbrobotics.ftc.ecrlib.steprunner.UntilAllDoneStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.UntilOneDoneStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.ServoStep;
 import org.eastcobbrobotics.ftc.relic.RelicBot;
+import org.eastcobbrobotics.ftc.relic.autonomous.Steps.GlyphterStep;
 import org.eastcobbrobotics.ftc.relic.autonomous.Steps.ReadColorSensorStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.DriveStep;
 
 import java.util.List;
 
@@ -143,15 +145,23 @@ abstract public class StepAutoCore extends LinearOpMode {
                         new WaitStep(1000),
                         new ServoStep(LEFT_GRAB_SERVO, 0.60),
                         new ServoStep(RIGHT_GRAB_SERVO, 0.40)
+                ),
+                new UntilOneDoneStep(
+                        new WaitStep(500),
+                        new GlyphterStep(-1)
                 )
         );
 
         releaseGlyph = new SequenceStep(
-            new UntilAllDoneStep(
-                    new WaitStep(1000),
-                    new ServoStep(LEFT_GRAB_SERVO, 0.90),
-                    new ServoStep(RIGHT_GRAB_SERVO, 0.00)
-            )
+                new UntilOneDoneStep(
+                new WaitStep(200),
+                new GlyphterStep(1)
+        ),
+                new UntilAllDoneStep(
+                        new WaitStep(500),
+                        new ServoStep(LEFT_GRAB_SERVO, 0.90),
+                        new ServoStep(RIGHT_GRAB_SERVO, 0.00)
+                )
         );
     }
 

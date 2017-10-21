@@ -67,13 +67,15 @@ public class RelicBot extends StepRobot {
     // Constants
     public static final double TICKS_PER_TILE = 1350;   // encoder ticks for one game tile
 
+    public static final double GLYPHTER_POWER       =  0.50;  // glyphter power
+
     public static final double LEFT_JEWEL_STORE     =  0.25;  // leftjewel store value
     public static final double LEFT_JEWEL_DOWN      =  0.91;  // leftjewel deployed value
     public static final double RIGHT_JEWEL_STORE    =  0.84;  // rightjewel store value
     public static final double RIGHT_JEWEL_DOWN     =  0.11;  // rightjewel deployed value
 
     public static final double RIGHT_WRIST_LEFT     =  0.75;
-    public static final double RIGHT_WRIST_CENTER   =  0.49;
+    public static final double RIGHT_WRIST_CENTER   =  0.52;
     public static final double RIGHT_WRIST_RIGHT    =  0.26;
     public static final double RIGHT_WRIST_STORE    =  1.00;
 
@@ -210,7 +212,10 @@ public class RelicBot extends StepRobot {
             motor.setPower(power);
         }
     }
-
+    public void driveGlyphter(int direction){
+        motorGlyphter.setPower(direction*GLYPHTER_POWER);
+    }
+    public void timeTurnLeft() {motorFrontRight.setPower(0.50);}
     /*
      * Junior doesn't drive sideways. Just stop.
      */

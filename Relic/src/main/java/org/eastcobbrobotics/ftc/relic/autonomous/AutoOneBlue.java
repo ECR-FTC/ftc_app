@@ -2,14 +2,18 @@ package org.eastcobbrobotics.ftc.relic.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.DriveStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.SequenceStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.ServoStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.Step;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.SwitchStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.UntilAllDoneStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.UntilOneDoneStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.WaitStep;
 import org.eastcobbrobotics.ftc.relic.RelicBot;
 import org.eastcobbrobotics.ftc.relic.autonomous.Steps.ReadColorSensorStep;
+import org.eastcobbrobotics.ftc.relic.autonomous.Steps.TurnLeftStep;
+import org.eastcobbrobotics.ftc.relic.autonomous.Steps.TurnRightStep;
 
 import static org.eastcobbrobotics.ftc.relic.RelicBot.LEFT_ARM_ELBOW_SERVO;
 import static org.eastcobbrobotics.ftc.relic.RelicBot.LEFT_ARM_WRIST_SERVO;
@@ -35,7 +39,26 @@ public class AutoOneBlue extends StepAutoCore {
                 flickLeftBallStep,
                 retractLeftArmStep,
                 grabGlyph,
-                releaseGlyph
+                new SequenceStep(
+                        new UntilOneDoneStep(
+                                new DriveStep(0.40),
+                                new WaitStep(500)
+                        ),
+                        new UntilOneDoneStep(
+                                new WaitStep(1500),
+                                new TurnRightStep()
+                        ),
+                        new UntilOneDoneStep(
+                                new DriveStep(0.40),
+                                new WaitStep(600)
+                        ),
+                        releaseGlyph,
+                        new UntilOneDoneStep(
+                                new DriveStep(-0.40),
+                                new WaitStep(100)
+                        )
+                )
+
         );
         runStepAutonomous("AutoOneBlue", robot, mainStep);
     }

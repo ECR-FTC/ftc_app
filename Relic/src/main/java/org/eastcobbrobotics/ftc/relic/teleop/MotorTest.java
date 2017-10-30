@@ -3,6 +3,7 @@
 
 package org.eastcobbrobotics.ftc.relic.teleop;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -12,7 +13,7 @@ import org.eastcobbrobotics.ftc.relic.HardwareJunior_V0;
  */
 
 @TeleOp(name = "MotorTest", group = "Junior")
-//@Disabled
+@Disabled
 
 /**
  * Created by ECR FTC on 9/17/2017.

@@ -1,6 +1,7 @@
 package org.eastcobbrobotics.ftc.relic.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.DriveStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.SequenceStep;
@@ -19,7 +20,7 @@ import org.eastcobbrobotics.ftc.relic.RelicBot;
  */
 
 @Autonomous(name = "HelloAuto", group = "Testing")
-//@Disabled
+@Disabled
 
 public class HelloAuto extends StepAutoCore {
 

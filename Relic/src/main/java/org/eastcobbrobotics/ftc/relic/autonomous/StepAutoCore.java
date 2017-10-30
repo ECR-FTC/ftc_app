@@ -97,18 +97,20 @@ abstract public class StepAutoCore extends LinearOpMode {
                 new ServoStep(LEFT_ARM_ELBOW_SERVO, RelicBot.LEFT_JEWEL_STORE)
         );
         flickLeftBallStep = new SequenceStep(
-                new UntilAllDoneStep(
-                        new ReadColorSensorStep(),
-                        new WaitStep(1000)
-                ),
-                new UntilAllDoneStep(
-                        new WaitStep(1000),
-                        new SwitchStep("colorFound",
-                                new ServoStep(LEFT_ARM_WRIST_SERVO, RelicBot.LEFT_WRIST_LEFT),
-                                null,
-                                new ServoStep(LEFT_ARM_WRIST_SERVO, RelicBot.LEFT_WRIST_RIGHT)
-                        )
-                )
+                new UntilOneDoneStep(
+                        new WaitStep(3000),
+                        new UntilAllDoneStep(
+                                new ReadColorSensorStep(),
+                                new WaitStep(1000)
+                        ),
+                        new UntilAllDoneStep(
+                                new WaitStep(1000),
+                                new SwitchStep("colorFound",
+                                        new ServoStep(LEFT_ARM_WRIST_SERVO, RelicBot.LEFT_WRIST_LEFT),
+                                        new WaitStep(500),
+                                        new ServoStep(LEFT_ARM_WRIST_SERVO, RelicBot.LEFT_WRIST_RIGHT)
+                                )
+                        ))
         );
 
         //Right side code
@@ -126,18 +128,20 @@ abstract public class StepAutoCore extends LinearOpMode {
                 new ServoStep(RIGHT_ARM_ELBOW_SERVO, RelicBot.RIGHT_JEWEL_STORE)
         );
         flickRightBallStep = new SequenceStep(
-                new UntilAllDoneStep(
-                        new ReadColorSensorStep(),
-                        new WaitStep(1000)
-                ),
-                new UntilAllDoneStep(
-                        new WaitStep(1000),
-                        new SwitchStep("colorFound",
-                                new ServoStep(RIGHT_ARM_WRIST_SERVO, RelicBot.RIGHT_WRIST_LEFT),
-                                null,
-                                new ServoStep(RIGHT_ARM_WRIST_SERVO, RelicBot.RIGHT_WRIST_RIGHT)
-                        )
-                )
+                new UntilOneDoneStep(
+                        new WaitStep(3000),
+                        new UntilAllDoneStep(
+                                new ReadColorSensorStep(),
+                                new WaitStep(1000)
+                        ),
+                        new UntilAllDoneStep(
+                                new WaitStep(1000),
+                                new SwitchStep("colorFound",
+                                        new ServoStep(RIGHT_ARM_WRIST_SERVO, RelicBot.RIGHT_WRIST_LEFT),
+                                        new WaitStep(500),
+                                        new ServoStep(RIGHT_ARM_WRIST_SERVO, RelicBot.RIGHT_WRIST_RIGHT)
+                                )
+                        ))
         );
 
         grabGlyph = new SequenceStep(
@@ -154,9 +158,9 @@ abstract public class StepAutoCore extends LinearOpMode {
 
         releaseGlyph = new SequenceStep(
                 new UntilOneDoneStep(
-                new WaitStep(200),
-                new GlyphterStep(1)
-        ),
+                        new WaitStep(200),
+                        new GlyphterStep(1)
+                ),
                 new UntilAllDoneStep(
                         new WaitStep(500),
                         new ServoStep(LEFT_GRAB_SERVO, 0.90),

@@ -76,14 +76,15 @@ public class HardwareJunior_V0
     public double rightJewelStore    =  0.84;  // rightjewel store value
     public double rightJewelDown     =  0.11;  // rightjewel deployed value
 
-    public double rightWristLeft     =  0.75;  // TODO DO THESE AD SEND TO AUTONOMOUS
-    public double rightWristCenter   =  0.49;  // TODO DO THESE AD SEND TO AUTONOMOUS
-    public double rightWristRight    =  0.26;  // TODO DO THESE AD SEND TO AUTONOMOUS
-    public double rightWristStore    =  1.00;  // TODO DO THESE AD SEND TO AUTONOMOUS
-    public double leftWristLeft      =  0.65;
-    public double leftWristCenter    =  0.44;
-    public double leftWristRight     =  0.20;
-    public double leftWristStore     =  0.00;
+    public double rightWristLeft     =  0.75;  // right wrist setting to knock off the left ball
+    public double rightWristCenter   =  0.49;  // right wrist deploy value, it scans here
+    public double rightWristRight    =  0.26;  // right wrist setting to knock off the right ball
+    public double rightWristStore    =  1.00;  // right wrist store value, inits here
+
+    public double leftWristLeft      =  0.65;  // left wrist setting to knock off the left ball
+    public double leftWristCenter    =  0.44;  // left wrist deploy value, it scans here
+    public double leftWristRight     =  0.20;  // left wrist setting to knock off the right ball
+    public double leftWristStore     =  0.00;  // left wrist store value, inits here
 
 
 
@@ -97,23 +98,26 @@ public class HardwareJunior_V0
         // save reference to HW Map
         hwMap = ahwMap;
 
+        //motor hardware map
         motorFR = hwMap.dcMotor.get("motorFR");
         motorFL = hwMap.dcMotor.get("motorFL");
         motorBR = hwMap.dcMotor.get("motorBR");
         motorBL = hwMap.dcMotor.get("motorBL");
-        motorGlyphter = hwMap.dcMotor.get("motorGlyphter");
 
         motorFL.setDirection(DcMotor.Direction.REVERSE);
         motorBL.setDirection(DcMotor.Direction.REVERSE);
 
+        motorGlyphter = hwMap.dcMotor.get("motorGlyphter");
+
+        //servo hardware map
         servoLeftGrab = hwMap.servo.get("servoLeftGrab");
         servoRightGrab = hwMap.servo.get("servoRightGrab");
 
         servoLeftJewel = hwMap.servo.get("servoLeftJewel");
         servoRightJewel = hwMap.servo.get("servoRightJewel");
-
         servoLeftWrist = hwMap.servo.get("servoLeftWrist");
         servoRightWrist = hwMap.servo.get("servoRightWrist");
+
 
         // Set all motors to zero power
         motorFL.setPower(0);
@@ -121,6 +125,7 @@ public class HardwareJunior_V0
         motorBR.setPower(0);
         motorBL.setPower(0);
         motorGlyphter.setPower(0);
+
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
         motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -138,12 +143,12 @@ public class HardwareJunior_V0
             Thread.sleep(50);
         }
 */
+
         // set the button pushing servos to the store positions
         servoRightGrab.setPosition(rightRelease);
         servoLeftGrab.setPosition(leftRelease);
         servoRightJewel.setPosition(rightJewelStore);
         servoLeftJewel.setPosition(leftJewelStore);
-
     }
 
     /***

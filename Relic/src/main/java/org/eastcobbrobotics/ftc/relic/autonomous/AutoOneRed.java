@@ -36,10 +36,10 @@ public class AutoOneRed extends StepAutoCore {
                 new SequenceStep(
                         new UntilOneDoneStep(
                                 new DriveStep(0.40),
-                                new WaitStep(600)
+                                new WaitStep(500)
                         ),
                         new UntilOneDoneStep(
-                                new WaitStep(1000),
+                                new WaitStep(1500),
                                 new TurnLeftStep()
                         ),
                         new UntilOneDoneStep(

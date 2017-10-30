@@ -26,6 +26,7 @@ public class JuniorTeleop extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        //variables that set positions/speeds of motors and servos
         double left;
         double right;
         double leftGlyphterArmPos = robot.leftRelease;
@@ -33,6 +34,7 @@ public class JuniorTeleop extends LinearOpMode {
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
+         * Init also inits servos to home value
          */
         try {
             robot.init(hardwareMap);
@@ -85,7 +87,7 @@ public class JuniorTeleop extends LinearOpMode {
                 rightGlyphterArmPos = rightGlyphterArmPos - robot.glyphterChangeSpeed;
             }
             //make sure the servos don't go too far
-            leftGlyphterArmPos  = Range.clip(leftGlyphterArmPos, robot.leftGrab, robot.leftRelease);
+            leftGlyphterArmPos = Range.clip(leftGlyphterArmPos, robot.leftGrab, robot.leftRelease);
             rightGlyphterArmPos = Range.clip(rightGlyphterArmPos, robot.rightRelease, robot.rightGrab);
 
             //set the position

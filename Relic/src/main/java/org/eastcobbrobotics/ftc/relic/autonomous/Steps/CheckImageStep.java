@@ -38,7 +38,7 @@ public class CheckImageStep extends Step {
     public void run() {
         super.run();
         RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
-        tell("%v Image Found", vuMark.ordinal());
+        tell("%b Image Found", vuMark.ordinal());
         setFlag("imageFound", vuMark.ordinal());
     }
 }

@@ -1,4 +1,4 @@
-package org.eastcobbrobotics.ftc.relic.autonomous;
+package org.eastcobbrobotics.ftc.relic.autonomous.tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -11,6 +11,7 @@ import org.eastcobbrobotics.ftc.ecrlib.steprunner.UntilAllDoneStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.UntilOneDoneStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.WaitStep;
 import org.eastcobbrobotics.ftc.relic.RelicBot;
+import org.eastcobbrobotics.ftc.relic.autonomous.StepAutoCore;
 
 /**
  * ECR FTC 11096 - 2016 - 2017 Velocity Vortex

@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.RamperDriveStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.SequenceStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.Step;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.WaitStep;
 import org.eastcobbrobotics.ftc.relic.RelicBot;
 import org.eastcobbrobotics.ftc.relic.autonomous.StepAutoCore;
 import org.eastcobbrobotics.ftc.relic.autonomous.Steps.CheckImageStep;
@@ -21,7 +22,8 @@ public class ImageTest extends StepAutoCore {
 
         RelicBot robot = new RelicBot();
         Step mainStep = new SequenceStep(
-                new CheckImageStep()
+                new CheckImageStep(),
+                new WaitStep(10000)
         );
         runStepAutonomous("ImageTest", robot, mainStep);
     }

@@ -10,26 +10,26 @@ package org.firstinspires.ftc.teamcode.autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MorganaBot;
-import org.firstinspires.ftc.teamcode.steprunner.CountLoopStep;
-import org.firstinspires.ftc.teamcode.steprunner.DriveStep;
-import org.firstinspires.ftc.teamcode.steprunner.FindRedBlueOnBlueStep;
-import org.firstinspires.ftc.teamcode.steprunner.FindRedBlueStep;
-import org.firstinspires.ftc.teamcode.steprunner.FindWhiteLineStep;
-import org.firstinspires.ftc.teamcode.steprunner.RamperDriveSidewaysStep;
-import org.firstinspires.ftc.teamcode.steprunner.RamperDriveStep;
-import org.firstinspires.ftc.teamcode.steprunner.RunShooterStep;
-import org.firstinspires.ftc.teamcode.steprunner.SequenceStep;
-import org.firstinspires.ftc.teamcode.steprunner.ServoStep;
-import org.firstinspires.ftc.teamcode.steprunner.SetFlagStep;
-import org.firstinspires.ftc.teamcode.steprunner.Step;
-import org.firstinspires.ftc.teamcode.steprunner.StepRobot;
-import org.firstinspires.ftc.teamcode.steprunner.StopShooterStep;
-import org.firstinspires.ftc.teamcode.steprunner.SwitchStep;
-import org.firstinspires.ftc.teamcode.steprunner.TelMessage;
-import org.firstinspires.ftc.teamcode.steprunner.TurnStep;
-import org.firstinspires.ftc.teamcode.steprunner.UntilOneDoneStep;
-import org.firstinspires.ftc.teamcode.steprunner.WaitForFlagStep;
-import org.firstinspires.ftc.teamcode.steprunner.WaitStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.CountLoopStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.DriveStep;
+import org.firstinspires.ftc.teamcode.autonomous.steps.FindRedBlueOnBlueStep;
+import org.firstinspires.ftc.teamcode.autonomous.steps.FindRedBlueStep;
+import org.firstinspires.ftc.teamcode.autonomous.steps.FindWhiteLineStep;
+import org.firstinspires.ftc.teamcode.autonomous.steps.RamperDriveSidewaysStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.RamperDriveStep;
+import org.firstinspires.ftc.teamcode.autonomous.steps.RunShooterStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.SequenceStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.ServoStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.SetFlagStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.Step;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.StepRobot;
+import org.firstinspires.ftc.teamcode.autonomous.steps.StopShooterStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.SwitchStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.TelMessage;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.TurnStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.UntilOneDoneStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.WaitForFlagStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.WaitStep;
 
 import java.util.List;
 
@@ -248,11 +248,11 @@ abstract public class StepAutoCore extends LinearOpMode {
         }
 
         // Show telemetry and wait for Start button to be pressed
-        showMessage("Waiting for start");
+        showMessage(autoName + ": waiting for start");
         waitForStart();
 
         // Start our main step
-        showMessage("Starting main step");
+        showMessage(autoName + ": starting main step");
         mainStep.start(robot);
 
         // Run until we're done
@@ -274,7 +274,7 @@ abstract public class StepAutoCore extends LinearOpMode {
         }
 
         // Stop the main step
-        showMessage("Stopping main step");
+        showMessage(autoName + ": stopping main step");
         mainStep.stop();
     }
 

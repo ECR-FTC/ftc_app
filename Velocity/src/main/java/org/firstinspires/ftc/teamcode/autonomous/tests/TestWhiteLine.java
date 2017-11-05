@@ -4,13 +4,13 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.MorganaBot;
 import org.firstinspires.ftc.teamcode.autonomous.StepAutoCore;
-import org.firstinspires.ftc.teamcode.steprunner.CountLoopStep;
-import org.firstinspires.ftc.teamcode.steprunner.FindWhiteLineStep;
-import org.firstinspires.ftc.teamcode.steprunner.RamperDriveStep;
-import org.firstinspires.ftc.teamcode.steprunner.SequenceStep;
-import org.firstinspires.ftc.teamcode.steprunner.Step;
-import org.firstinspires.ftc.teamcode.steprunner.UntilOneDoneStep;
-import org.firstinspires.ftc.teamcode.steprunner.WaitStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.CountLoopStep;
+import org.firstinspires.ftc.teamcode.autonomous.steps.FindWhiteLineStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.RamperDriveStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.SequenceStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.Step;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.UntilOneDoneStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.WaitStep;
 
 /**
  * ECR FTC 11096 - 2016 - 2017 Velocity Vortex - White line test

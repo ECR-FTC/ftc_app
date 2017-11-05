@@ -3,6 +3,7 @@ package org.eastcobbrobotics.ftc.relic.autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.DriveStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.RamperDriveStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.SequenceStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.Step;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.TurnStep;
@@ -35,21 +36,21 @@ public class AutoOneRed extends StepAutoCore {
                 grabGlyph,
                 new SequenceStep(
                         new UntilOneDoneStep(
-                                new DriveStep(0.40),
-                                new WaitStep(500)
+                                new RamperDriveStep(1,1),
+                                new WaitStep(1000)
                         ),
                         new UntilOneDoneStep(
-                                new WaitStep(1500),
+                                new WaitStep(1750),
                                 new TurnLeftStep()
                         ),
                         new UntilOneDoneStep(
-                                new DriveStep(0.40),
-                                new WaitStep(600)
+                                new RamperDriveStep(1.2,1),
+                                new WaitStep(1000)
                         ),
                         releaseGlyph,
                         new UntilOneDoneStep(
-                                new DriveStep(-0.40),
-                                new WaitStep(100)
+                                new DriveStep(-0.50),
+                                new WaitStep(800)
                         )
 
                 )

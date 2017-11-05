@@ -11,7 +11,11 @@ import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.StepRobot;
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 import java.util.List;
 
@@ -53,7 +57,8 @@ public class RelicBot extends StepRobot {
 
     // Sensors
 
-    public ColorSensor colorSensor;
+    public ColorSensor colorSensorRight;
+    public ColorSensor colorSensorLeft;
     public BNO055IMU imu;
 
     // State used for updating telemetry
@@ -92,7 +97,12 @@ public class RelicBot extends StepRobot {
     public static final double LEFT_WRIST_RIGHT     =  0.20;
     public static final double LEFT_WRIST_STORE     =  0.00;
 
-    public int colorDifference = 20;
+    public int colorDifference = 10;
+
+
+    public VuforiaLocalizer vuforia;
+    public VuforiaTrackables relicTrackables;
+    public VuforiaTrackable relicTemplate;
 
     /*
      *   Initialize the robot by getting access to all of its devices through the
@@ -117,26 +127,27 @@ public class RelicBot extends StepRobot {
         leftGrab = hwMap.servo.get("servoLeftGrab");
         rightGrab = hwMap.servo.get("servoRightGrab");
 
-        // Jewel arms.
-        leftArmElbow = hwMap.servo.get("servoLeftJewel");
-        rightArmElbow = hwMap.servo.get("servoRightJewel");
+       // Jewel arms.
+       leftArmElbow = hwMap.servo.get("servoLeftJewel");
+       rightArmElbow = hwMap.servo.get("servoRightJewel");
 
 
-        leftArmWrist = hwMap.servo.get("servoLeftWrist");    // hwMap.servo.get("???")
-        rightArmWrist = hwMap.servo.get("servoRightWrist");   // hwMap.servo.get("???")
+       leftArmWrist = hwMap.servo.get("servoLeftWrist");    // hwMap.servo.get("???")
+       rightArmWrist = hwMap.servo.get("servoRightWrist");   // hwMap.servo.get("???")
 
-        colorSensor = hwMap.colorSensor.get("sensorColorDistance");
+       colorSensorRight = hwMap.colorSensor.get("sensorColorDistanceRight");
+       colorSensorLeft = hwMap.colorSensor.get("sensorColorDistanceLeft");
 
-        // Make a list of the Servos, so we can refer to them by number.
-        // Make sure they are in the right order! SEE COMMENT ABOVE!
+       // Make a list of the Servos, so we can refer to them by number.
+       // Make sure they are in the right order! SEE COMMENT ABOVE!
 
-        servoList = asList(leftGrab, rightGrab, leftArmElbow, rightArmElbow, leftArmWrist, rightArmWrist);
+       servoList = asList(leftGrab, rightGrab, leftArmElbow, rightArmElbow, leftArmWrist, rightArmWrist);
 
-        // Reset all drive motors
-        resetDriveMotors();
+       // Reset all drive motors
+       resetDriveMotors();
 
-        // Reset jewel arms
-        reset_jewel_arms();
+       // Reset jewel arms
+       reset_jewel_arms();
 
         // Calibrate the gyro.
         // TODO: do this for the new sensor
@@ -144,7 +155,8 @@ public class RelicBot extends StepRobot {
 //        while (gyro.isCalibrating()) {
 //            Thread.sleep(50);
 //        }
-        colorSensor.enableLed(true);
+        colorSensorRight.enableLed(true);
+        colorSensorLeft.enableLed(true);
 
         // Set up the parameters with which we will use our IMU. Note that integration
         // algorithm here just reports accelerations to the logcat log; it doesn't actually
@@ -165,6 +177,18 @@ public class RelicBot extends StepRobot {
 
         //todo angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         // return formatAngle(angles.angleUnit, angles.firstAngle);
+
+        VuforiaLocalizer.Parameters vuforiaParameters = new VuforiaLocalizer.Parameters();
+        vuforiaParameters.vuforiaLicenseKey = "ATzOAID/////AAAAGWB+pRDolE/Mlr+59IMYtjx6LhM5Ct9clbf5okK+ie5MhZ7gTp7z0hdxcRP/DAzErKsfTg3Cz3JNZMUVM2LL5Aj5Nx3r0awwiSDS5/FRxdDurfddsF4wVzgzDyyIk3jIW3LQu96DVlcsGS2NzCcnclfft/kwfcQt6J5lGBbbWOp65h/cSopGehPckyTjrOUuIDQGQnrmqM+QjdL2eardbNfvQQ3/DGLHHsO4f/ZYXXHxahD4r6vCNBCW282upQVl8dflrEVcGaQ9G39MbBOJSsxpFsece0P+MsHoF6Y58GQDxBXQzRrNbP2OBU14lhSTb0mZBl52MLEhCZGgzWXgMkKronzDwp2g4QwVAngF8XzU";
+        vuforiaParameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
+        vuforia = ClassFactory.createVuforiaLocalizer(vuforiaParameters);
+
+        // Load images
+        relicTrackables = vuforia.loadTrackablesFromAsset("RelicVuMark");
+        relicTemplate = relicTrackables.get(0);
+        relicTemplate.setName("relicVuMarkTemplate");
+
+        relicTrackables.activate();
     }
 
     /*
@@ -194,21 +218,44 @@ public class RelicBot extends StepRobot {
      *   Stop driving.
      */
     //@Override
-    public int readColor()
+    public int readColorRight()
     {
         int color = 1; // 0 is blue, 1 is neither(or both), 2 is red
-        float blue = colorSensor.blue();
-        float red = colorSensor.red();
+        float blue = colorSensorRight.blue();
+        float red = colorSensorRight.red();
 
         if(blue - red > colorDifference)
         {
-            color = color - 1;
+            color = 0;
+        }
+        else if(red - blue > colorDifference)
+        {
+            color = 2;
+        }
+        else {
+            color = 1;
         }
 
-        if(red - blue > colorDifference)
+        return color;
+    }
+    public int readColorLeft()
+    {
+        int color = 1; // 0 is blue, 1 is neither(or both), 2 is red
+        float blue = colorSensorLeft.blue();
+        float red = colorSensorLeft.red();
+
+        if(blue - red > colorDifference)
         {
-            color = color + 1;
+            color = 0;
         }
+        else if(red - blue > colorDifference)
+        {
+            color = 2;
+        }
+        else {
+            color = 1;
+        }
+
         return color;
     }
 

@@ -39,7 +39,7 @@ public class RamperDriveStep extends Step {
         double driveEncoderValue = robot.getDriveEncoderValue();
         double tiles = driveEncoderValue / robot.getTicksPerTile();
         if (driveEncoderValue >= ticks) {
-            stop();
+                stop();
         } else {
             double power = ramper.getRampValue(driveEncoderValue);
             robot.driveStraight(power);

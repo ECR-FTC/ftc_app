@@ -31,7 +31,8 @@ public class AutoTwoRed extends StepAutoCore {
                 deployRightArmStep,
                 flickRightBallStep,
                 retractRightArmStep,
-                grabGlyph
+                grabGlyph,
+                releaseGlyph
         );
         runStepAutonomous("AutoOneBlue", robot, mainStep);
     }

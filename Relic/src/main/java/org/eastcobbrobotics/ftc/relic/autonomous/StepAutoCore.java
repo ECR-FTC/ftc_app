@@ -21,6 +21,8 @@ import org.eastcobbrobotics.ftc.ecrlib.steprunner.UntilOneDoneStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.ServoStep;
 import org.eastcobbrobotics.ftc.relic.RelicBot;
 import org.eastcobbrobotics.ftc.relic.autonomous.Steps.GlyphterStep;
+import org.eastcobbrobotics.ftc.relic.autonomous.Steps.ReadColorSensorLeftStep;
+import org.eastcobbrobotics.ftc.relic.autonomous.Steps.ReadColorSensorRightStep;
 import org.eastcobbrobotics.ftc.relic.autonomous.Steps.ReadColorSensorStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.DriveStep;
 
@@ -100,7 +102,7 @@ abstract public class StepAutoCore extends LinearOpMode {
                 new UntilOneDoneStep(
                         new WaitStep(3000),
                         new UntilAllDoneStep(
-                                new ReadColorSensorStep(),
+                                new ReadColorSensorLeftStep(),
                                 new WaitStep(1000)
                         ),
                         new UntilAllDoneStep(
@@ -131,7 +133,7 @@ abstract public class StepAutoCore extends LinearOpMode {
                 new UntilOneDoneStep(
                         new WaitStep(3000),
                         new UntilAllDoneStep(
-                                new ReadColorSensorStep(),
+                                new ReadColorSensorRightStep(),
                                 new WaitStep(1000)
                         ),
                         new UntilAllDoneStep(

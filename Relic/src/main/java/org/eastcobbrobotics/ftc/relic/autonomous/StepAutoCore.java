@@ -34,6 +34,7 @@ import static org.eastcobbrobotics.ftc.relic.RelicBot.LEFT_GRAB_SERVO;
 import static org.eastcobbrobotics.ftc.relic.RelicBot.RIGHT_ARM_ELBOW_SERVO;
 import static org.eastcobbrobotics.ftc.relic.RelicBot.RIGHT_ARM_WRIST_SERVO;
 import static org.eastcobbrobotics.ftc.relic.RelicBot.RIGHT_GRAB_SERVO;
+import static org.eastcobbrobotics.ftc.relic.RelicBot.RIGHT_JEWEL_STORE;
 
 /*
  *  StepAutoCore for ECR FTC 11096 Relic Recovery 2017-2018 ('Junior')
@@ -95,8 +96,13 @@ abstract public class StepAutoCore extends LinearOpMode {
         );
         retractLeftArmStep = new UntilAllDoneStep(
                 new WaitStep(2000),
-                new ServoStep(LEFT_ARM_WRIST_SERVO, RelicBot.LEFT_WRIST_STORE),
-                new ServoStep(LEFT_ARM_ELBOW_SERVO, RelicBot.LEFT_JEWEL_STORE)
+                new ServoStep(RelicBot.LEFT_ARM_ELBOW_SERVO, RelicBot.LEFT_JEWEL_STORE),
+                new SequenceStep
+                        (
+                                new WaitStep(1000),
+                                new ServoStep(LEFT_ARM_WRIST_SERVO, RelicBot.LEFT_WRIST_STORE),
+                                new WaitStep(1000)
+                        )
         );
         flickLeftBallStep = new SequenceStep(
                 new UntilOneDoneStep(
@@ -126,8 +132,13 @@ abstract public class StepAutoCore extends LinearOpMode {
         );
         retractRightArmStep = new UntilAllDoneStep(
                 new WaitStep(2000),
-                new ServoStep(RIGHT_ARM_WRIST_SERVO, RelicBot.RIGHT_WRIST_STORE),
-                new ServoStep(RIGHT_ARM_ELBOW_SERVO, RelicBot.RIGHT_JEWEL_STORE)
+                new ServoStep(RelicBot.RIGHT_ARM_ELBOW_SERVO, RelicBot.RIGHT_JEWEL_STORE),
+                new SequenceStep
+                (
+                        new WaitStep(1000),
+                        new ServoStep(RIGHT_ARM_WRIST_SERVO, RelicBot.RIGHT_WRIST_STORE),
+                        new WaitStep(1000)
+                )
         );
         flickRightBallStep = new SequenceStep(
                 new UntilOneDoneStep(

@@ -15,6 +15,8 @@ import org.eastcobbrobotics.ftc.relic.RelicBot;
 import org.eastcobbrobotics.ftc.relic.autonomous.Steps.ReadColorSensorStep;
 import org.eastcobbrobotics.ftc.relic.autonomous.Steps.TurnLeftStep;
 import org.eastcobbrobotics.ftc.relic.autonomous.Steps.TurnRightStep;
+import org.eastcobbrobotics.ftc.relic.autonomous.Steps.JewelFlipLeftStep;
+import org.eastcobbrobotics.ftc.relic.autonomous.Steps.JewelFlipRightStep;
 
 import static org.eastcobbrobotics.ftc.relic.RelicBot.LEFT_ARM_ELBOW_SERVO;
 import static org.eastcobbrobotics.ftc.relic.RelicBot.LEFT_ARM_WRIST_SERVO;
@@ -36,8 +38,10 @@ public class AutoOneBlue extends StepAutoCore {
 
         RelicBot robot = new RelicBot();
         Step mainStep = new SequenceStep(
-                deployLeftArmStep,
-                flickLeftBallStep,
+                deployLeftArmStep,                new UntilAllDoneStep(
+                new JewelFlipLeftStep(),
+                new WaitStep(2000)
+        ),
                 retractLeftArmStep,
                 grabGlyph,
                 new SequenceStep(

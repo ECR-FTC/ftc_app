@@ -87,14 +87,14 @@ public class RelicBot extends StepRobot {
     public static final double RIGHT_JEWEL_STORE    =  0.84;  // rightjewel store value
     public static final double RIGHT_JEWEL_DOWN     =  0.11;  // rightjewel deployed value
 
-    public static final double RIGHT_WRIST_LEFT     =  0.75;
+    public static final double RIGHT_WRIST_LEFT     =  0.80;
     public static final double RIGHT_WRIST_CENTER   =  0.52;
-    public static final double RIGHT_WRIST_RIGHT    =  0.26;
+    public static final double RIGHT_WRIST_RIGHT    =  0.20;
     public static final double RIGHT_WRIST_STORE    =  1.00;
 
-    public static final double LEFT_WRIST_LEFT      =  0.65;
+    public static final double LEFT_WRIST_LEFT      =  0.70;
     public static final double LEFT_WRIST_CENTER    =  0.44;
-    public static final double LEFT_WRIST_RIGHT     =  0.20;
+    public static final double LEFT_WRIST_RIGHT     =  0.15;
     public static final double LEFT_WRIST_STORE     =  0.00;
 
     public int colorDifference = 10;

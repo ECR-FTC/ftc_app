@@ -1,5 +1,7 @@
 package org.eastcobbrobotics.ftc.relic;
 
+import android.media.MediaPlayer;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
@@ -12,8 +14,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.StepRobot;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.teamcode.R;
 
 import java.util.List;
+import java.util.Map;
 
 import static java.util.Arrays.asList;
 
@@ -52,15 +56,14 @@ public class RelicBot extends StepRobot {
     public Servo rightArmWrist;
 
     // Sensors
-
     public ColorSensor colorSensor;
     public BNO055IMU imu;
 
     // State used for updating telemetry
     public Orientation angles;
 
-
-
+    // The media player we use for "spoken" output
+    private MediaPlayer mp;
 
     // List of Servos and their Id's. NOTE THAT THE IDs ARE IN THE
     // ORDER added to servoList below!
@@ -129,7 +132,6 @@ public class RelicBot extends StepRobot {
 
         // Make a list of the Servos, so we can refer to them by number.
         // Make sure they are in the right order! SEE COMMENT ABOVE!
-
         servoList = asList(leftGrab, rightGrab, leftArmElbow, rightArmElbow, leftArmWrist, rightArmWrist);
 
         // Reset all drive motors
@@ -308,6 +310,14 @@ public class RelicBot extends StepRobot {
     public double getTicksPerTile() {
         return TICKS_PER_TILE;
     }
+
+    /* Play a sound specified by a resource ID. */
+    @Override
+    public void play(int resId) {
+        mp = MediaPlayer.create(hwMap.appContext, resId);
+        mp.start();
+    }
+
 
     // Relic-specific methods
 

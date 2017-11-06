@@ -81,6 +81,10 @@ public abstract class StepRobot {
      */
     abstract public double getTicksPerTile();
 
+    /*
+     * Play a sound
+     */
+    abstract public void play(int resId);
 }
 
 

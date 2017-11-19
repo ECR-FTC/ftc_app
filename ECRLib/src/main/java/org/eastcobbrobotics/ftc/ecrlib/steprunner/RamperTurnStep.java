@@ -7,8 +7,8 @@ import org.eastcobbrobotics.ftc.ecrlib.Ramper;
  */
 public class RamperTurnStep extends Step{
     static final double DEFAULT_TUP    = 15;
-    static final double DEFAULT_TDOWN  = 15;
-    static final double DEFAULT_MIN    = 0.75;
+    static final double DEFAULT_TDOWN  = 80]\'';
+    static final double DEFAULT_MIN    = 0.2;
 
     protected double maxPower;
     protected double heading;

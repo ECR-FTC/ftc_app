@@ -11,6 +11,9 @@ import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.StepRobot;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
@@ -59,11 +62,6 @@ public class RelicBot extends StepRobot {
     public ColorSensor colorSensorRight;
     public ColorSensor colorSensorLeft;
     public BNO055IMU imu;
-
-    // State used for updating telemetry
-    public Orientation angles;
-
-
 
 
     // List of Servos and their Id's. NOTE THAT THE IDs ARE IN THE
@@ -177,8 +175,6 @@ public class RelicBot extends StepRobot {
         imu = hwMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
 
-        //todo angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        // return formatAngle(angles.angleUnit, angles.firstAngle);
 
         VuforiaLocalizer.Parameters vuforiaParameters = new VuforiaLocalizer.Parameters();
         vuforiaParameters.vuforiaLicenseKey = "ATzOAID/////AAAAGWB+pRDolE/Mlr+59IMYtjx6LhM5Ct9clbf5okK+ie5MhZ7gTp7z0hdxcRP/DAzErKsfTg3Cz3JNZMUVM2LL5Aj5Nx3r0awwiSDS5/FRxdDurfddsF4wVzgzDyyIk3jIW3LQu96DVlcsGS2NzCcnclfft/kwfcQt6J5lGBbbWOp65h/cSopGehPckyTjrOUuIDQGQnrmqM+QjdL2eardbNfvQQ3/DGLHHsO4f/ZYXXHxahD4r6vCNBCW282upQVl8dflrEVcGaQ9G39MbBOJSsxpFsece0P+MsHoF6Y58GQDxBXQzRrNbP2OBU14lhSTb0mZBl52MLEhCZGgzWXgMkKronzDwp2g4QwVAngF8XzU";
@@ -274,10 +270,10 @@ public class RelicBot extends StepRobot {
     @Override
     public void driveTurn(double power, int direction) {
         double p = power * direction;
-        motorFrontRight.setPower(p);
-        motorBackRight.setPower(p);
-        motorFrontLeft.setPower(-p);
-        motorBackLeft.setPower(-p);
+        motorFrontRight.setPower(-p);
+        motorBackRight.setPower(-p);
+        motorFrontLeft.setPower(p);
+        motorBackLeft.setPower(p);
     }
 
     /*
@@ -331,8 +327,7 @@ public class RelicBot extends StepRobot {
      */
     @Override
     public void resetGyro() {
-        // TODO: use new sensor
-        // gyro.resetZAxisIntegrator();
+        // TODO: don't know if we really need thie yet; maybe just re-initialize?
     }
 
     /*
@@ -340,9 +335,8 @@ public class RelicBot extends StepRobot {
      */
     @Override
     public double getGyroHeading() {
-        // TODO: use new sensor for heading
-        // return gyro.getIntegratedZValue();
-        return 0.0;
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        return angles.firstAngle;
     }
 
     /*

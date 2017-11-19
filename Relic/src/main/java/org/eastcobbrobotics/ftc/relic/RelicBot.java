@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
-
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.StepRobot;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
@@ -97,7 +96,9 @@ public class RelicBot extends StepRobot {
     public static final double LEFT_WRIST_RIGHT     =  0.15;
     public static final double LEFT_WRIST_STORE     =  0.00;
 
-    public int colorDifference = 10;
+
+    public double colorDifference = 10;
+
 
 
     public VuforiaLocalizer vuforia;
@@ -118,6 +119,7 @@ public class RelicBot extends StepRobot {
         motorFrontLeft = hwMap.dcMotor.get("motorFL");
         motorBackRight = hwMap.dcMotor.get("motorBR");
         motorBackLeft = hwMap.dcMotor.get("motorBL");
+
 
         // Make a list of the drive motors so we can do things to all of them easily
         driveMotors = asList(motorFrontRight, motorFrontLeft, motorBackRight, motorBackLeft);

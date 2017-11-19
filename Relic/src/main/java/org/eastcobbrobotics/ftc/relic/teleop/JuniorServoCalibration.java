@@ -57,13 +57,13 @@ public class JuniorServoCalibration extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
             if (gamepad1.dpad_up) {
-                /*if (gamepad1.a) {
+                if (gamepad1.left_bumper) {
                     leftGrabPos = leftGrabPos + changeSpeed;
                 }
-                if (gamepad1.b) {
+                if (gamepad1.right_bumper) {
                     rightGrabPos = rightGrabPos + changeSpeed;
                 }
-                */
+
                 if (gamepad1.x) {
                     leftJewelPos = leftJewelPos + changeSpeed;
                 }
@@ -80,12 +80,12 @@ public class JuniorServoCalibration extends LinearOpMode {
 
 
             if (gamepad1.dpad_down) {
-                /*if (gamepad1.a) {
+                if (gamepad1.left_bumper) {
                     leftGrabPos = leftGrabPos - changeSpeed;
                 }
-                if (gamepad1.b) {
+                if (gamepad1.right_bumper) {
                     rightGrabPos = rightGrabPos - changeSpeed;
-                }*/
+                }
                 if (gamepad1.x) {
                     leftJewelPos = leftJewelPos - changeSpeed;
                 }

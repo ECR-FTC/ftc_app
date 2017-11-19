@@ -126,9 +126,9 @@ abstract public class StepAutoCore extends LinearOpMode {
                 new WaitStep(2000),
                 new SequenceStep(
                         new WaitStep(200),
-                        new ServoStep(RIGHT_ARM_WRIST_SERVO, RelicBot.RIGHT_WRIST_CENTER)
+                        new ServoStep(RIGHT_ARM_ELBOW_SERVO, RelicBot.RIGHT_JEWEL_DOWN)
                 ),
-                new ServoStep(RIGHT_ARM_ELBOW_SERVO, RelicBot.RIGHT_JEWEL_DOWN)
+                new ServoStep(RIGHT_ARM_WRIST_SERVO, RelicBot.RIGHT_WRIST_CENTER)
         );
         retractRightArmStep = new UntilAllDoneStep(
                 new WaitStep(2000),

@@ -56,11 +56,11 @@ public class AutoOneRed extends StepAutoCore {
                         releaseGlyph,
                         new UntilOneDoneStep(
                                 new DriveStep(-0.50),
-                                new WaitStep(800)
+                                new WaitStep(200)
                         )
 
                 )
         );
-        runStepAutonomous("AutoOneBlue", robot, mainStep);
+        runStepAutonomous("AutoOneRed", robot, mainStep);
     }
 }

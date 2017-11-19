@@ -64,9 +64,9 @@ public class HardwareJunior_V0
     private ElapsedTime period  = new ElapsedTime();
 
 
-    public double leftGrab           =  0.35;  // leftgrab grab value   .6 with out relic
+    public double leftGrab           =  0.47;  // leftgrab grab value   .6 with out relic
     public double leftRelease        =  0.90;  // leftgrab release value
-    public double rightGrab          =  0.55;  // rightgrab grab value  .4 without relic
+    public double rightGrab          =  0.00;  // rightgrab grab value  .4 without relic
     public double rightRelease       =  0.00;  // rightgrab release value
     public double glyphterSpeed      =  0.50;  // top speed for glyphter
     public double glyphterChangeSpeed=  0.02;  // amount of change in the position of the glyphter arm

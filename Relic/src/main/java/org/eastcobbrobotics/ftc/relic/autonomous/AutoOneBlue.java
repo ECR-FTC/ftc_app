@@ -60,7 +60,7 @@ public class AutoOneBlue extends StepAutoCore {
                         releaseGlyph,
                         new UntilOneDoneStep(
                                 new DriveStep(-0.50),
-                                new WaitStep(500)
+                                new WaitStep(200)
                         )
                 )
 

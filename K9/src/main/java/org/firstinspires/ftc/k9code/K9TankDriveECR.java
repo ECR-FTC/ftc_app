@@ -46,6 +46,9 @@ import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcontroller.external.samples.HardwareK9bot;
+
+
 
 //import org.firstinspires.ftc.robotcontroller.external.samples.HardwareK9bot;
 //import org.firstinspires.ftc.team11096code.HardwareK9botECR;
@@ -72,12 +75,16 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class K9TankDriveECR extends LinearOpMode {
 
     /* Declare OpMode members. */
-    HardwareK9botECR   robot        = new HardwareK9botECR();          // Use a K9'shardware
-    double          armPosition     = HardwareK9botECR.ARM_HOME;       // Servo safe position
-    double          clawPosition    = HardwareK9botECR.CLAW_HOME;      // Servo safe position
+    HardwareK9botECR   robot        = new HardwareK9botECR();          // Use a K9's hardware
+    double          armPosition     = HardwareK9botECR.ARM_HOME;       // Servo home position
+    double          clawPosition    = HardwareK9botECR.CLAW_HOME;      // Servo home position
+    double          tailPosition    = HardwareK9botECR.TAIL_HOME;      // Servo home position
     final double    CLAW_SPEED      = 0.01;                            // sets rate to move servo
     final double    ARM_SPEED       = 0.01;                            // sets rate to move servo
-    double          Speed           = 1.00;
+    final double    TAIL_SPEED      = 0.02;                            // sets rate to move servo
+    double          Speed           = 1.00;                            // amount that the max speed (one) is divided by, aka 1/speed
+    int             tailDirection   = 1;                               // direction of tail
+
 
 
 
@@ -143,16 +150,44 @@ public class K9TankDriveECR extends LinearOpMode {
                 robot.LED2.enable(false); // turn off LED
             }
 
-            //change speed
-/*            if (gamepad1.dpad_up)
+            //change speed, set to gamepad 2 to do this (outreach)
+            if (gamepad2.a)
             {
-                Speed = Speed + 0.01;
+                Speed = 4;
+                telemetry.addData("Driver Mode","Slow");
+                telemetry.update();
+                robot.waitForTick(2000);
             }
-            if (gamepad1.dpad_down)
+            if (gamepad2.b)
             {
-                Speed = Speed + 0.01;
+                Speed = 2;
+                telemetry.addData("Driver Mode","Medium");
+                telemetry.update();
+                robot.waitForTick(2000);
             }
-*/
+            if (gamepad2.x)
+            {
+                Speed = 2;
+                telemetry.addData("Driver Mode","Medium");
+                telemetry.update();
+                robot.waitForTick(2000);
+            }
+            if (gamepad2.y)
+            {
+                Speed = 1;
+                telemetry.addData("Driver Mode","Fast");
+                telemetry.update();
+                robot.waitForTick(2000);
+            }
+
+
+            //operate tail
+            if(tailPosition > robot.TAIL_MAX_RANGE || tailPosition < robot.TAIL_MIN_RANGE)
+            {
+                tailDirection = -tailDirection;
+            }
+            tailPosition = tailPosition + (tailDirection*TAIL_SPEED);
+            robot.tail.setPosition(tailPosition);
 
             // Send telemetry message to signify robot running;
 //            telemetry.addData("isPressed",String.valueOf(robot.touchR.isPressed()));
@@ -163,6 +198,8 @@ public class K9TankDriveECR extends LinearOpMode {
 //            telemetry.addData("touch", "%b", robot.touchR.isPressed());
             telemetry.addData("logLin1", "%.3f", robot.logLin1.getVoltage());
             telemetry.addData("4. h", "%03d", robot.gyro.getHeading());
+            telemetry.addData("tailPos ", tailPosition);
+            telemetry.addData("tailDir ", tailDirection);
 //            telemetry.addData("speed = speed /", Speed);
             telemetry.update();
 

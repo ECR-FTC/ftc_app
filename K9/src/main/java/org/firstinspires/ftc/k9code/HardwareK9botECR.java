@@ -38,20 +38,24 @@ public class HardwareK9botECR
     public DcMotor  rightMotor  = null;
     public Servo    arm         = null;
     public Servo    claw        = null;
-    public LED LED2 = null;
-    public AnalogInput logLin1 = null;
+    public Servo    tail        = null;
+    public LED      LED2        = null;
+    public AnalogInput logLin1  = null;
 //    public AnalogOutput led1 = null;
 
     //public SensorMRGyro gyro    = null;
-    public GyroSensor gyro = null;
-    public TouchSensor touchR = null;
+    public GyroSensor  gyro     = null;
+    public TouchSensor touchR   = null;
 
-    public final static double ARM_HOME = 0.2;
-    public final static double CLAW_HOME = 0.2;
-    public final static double ARM_MIN_RANGE  = 0.00;
-    public final static double ARM_MAX_RANGE  = 1.00;
+    public final static double ARM_HOME        = 0.2;
+    public final static double CLAW_HOME       = 0.2;
+    public final static double TAIL_HOME       = 0.6;
+    public final static double ARM_MIN_RANGE   = 0.00;
+    public final static double ARM_MAX_RANGE   = 1.00;
     public final static double CLAW_MIN_RANGE  = 0.00;
     public final static double CLAW_MAX_RANGE  = 0.7;
+    public final static double TAIL_MAX_RANGE  = 0.9;
+    public final static double TAIL_MIN_RANGE  = 0.3;
 
     /* Local OpMode members. */
     HardwareMap hwMap  = null;
@@ -93,8 +97,10 @@ public class HardwareK9botECR
         // Define and initialize ALL installed servos.
         arm = hwMap.servo.get("servo_1");
         claw = hwMap.servo.get("servo_6");
+        tail = hwMap.servo.get("servo_2");
         arm.setPosition(ARM_HOME);
         claw.setPosition(CLAW_HOME);
+        tail.setPosition(TAIL_HOME);
 
         // start calibrating the gyro.
         gyro.calibrate();

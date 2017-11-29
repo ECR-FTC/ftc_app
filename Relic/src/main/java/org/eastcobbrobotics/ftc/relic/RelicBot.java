@@ -80,7 +80,7 @@ public class RelicBot extends StepRobot {
     public static final double GLYPHTER_POWER       =  0.50;  // glyphter power
 
     public static final double LEFT_JEWEL_STORE     =  0.25;  // leftjewel store value
-    public static final double LEFT_JEWEL_DOWN      =  0.91;  // leftjewel deployed value
+    public static final double LEFT_JEWEL_DOWN      =  1.00;  // leftjewel deployed value
     public static final double RIGHT_JEWEL_STORE    =  0.84;  // rightjewel store value
     public static final double RIGHT_JEWEL_DOWN     =  0.11;  // rightjewel deployed value
 
@@ -92,7 +92,7 @@ public class RelicBot extends StepRobot {
     public static final double LEFT_WRIST_LEFT      =  0.70;
     public static final double LEFT_WRIST_CENTER    =  0.44;
     public static final double LEFT_WRIST_RIGHT     =  0.15;
-    public static final double LEFT_WRIST_STORE     =  0.00;
+    public static final double LEFT_WRIST_STORE     =  1.00;
 
 
     public double colorDifference = 10;

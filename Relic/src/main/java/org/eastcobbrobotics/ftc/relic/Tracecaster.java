@@ -1,9 +1,5 @@
 package org.eastcobbrobotics.ftc.relic;
 
-import android.content.Context;
-import android.net.DhcpInfo;
-import android.net.Network;
-import android.net.wifi.WifiManager;
 import android.util.Log;
 
 import java.io.IOException;

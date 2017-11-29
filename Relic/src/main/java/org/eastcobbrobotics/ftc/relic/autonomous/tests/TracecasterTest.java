@@ -21,7 +21,7 @@ public class TracecasterTest extends StepAutoCore {
     public void runOpMode() throws InterruptedException {
 
         RelicBot robot = new RelicBot();
-        Tracecaster tc = new Tracecaster(hardwareMap.appContext, 11096);
+        Tracecaster tc = new Tracecaster(11096);
 
         tc.post("Waiting for start");
         waitForStart();

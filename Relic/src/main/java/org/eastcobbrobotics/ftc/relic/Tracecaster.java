@@ -28,6 +28,11 @@ import java.util.Enumeration;
 public class Tracecaster {
 
     private static final String TAG = "Tracecaster";
+
+    // We try to determine broadcast address from the network
+    // interfaces, but if that fails, we fall back to this
+    // hardcoded address -- which reflects the default IP
+    // address for FTC robots.
     private static final String DEFAULT_BROADCAST = "192.168.49.255";
 
     protected boolean enabled;
@@ -36,7 +41,7 @@ public class Tracecaster {
     protected InetAddress broadcast;
 
 
-    public Tracecaster(Context appContext, int thePort) {
+    public Tracecaster(int thePort) {
         port = thePort;
         try {
             broadcast = getBroadcast();
@@ -80,6 +85,10 @@ public class Tracecaster {
             sock = null;
         }
     }
+
+    /*
+     *  Determine and return the broadcast IP address.
+     */
 
     protected static InetAddress getBroadcast() {
         try {

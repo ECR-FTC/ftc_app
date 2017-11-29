@@ -23,10 +23,16 @@ public class TracecasterTest extends StepAutoCore {
         RelicBot robot = new RelicBot();
         Tracecaster tc = new Tracecaster(hardwareMap.appContext, 11096);
 
+        tc.post("Waiting for start");
+        waitForStart();
+        tc.post("Starting up");
+
         for(int i = 0 ; i < 20 ; i++) {
             tc.post(String.format("Hello #%d", i));
-            sleep(500);
+            sleep(100);
         }
+        tc.post("That is all!");
+        tc.close();
 
     }
 }

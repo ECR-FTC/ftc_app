@@ -30,6 +30,7 @@ public class Tracecaster {
     private static final String TAG = "Tracecaster";
     private static final String DEFAULT_BROADCAST = "192.168.49.255";
 
+    protected boolean enabled;
     protected int port;
     protected DatagramSocket sock;
     protected InetAddress broadcast;
@@ -39,37 +40,45 @@ public class Tracecaster {
         port = thePort;
         try {
             broadcast = getBroadcast();
-
-            // Now open up the socket and put it in broadcast mode.
-            sock = new DatagramSocket(port);
-            sock.setBroadcast(true);
+            enabled = true;
             Log.i(TAG, String.format("Broadcasting to %s on port %d",
                     broadcast, port));
 
         } catch (Exception e) {
-            sock = null;
+            enabled = false;
             logError("Error opening broadcast socket", e);
         }
     }
 
 
     public void post(String msg) {
-        if (sock != null) {
+        if (!enabled) return;
+
+        try {
             DatagramPacket packet = new DatagramPacket(
                     msg.getBytes(),
                     msg.length(),
                     broadcast,
                     port
             );
-            try {
-                sock.send(packet);
-            } catch (IOException e) {
-                logError("Failed to post", e);
-                sock = null; // if we fail, don't bother trying again
+            if (sock == null) {
+                sock = new DatagramSocket(port);
+                sock.setBroadcast(true);
             }
+            sock.send(packet);
+        } catch (IOException e) {
+            logError("Failed to post", e);
+            enabled = false;
         }
 
 
+    }
+
+    public void close() {
+        if (sock != null) {
+            sock.close();
+            sock = null;
+        }
     }
 
     protected static InetAddress getBroadcast() {

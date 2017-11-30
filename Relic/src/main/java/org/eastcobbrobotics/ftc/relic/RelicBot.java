@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.StepRobot;
 import org.eastcobbrobotics.ftc.relic.utils.Tracecaster;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -101,6 +102,8 @@ public class RelicBot extends StepRobot {
 
     public double colorDifference = 10;
 
+    // Tracing.
+    public Telemetry telemetry;
     public int tcPort = 11096;
     public Tracecaster tc;
 
@@ -186,6 +189,12 @@ public class RelicBot extends StepRobot {
         relicTemplate.setName("relicVuMarkTemplate");
 
         relicTrackables.activate();
+
+    }
+
+    @Override
+    public void setTelemetry(Object telemetry) {
+        this.telemetry = (Telemetry) telemetry;
     }
 
     /*
@@ -193,11 +202,14 @@ public class RelicBot extends StepRobot {
      */
     @Override
     public void tell(String msg) {
-        // telemetry.addData(tm.caption, tm.message);
-        // Log.i("TEL", msg);
+
+        if (telemetry != null) {
+            telemetry.addData("TEL", msg);      // FOR NOW also send message to telemetry
+        }
+
         if (tc == null) {
             tc = new Tracecaster(tcPort);
-            tc.post("Tracecast: Ready");
+            tc.post("Tracecast: Ready ---------------------");
         }
         tc.post(msg);
     }
@@ -208,7 +220,6 @@ public class RelicBot extends StepRobot {
      */
     @Override
     public void shutDown() {
-        tell("RelicBot: Shutdown");
         if (tc != null) {
             tc.close();
             tc = null;
@@ -238,9 +249,6 @@ public class RelicBot extends StepRobot {
         motorBackLeft.setDirection(DcMotor.Direction.REVERSE);
     }
 
-    /*
-     *   Stop driving.
-     */
     //@Override
     public int readColorRight() {
         int color = 1; // 0 is blue, 1 is neither(or both), 2 is red

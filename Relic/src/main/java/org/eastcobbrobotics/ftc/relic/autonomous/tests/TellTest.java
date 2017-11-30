@@ -5,7 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.SayStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.SequenceStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.Step;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.WaitStep;
 import org.eastcobbrobotics.ftc.relic.RelicBot;
 import org.eastcobbrobotics.ftc.relic.autonomous.StepAutoCore;
 
@@ -24,7 +26,12 @@ public class TellTest extends StepAutoCore {
     public void runOpMode() throws InterruptedException {
 
         RelicBot robot = new RelicBot();
-        Step mainStep = new SayStep("HELLO from SayStep");
+        Step mainStep = new SequenceStep(
+                new SayStep("HELLO from SayStep"),
+                new WaitStep(1000),
+                new SayStep("GOODBYE from SayStep")
+        );
+
         runStepAutonomous("TellTest", robot, mainStep);
         robot.shutDown();
     }

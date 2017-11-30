@@ -26,11 +26,6 @@ public abstract class StepRobot {
     abstract public void init(Object map) throws InterruptedException;
 
     /*
-     * Send a telemetry message.
-     */
-    abstract public void tell(String msg);
-
-    /*
      *  Reset and stop all drive motors.
      */
     abstract public void resetDriveMotors();
@@ -87,9 +82,23 @@ public abstract class StepRobot {
     abstract public double getTicksPerTile();
 
     /*
+     * Optional overrides.
+     */
+
+    /*
+     * Use a telemetry object.
+     */
+    public void setTelemetry(Object telemetry) {};
+
+    /*
+     * Send a telemetry message.
+     */
+    public void tell(String msg) {};
+
+    /*
      * Clean up and stop at the end of a run.
      */
-    abstract public void shutDown();
+    public void shutDown() {};
 
 }
 

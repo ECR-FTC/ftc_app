@@ -22,7 +22,7 @@ import org.eastcobbrobotics.ftc.relic.autonomous.Steps.TurnRightStep;
  * StepRunner to perform several competition processes.
  */
 
-@Autonomous(name = "RamperTest", group = "Competition")
+@Autonomous(name = "RamperTest", group = "Test")
 //@Disabled
 
 public class RamperTest extends StepAutoCore {
@@ -32,8 +32,8 @@ public class RamperTest extends StepAutoCore {
 
         RelicBot robot = new RelicBot();
         Step mainStep = new SequenceStep(
-                new WaitStep(1000),
-                new RamperTurnStep(90d, 0.5d)
+                new WaitStep(500),
+                new RamperTurnStep(90, 0.75)
         );
         runStepAutonomous("RamperTest", robot, mainStep);
     }

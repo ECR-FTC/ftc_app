@@ -194,41 +194,37 @@ abstract public class StepAutoCore extends LinearOpMode {
 
         // Initialize the robot.
         try {
+            robot.setTelemetry(telemetry);
             robot.init(hardwareMap);
         } catch (InterruptedException e) {
             return;         // just exit if interrupted
         }
 
-        // Show telemetry and wait for Start button to be pressed
-        // TODO: include name of routine in message?
-        showMessage("Waiting for start");
+        // Wait for Start button to be pressed
+        robot.tell(autoName + ": Waiting for start");
+        telemetry.update();
         waitForStart();
 
         // Start our main step
-        showMessage("Starting main step");
+        robot.tell(autoName + ": Starting main step");
+        telemetry.update();
+
         mainStep.start(robot);
+        telemetry.update();
 
         // Run until we're done
         while (opModeIsActive() && mainStep.isRunning()) {
             mainStep.run();
-
-            // If there are telemetry messages, show them and flush them.
-            List<TelMessage> messages = mainStep.getMessages();
-            if (!messages.isEmpty()) {
-                for (TelMessage tm : messages) {
-                    telemetry.addData(tm.caption, tm.message);
-                }
-                telemetry.update();
-                messages.clear();
-            }
-
-            // Let the rest of the robot do whatever it wants
+            telemetry.update();
             idle();
         }
 
         // Stop the main step
-        showMessage("Stopping main step");
+        robot.tell(autoName + ": Stopping main step");
         mainStep.stop();
+        robot.tell(autoName + ": Shutting down");
+        telemetry.update();
+        robot.shutDown();
     }
 
     /*
@@ -242,17 +238,6 @@ abstract public class StepAutoCore extends LinearOpMode {
         return new WaitStep(duration);
     }
 
-
-
-
-    /*
-     * Show a telemetry message
-     */
-
-    protected void showMessage(String message) {
-        telemetry.addData(this.getClass().getSimpleName(), message);
-        telemetry.update();
-    }
 }
 
 

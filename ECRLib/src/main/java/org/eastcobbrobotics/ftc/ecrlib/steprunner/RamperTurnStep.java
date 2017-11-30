@@ -29,6 +29,7 @@ public class RamperTurnStep extends Step{
 
         ramper = new Ramper(DEFAULT_TUP, DEFAULT_TDOWN, Math.abs(heading), DEFAULT_MIN, maxPower);
         robot.resetGyro();
+        tell("Starting turn to heading=%.2f, max power=%.2f", heading, maxPower);
     }
 
     @Override

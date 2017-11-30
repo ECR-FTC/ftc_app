@@ -1,5 +1,7 @@
 package org.eastcobbrobotics.ftc.relic;
 
+import android.util.Log;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
@@ -9,8 +11,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
+
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.StepRobot;
+import org.eastcobbrobotics.ftc.relic.utils.Tracecaster;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -67,37 +72,40 @@ public class RelicBot extends StepRobot {
     // List of Servos and their Id's. NOTE THAT THE IDs ARE IN THE
     // ORDER added to servoList below!
     public List<Servo> servoList;
-    public final static int LEFT_GRAB_SERVO           = 0;
-    public final static int RIGHT_GRAB_SERVO          = 1;
-    public final static int LEFT_ARM_ELBOW_SERVO      = 2;
-    public final static int RIGHT_ARM_ELBOW_SERVO     = 3;
-    public final static int LEFT_ARM_WRIST_SERVO      = 4;
-    public final static int RIGHT_ARM_WRIST_SERVO     = 5;
+    public final static int LEFT_GRAB_SERVO = 0;
+    public final static int RIGHT_GRAB_SERVO = 1;
+    public final static int LEFT_ARM_ELBOW_SERVO = 2;
+    public final static int RIGHT_ARM_ELBOW_SERVO = 3;
+    public final static int LEFT_ARM_WRIST_SERVO = 4;
+    public final static int RIGHT_ARM_WRIST_SERVO = 5;
 
     // Constants
     public static final double TICKS_PER_TILE = 1525;   // encoder ticks for one game tile
 
-    public static final double GLYPHTER_POWER       =  0.50;  // glyphter power
+    public static final double GLYPHTER_POWER = 0.50;  // glyphter power
 
-    public static final double LEFT_JEWEL_STORE     =  0.25;  // leftjewel store value
-    public static final double LEFT_JEWEL_DOWN      =  1.00;  // leftjewel deployed value
-    public static final double RIGHT_JEWEL_STORE    =  0.84;  // rightjewel store value
-    public static final double RIGHT_JEWEL_DOWN     =  0.11;  // rightjewel deployed value
+    public static final double LEFT_JEWEL_STORE = 0.25;  // leftjewel store value
+    public static final double LEFT_JEWEL_DOWN = 1.00;  // leftjewel deployed value
+    public static final double RIGHT_JEWEL_STORE = 0.84;  // rightjewel store value
+    public static final double RIGHT_JEWEL_DOWN = 0.11;  // rightjewel deployed value
 
-    public static final double RIGHT_WRIST_LEFT     =  0.80;
-    public static final double RIGHT_WRIST_CENTER   =  0.52;
-    public static final double RIGHT_WRIST_RIGHT    =  0.20;
-    public static final double RIGHT_WRIST_STORE    =  1.00;
+    public static final double RIGHT_WRIST_LEFT = 0.80;
+    public static final double RIGHT_WRIST_CENTER = 0.52;
+    public static final double RIGHT_WRIST_RIGHT = 0.20;
+    public static final double RIGHT_WRIST_STORE = 1.00;
 
-    public static final double LEFT_WRIST_LEFT      =  0.70;
-    public static final double LEFT_WRIST_CENTER    =  0.44;
-    public static final double LEFT_WRIST_RIGHT     =  0.15;
-    public static final double LEFT_WRIST_STORE     =  1.00;
+    public static final double LEFT_WRIST_LEFT = 0.70;
+    public static final double LEFT_WRIST_CENTER = 0.44;
+    public static final double LEFT_WRIST_RIGHT = 0.15;
+    public static final double LEFT_WRIST_STORE = 1.00;
 
 
     public double colorDifference = 10;
 
-
+    // Tracing.
+    public Telemetry telemetry;
+    public int tcPort = 11096;
+    public Tracecaster tc;
 
     public VuforiaLocalizer vuforia;
     public VuforiaTrackables relicTrackables;
@@ -110,6 +118,8 @@ public class RelicBot extends StepRobot {
     @Override
     public void init(Object map) throws InterruptedException {
 
+        tell("RelicBot: Initializing");
+
         hwMap = (HardwareMap) map;
 
         // Get access to the devices through the hardware map.
@@ -117,7 +127,6 @@ public class RelicBot extends StepRobot {
         motorFrontLeft = hwMap.dcMotor.get("motorFL");
         motorBackRight = hwMap.dcMotor.get("motorBR");
         motorBackLeft = hwMap.dcMotor.get("motorBL");
-
 
         // Make a list of the drive motors so we can do things to all of them easily
         driveMotors = asList(motorFrontRight, motorFrontLeft, motorBackRight, motorBackLeft);
@@ -127,34 +136,27 @@ public class RelicBot extends StepRobot {
         leftGrab = hwMap.servo.get("servoLeftGrab");
         rightGrab = hwMap.servo.get("servoRightGrab");
 
-       // Jewel arms.
-       leftArmElbow = hwMap.servo.get("servoLeftJewel");
-       rightArmElbow = hwMap.servo.get("servoRightJewel");
+        // Jewel arms.
+        leftArmElbow = hwMap.servo.get("servoLeftJewel");
+        rightArmElbow = hwMap.servo.get("servoRightJewel");
 
+        leftArmWrist = hwMap.servo.get("servoLeftWrist");
+        rightArmWrist = hwMap.servo.get("servoRightWrist");
 
-       leftArmWrist = hwMap.servo.get("servoLeftWrist");    // hwMap.servo.get("???")
-       rightArmWrist = hwMap.servo.get("servoRightWrist");   // hwMap.servo.get("???")
+        colorSensorRight = hwMap.colorSensor.get("sensorColorDistanceRight");
+        colorSensorLeft = hwMap.colorSensor.get("sensorColorDistanceLeft");
 
-       colorSensorRight = hwMap.colorSensor.get("sensorColorDistanceRight");
-       colorSensorLeft = hwMap.colorSensor.get("sensorColorDistanceLeft");
+        // Make a list of the Servos, so we can refer to them by number.
+        // Make sure they are in the right order! SEE COMMENT ABOVE!
+        servoList = asList(leftGrab, rightGrab, leftArmElbow, rightArmElbow, leftArmWrist, rightArmWrist);
 
-       // Make a list of the Servos, so we can refer to them by number.
-       // Make sure they are in the right order! SEE COMMENT ABOVE!
+        // Reset all drive motors
+        resetDriveMotors();
 
-       servoList = asList(leftGrab, rightGrab, leftArmElbow, rightArmElbow, leftArmWrist, rightArmWrist);
+        // Reset jewel arms
+        reset_jewel_arms();
 
-       // Reset all drive motors
-       resetDriveMotors();
-
-       // Reset jewel arms
-       reset_jewel_arms();
-
-        // Calibrate the gyro.
-        // TODO: do this for the new sensor
-//        gyro.calibrate();
-//        while (gyro.isCalibrating()) {
-//            Thread.sleep(50);
-//        }
+        // Enable color sensor LEDs.
         colorSensorRight.enableLed(true);
         colorSensorLeft.enableLed(true);
 
@@ -162,11 +164,11 @@ public class RelicBot extends StepRobot {
         // algorithm here just reports accelerations to the logcat log; it doesn't actually
         // provide positional information.
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-        parameters.loggingEnabled      = true;
-        parameters.loggingTag          = "IMU";
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
@@ -175,7 +177,7 @@ public class RelicBot extends StepRobot {
         imu = hwMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
 
-
+        // Set up our Vuforia camera.
         VuforiaLocalizer.Parameters vuforiaParameters = new VuforiaLocalizer.Parameters();
         vuforiaParameters.vuforiaLicenseKey = "ATzOAID/////AAAAGWB+pRDolE/Mlr+59IMYtjx6LhM5Ct9clbf5okK+ie5MhZ7gTp7z0hdxcRP/DAzErKsfTg3Cz3JNZMUVM2LL5Aj5Nx3r0awwiSDS5/FRxdDurfddsF4wVzgzDyyIk3jIW3LQu96DVlcsGS2NzCcnclfft/kwfcQt6J5lGBbbWOp65h/cSopGehPckyTjrOUuIDQGQnrmqM+QjdL2eardbNfvQQ3/DGLHHsO4f/ZYXXHxahD4r6vCNBCW282upQVl8dflrEVcGaQ9G39MbBOJSsxpFsece0P+MsHoF6Y58GQDxBXQzRrNbP2OBU14lhSTb0mZBl52MLEhCZGgzWXgMkKronzDwp2g4QwVAngF8XzU";
         vuforiaParameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
@@ -187,6 +189,41 @@ public class RelicBot extends StepRobot {
         relicTemplate.setName("relicVuMarkTemplate");
 
         relicTrackables.activate();
+
+    }
+
+    @Override
+    public void setTelemetry(Object telemetry) {
+        this.telemetry = (Telemetry) telemetry;
+    }
+
+    /*
+     * Send a telemetry / status message. Current implementation uses Tracecaster.
+     */
+    @Override
+    public void tell(String msg) {
+
+        if (telemetry != null) {
+            telemetry.addData("TEL", msg);      // FOR NOW also send message to telemetry
+        }
+
+        if (tc == null) {
+            tc = new Tracecaster(tcPort);
+            tc.post("Tracecast: Ready ---------------------");
+        }
+        tc.post(msg);
+    }
+
+
+    /*
+     * Shut down at the end of a run.
+     */
+    @Override
+    public void shutDown() {
+        if (tc != null) {
+            tc.close();
+            tc = null;
+        }
     }
 
     /*
@@ -212,45 +249,33 @@ public class RelicBot extends StepRobot {
         motorBackLeft.setDirection(DcMotor.Direction.REVERSE);
     }
 
-    /*
-     *   Stop driving.
-     */
     //@Override
-    public int readColorRight()
-    {
+    public int readColorRight() {
         int color = 1; // 0 is blue, 1 is neither(or both), 2 is red
         float blue = colorSensorRight.blue();
         float red = colorSensorRight.red();
 
-        if(blue - red > colorDifference)
-        {
+        if (blue - red > colorDifference) {
             color = 0;
-        }
-        else if(red - blue > colorDifference)
-        {
+        } else if (red - blue > colorDifference) {
             color = 2;
-        }
-        else {
+        } else {
             color = 1;
         }
 
         return color;
     }
-    public int readColorLeft()
-    {
+
+    public int readColorLeft() {
         int color = 1; // 0 is blue, 1 is neither(or both), 2 is red
         float blue = colorSensorLeft.blue();
         float red = colorSensorLeft.red();
 
-        if(blue - red > colorDifference)
-        {
+        if (blue - red > colorDifference) {
             color = 0;
-        }
-        else if(red - blue > colorDifference)
-        {
+        } else if (red - blue > colorDifference) {
             color = 2;
-        }
-        else {
+        } else {
             color = 1;
         }
 
@@ -285,11 +310,19 @@ public class RelicBot extends StepRobot {
             motor.setPower(power);
         }
     }
-    public void driveGlyphter(int direction){
-        motorGlyphter.setPower(direction*GLYPHTER_POWER);
+
+    public void driveGlyphter(int direction) {
+        motorGlyphter.setPower(direction * GLYPHTER_POWER);
     }
-    public void timeTurnLeft() {motorFrontRight.setPower(0.50);}
-    public void timeTurnRight() {motorFrontLeft.setPower(0.50);}
+
+    public void timeTurnLeft() {
+        motorFrontRight.setPower(0.50);
+    }
+
+    public void timeTurnRight() {
+        motorFrontLeft.setPower(0.50);
+    }
+
     /*
      * Junior doesn't drive sideways. Just stop.
      */

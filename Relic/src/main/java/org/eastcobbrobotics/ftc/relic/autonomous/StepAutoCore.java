@@ -209,14 +209,14 @@ abstract public class StepAutoCore extends LinearOpMode {
             mainStep.run();
 
             // If there are telemetry messages, show them and flush them.
-            List<TelMessage> messages = mainStep.getMessages();
-            if (!messages.isEmpty()) {
-                for (TelMessage tm : messages) {
-                    telemetry.addData(tm.caption, tm.message);
-                }
-                telemetry.update();
-                messages.clear();
-            }
+//            List<TelMessage> messages = mainStep.getMessages();
+//            if (!messages.isEmpty()) {
+//                for (TelMessage tm : messages) {
+//                    telemetry.addData(tm.caption, tm.message);
+//                }
+//                telemetry.update();
+//                messages.clear();
+//            }
 
             // Let the rest of the robot do whatever it wants
             idle();

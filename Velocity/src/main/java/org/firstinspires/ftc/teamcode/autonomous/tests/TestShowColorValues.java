@@ -26,7 +26,7 @@ public class TestShowColorValues extends StepAutoCore {
         }
 
         // Show telemetry and wait for Start button to be pressed
-        showMessage("Waiting for start");
+        robot.tell("Waiting for start");
         waitForStart();
 
         while (opModeIsActive()) {

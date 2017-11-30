@@ -15,7 +15,6 @@ public class Step {
     private Boolean running = false;
 
     private static Boolean tellConsole = false;
-    public static ArrayList<TelMessage> telMessages = new ArrayList<TelMessage>();
     private static HashMap<String, Integer> flags = new HashMap<String, Integer>();
 
     /*
@@ -70,22 +69,14 @@ public class Step {
                             this.getClass().getSimpleName(),
                             msg));
         } else {
-            telMessages.add(new TelMessage(
+            robot.tell(String.format("%s: %s",
                     this.getClass().getSimpleName(),
-                    msg
-            ));
+                    msg));
         }
     }
 
     public void tell(String fmt, Object... arguments) {
         tell(String.format(Locale.US, fmt, arguments));
-    }
-
-    /*
-     * Return all posted telemetry messages.
-     */
-    public List<TelMessage> getMessages() {
-        return telMessages;
     }
 
 

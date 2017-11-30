@@ -1,4 +1,4 @@
-package org.eastcobbrobotics.ftc.relic;
+package org.eastcobbrobotics.ftc.relic.utils;
 
 import android.util.Log;
 
@@ -8,8 +8,6 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.Enumeration;
 
 /**

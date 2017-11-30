@@ -248,34 +248,25 @@ abstract public class StepAutoCore extends LinearOpMode {
         }
 
         // Show telemetry and wait for Start button to be pressed
-        showMessage(autoName + ": waiting for start");
+        robot.tell(autoName + ": waiting for start");
         waitForStart();
 
         // Start our main step
-        showMessage(autoName + ": starting main step");
+        robot.tell(autoName + ": starting main step");
         mainStep.start(robot);
 
         // Run until we're done
         while (opModeIsActive() && mainStep.isRunning()) {
             mainStep.run();
-
-            // If there are telemetry messages, show them and flush them.
-            List<TelMessage> messages = mainStep.getMessages();
-            if (!messages.isEmpty()) {
-                for (TelMessage tm : messages) {
-                    telemetry.addData(tm.caption, tm.message);
-                }
-                telemetry.update();
-                messages.clear();
-            }
-
-            // Let the rest of the robot do whatever it wants
             idle();
         }
 
         // Stop the main step
-        showMessage(autoName + ": stopping main step");
+        robot.tell(autoName + ": stopping main step");
         mainStep.stop();
+
+        // and shut down things on the robot.
+        robot.shutDown();
     }
 
     /*
@@ -285,15 +276,6 @@ abstract public class StepAutoCore extends LinearOpMode {
         return new WaitStep(duration);
     }
 
-
-    /*
-     * Show a telemetry message
-     */
-
-    protected void showMessage(String message) {
-        telemetry.addData(this.getClass().getSimpleName(), message);
-        telemetry.update();
-    }
 }
 
 

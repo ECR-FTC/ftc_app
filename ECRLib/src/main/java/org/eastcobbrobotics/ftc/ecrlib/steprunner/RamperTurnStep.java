@@ -8,7 +8,7 @@ import org.eastcobbrobotics.ftc.ecrlib.Ramper;
 public class RamperTurnStep extends Step{
     static final double DEFAULT_TUP    = 15;
     static final double DEFAULT_TDOWN  = 80;
-    static final double DEFAULT_MIN    = 0.2;
+    static final double DEFAULT_MIN    = 0.3;
 
     protected double maxPower;
     protected double heading;
@@ -29,6 +29,7 @@ public class RamperTurnStep extends Step{
 
         ramper = new Ramper(DEFAULT_TUP, DEFAULT_TDOWN, Math.abs(heading), DEFAULT_MIN, maxPower);
         robot.resetGyro();
+        tell("Starting turn to heading=%.2f, max power=%.2f", heading, maxPower);
     }
 
     @Override

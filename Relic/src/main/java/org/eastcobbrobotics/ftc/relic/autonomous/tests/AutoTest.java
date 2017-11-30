@@ -33,6 +33,6 @@ public class AutoTest extends StepAutoCore {
         Step mainStep = new SequenceStep(
                 new RamperDriveStep( 1 , 1 )
         );
-        runStepAutonomous("AutoOneBlue", robot, mainStep);
+        runStepAutonomous("AutoTest", robot, mainStep);
     }
 }

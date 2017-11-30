@@ -138,11 +138,6 @@ public class MorganaBot extends StepRobot {
 
     }
 
-    @Override
-    public void tell(String msg) {
-
-    }
-
     /*
      *   Configure all drive motors and set them to zero power.
      */
@@ -317,10 +312,6 @@ public class MorganaBot extends StepRobot {
         }
         return NONE_SEEN;          // we don't know yet
 
-    }
-
-    @Override
-    public void shutDown() {
     }
 
 }

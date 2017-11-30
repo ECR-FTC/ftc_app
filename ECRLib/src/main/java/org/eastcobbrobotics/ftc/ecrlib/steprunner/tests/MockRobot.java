@@ -32,6 +32,10 @@ public class MockRobot extends StepRobot {
     }
 
     @Override
+    public void tell(String msg) {
+    }
+
+    @Override
     public void driveSideways( double maxPower, int direction) {
 
     }
@@ -141,5 +145,9 @@ public class MockRobot extends StepRobot {
 
     protected void say(String msg) {
         System.out.println("MockRobot: " + msg);
+    }
+
+    @Override
+    public void shutDown() {
     }
 }

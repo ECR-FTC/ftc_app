@@ -3,7 +3,7 @@ package org.eastcobbrobotics.ftc.ecrlib.steprunner;
 /**
  * Created by ECR FTC 11096 on 10/29/2016.
  * <p>
- * This is the abstract base class for StepRunner-compatible robots. Most of the methods
+ * This is the abstract base class for StepRunner-compatible robots. The methods
  * here should be overridden in subclasses that know how to do things specific
  * to a particular robot design.
  */
@@ -24,6 +24,11 @@ public abstract class StepRobot {
      *  Initialize the robot, given some kind of map.
      */
     abstract public void init(Object map) throws InterruptedException;
+
+    /*
+     * Send a telemetry message.
+     */
+    abstract public void tell(String msg);
 
     /*
      *  Reset and stop all drive motors.
@@ -80,6 +85,11 @@ public abstract class StepRobot {
      * Get number of encoder ticks per tile.
      */
     abstract public double getTicksPerTile();
+
+    /*
+     * Clean up and stop at the end of a run.
+     */
+    abstract public void shutDown();
 
 }
 

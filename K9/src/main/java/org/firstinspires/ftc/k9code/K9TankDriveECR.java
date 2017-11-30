@@ -154,7 +154,7 @@ public class K9TankDriveECR extends LinearOpMode {
             if (gamepad2.a)
             {
                 Speed = 4;
-                telemetry.addData("Driver Mode","Slow");
+                telemetry.addData("Driver Mode+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++4++1","Slow");
                 telemetry.update();
                 robot.waitForTick(2000);
             }

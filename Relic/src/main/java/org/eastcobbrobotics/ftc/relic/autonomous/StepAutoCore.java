@@ -95,7 +95,9 @@ abstract public class StepAutoCore extends LinearOpMode {
                 new ServoStep(LEFT_ARM_ELBOW_SERVO, RelicBot.LEFT_JEWEL_DOWN)
         );
         retractLeftArmStep = new UntilAllDoneStep(
-                new WaitStep(2000),
+                new WaitStep(1000),
+                new ServoStep(RelicBot.LEFT_ARM_ELBOW_SERVO, ((RelicBot.LEFT_JEWEL_STORE+RelicBot.LEFT_JEWEL_DOWN)/2)),
+                new WaitStep(1000),
                 new ServoStep(RelicBot.LEFT_ARM_ELBOW_SERVO, RelicBot.LEFT_JEWEL_STORE),
                 new SequenceStep
                         (
@@ -131,7 +133,9 @@ abstract public class StepAutoCore extends LinearOpMode {
                 new ServoStep(RIGHT_ARM_WRIST_SERVO, RelicBot.RIGHT_WRIST_CENTER)
         );
         retractRightArmStep = new UntilAllDoneStep(
-                new WaitStep(2000),
+                new WaitStep(1000),
+                new ServoStep(RelicBot.RIGHT_ARM_ELBOW_SERVO, ((RelicBot.RIGHT_JEWEL_STORE+RelicBot.RIGHT_JEWEL_DOWN)/2)),
+                new WaitStep(1000),
                 new ServoStep(RelicBot.RIGHT_ARM_ELBOW_SERVO, RelicBot.RIGHT_JEWEL_STORE),
                 new SequenceStep
                 (
@@ -160,8 +164,8 @@ abstract public class StepAutoCore extends LinearOpMode {
         grabGlyph = new SequenceStep(
                 new UntilAllDoneStep(
                         new WaitStep(1000),
-                        new ServoStep(LEFT_GRAB_SERVO, 0.60),
-                        new ServoStep(RIGHT_GRAB_SERVO, 0.40)
+                        new ServoStep(LEFT_GRAB_SERVO, 0.22),//todo this is the value for the old servos
+                        new ServoStep(RIGHT_GRAB_SERVO, 0.59)//todo this is the value for the old servos
                 ),
                 new UntilOneDoneStep(
                         new WaitStep(500),
@@ -176,8 +180,8 @@ abstract public class StepAutoCore extends LinearOpMode {
                 ),
                 new UntilAllDoneStep(
                         new WaitStep(500),
-                        new ServoStep(LEFT_GRAB_SERVO, 0.90),
-                        new ServoStep(RIGHT_GRAB_SERVO, 0.00)
+                        new ServoStep(LEFT_GRAB_SERVO, 0.80),//todo this is the value for the old servos
+                        new ServoStep(RIGHT_GRAB_SERVO, 0.07)    //todo this is the value for the old servos
                 )
         );
     }

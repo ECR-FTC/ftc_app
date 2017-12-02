@@ -94,10 +94,10 @@ public class RelicBot extends StepRobot {
     public static final double RIGHT_WRIST_RIGHT = 0.20;
     public static final double RIGHT_WRIST_STORE = 1.00;
 
-    public static final double LEFT_WRIST_LEFT = 0.70;
-    public static final double LEFT_WRIST_CENTER = 0.44;
-    public static final double LEFT_WRIST_RIGHT = 0.15;
-    public static final double LEFT_WRIST_STORE = 1.00;
+    public static final double LEFT_WRIST_LEFT = 0.77;
+    public static final double LEFT_WRIST_CENTER = 0.54;
+    public static final double LEFT_WRIST_RIGHT = 0.28;
+    public static final double LEFT_WRIST_STORE = 0.00;
 
 
     public double colorDifference = 10;
@@ -106,6 +106,7 @@ public class RelicBot extends StepRobot {
     public Telemetry telemetry;
     public int tcPort = 11096;
     public Tracecaster tc;
+    public boolean tracecastEnabled;
 
     public VuforiaLocalizer vuforia;
     public VuforiaTrackables relicTrackables;
@@ -117,6 +118,9 @@ public class RelicBot extends StepRobot {
      */
     @Override
     public void init(Object map) throws InterruptedException {
+
+        // Tracecaster must be DISABLED (false) for competition
+        tracecastEnabled = false;
 
         tell("RelicBot: Initializing");
 
@@ -207,11 +211,13 @@ public class RelicBot extends StepRobot {
             telemetry.addData("TEL", msg);      // FOR NOW also send message to telemetry
         }
 
-        if (tc == null) {
-            tc = new Tracecaster(tcPort);
-            tc.post("Tracecast: Ready ---------------------");
+        if (tracecastEnabled) {
+            if (tc == null) {
+                tc = new Tracecaster(tcPort);
+                tc.post("Tracecast: Ready ---------------------");
+            }
+            tc.post(msg);
         }
-        tc.post(msg);
     }
 
 

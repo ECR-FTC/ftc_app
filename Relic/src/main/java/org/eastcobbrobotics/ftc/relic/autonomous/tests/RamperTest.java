@@ -31,9 +31,9 @@ public class RamperTest extends StepAutoCore {
     public void runOpMode() throws InterruptedException {
 
         RelicBot robot = new RelicBot();
-        Step mainStep = new SequenceStep(
-                new WaitStep(500),
-                new RamperTurnStep(90, 0.75)
+        Step mainStep = new UntilOneDoneStep(
+                new WaitStep(50000),
+                new RamperDriveStep(4, 1)
         );
         runStepAutonomous("RamperTest", robot, mainStep);
     }

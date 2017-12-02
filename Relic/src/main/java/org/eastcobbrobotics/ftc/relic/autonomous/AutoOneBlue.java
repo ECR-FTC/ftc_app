@@ -53,8 +53,8 @@ public class AutoOneBlue extends StepAutoCore {
                                 new WaitStep(1000)
                         ),
                         new UntilOneDoneStep(
-                                new RamperDriveStep(1.8, 1),
-                                new WaitStep(1000)
+                                new RamperDriveStep(1.2, 1),
+                                new WaitStep(3000)
                         ),
                         // Code for left column
                        /* new SwitchStep("imageFound",
@@ -91,8 +91,8 @@ public class AutoOneBlue extends StepAutoCore {
                                 new RamperTurnStep(44, 0.5)
                         ),
                         new UntilOneDoneStep(
-                                new RamperDriveStep(5.0, 1),
-                                new WaitStep(1000)
+                                new RamperDriveStep(1.5, 1),
+                                new WaitStep(3000)
                         ),
                         releaseGlyph,
                         new UntilOneDoneStep(

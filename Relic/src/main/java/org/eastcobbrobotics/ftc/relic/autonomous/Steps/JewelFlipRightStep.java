@@ -23,7 +23,7 @@ public class JewelFlipRightStep extends Step {
 
         if(color == 0)
         {
-            robot.setServo(RelicBot.RIGHT_ARM_WRIST_SERVO,RelicBot.RIGHT_WRIST_LEFT);
+            robot.setServo(RelicBot.RIGHT_ARM_WRIST_SERVO,RelicBot.RIGHT_WRIST_RIGHT);
         }
         else if(color == 1)
         {
@@ -31,7 +31,7 @@ public class JewelFlipRightStep extends Step {
         }
         else if(color == 2)
         {
-            robot.setServo(RelicBot.RIGHT_ARM_WRIST_SERVO,RelicBot.RIGHT_WRIST_RIGHT);
+            robot.setServo(RelicBot.RIGHT_ARM_WRIST_SERVO,RelicBot.RIGHT_WRIST_LEFT);
         }
         stop();
     }

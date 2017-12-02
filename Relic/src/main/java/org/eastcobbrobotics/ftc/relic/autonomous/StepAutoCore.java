@@ -94,16 +94,22 @@ abstract public class StepAutoCore extends LinearOpMode {
                 ),
                 new ServoStep(LEFT_ARM_ELBOW_SERVO, RelicBot.LEFT_JEWEL_DOWN)
         );
-        retractLeftArmStep = new UntilAllDoneStep(
-                new WaitStep(1000),
-                new ServoStep(RelicBot.LEFT_ARM_ELBOW_SERVO, ((RelicBot.LEFT_JEWEL_STORE+RelicBot.LEFT_JEWEL_DOWN)/2)),
-                new WaitStep(1000),
-                new ServoStep(RelicBot.LEFT_ARM_ELBOW_SERVO, RelicBot.LEFT_JEWEL_STORE),
+        retractLeftArmStep = new SequenceStep(
+                new UntilAllDoneStep
+                        (
+                        new WaitStep(1000),
+                        new ServoStep(RelicBot.LEFT_ARM_ELBOW_SERVO, ((RelicBot.LEFT_JEWEL_STORE + RelicBot.LEFT_JEWEL_DOWN) / 2))
+                        ),
                 new SequenceStep
                         (
                                 new WaitStep(1000),
                                 new ServoStep(LEFT_ARM_WRIST_SERVO, RelicBot.LEFT_WRIST_STORE),
                                 new WaitStep(1000)
+                        ),
+                new UntilAllDoneStep
+                        (
+                        new WaitStep(1000),
+                        new ServoStep(RelicBot.LEFT_ARM_ELBOW_SERVO, RelicBot.LEFT_JEWEL_STORE)
                         )
         );
         flickLeftBallStep = new SequenceStep(
@@ -133,16 +139,22 @@ abstract public class StepAutoCore extends LinearOpMode {
                 new ServoStep(RIGHT_ARM_WRIST_SERVO, RelicBot.RIGHT_WRIST_CENTER)
         );
         retractRightArmStep = new UntilAllDoneStep(
-                new WaitStep(1000),
-                new ServoStep(RelicBot.RIGHT_ARM_ELBOW_SERVO, ((RelicBot.RIGHT_JEWEL_STORE+RelicBot.RIGHT_JEWEL_DOWN)/2)),
-                new WaitStep(1000),
-                new ServoStep(RelicBot.RIGHT_ARM_ELBOW_SERVO, RelicBot.RIGHT_JEWEL_STORE),
+                new UntilAllDoneStep
+                        (
+                                new WaitStep(1000),
+                                new ServoStep(RelicBot.RIGHT_ARM_ELBOW_SERVO, ((RelicBot.RIGHT_JEWEL_STORE + RelicBot.RIGHT_JEWEL_DOWN) / 2))
+                        ),
                 new SequenceStep
-                (
-                        new WaitStep(1000),
-                        new ServoStep(RIGHT_ARM_WRIST_SERVO, RelicBot.RIGHT_WRIST_STORE),
-                        new WaitStep(1000)
-                )
+                        (
+                                new WaitStep(1000),
+                                new ServoStep(RIGHT_ARM_WRIST_SERVO, RelicBot.RIGHT_WRIST_STORE),
+                                new WaitStep(1000)
+                        ),
+                new UntilAllDoneStep
+                        (
+                                new WaitStep(1000),
+                                new ServoStep(RelicBot.RIGHT_ARM_ELBOW_SERVO, RelicBot.RIGHT_JEWEL_STORE)
+                        )
         );
         flickRightBallStep = new SequenceStep(
                 new UntilOneDoneStep(

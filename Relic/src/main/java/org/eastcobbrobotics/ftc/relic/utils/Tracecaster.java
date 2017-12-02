@@ -49,6 +49,12 @@ public class Tracecaster {
         }
     }
 
+    public void setEnabled(boolean value) {
+        enabled = value;
+        if (!enabled) {
+            close();
+        }
+    }
 
     public void post(String msg) {
         if (!enabled) return;

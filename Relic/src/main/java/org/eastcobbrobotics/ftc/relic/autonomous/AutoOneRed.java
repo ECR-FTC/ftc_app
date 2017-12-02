@@ -11,6 +11,7 @@ import org.eastcobbrobotics.ftc.ecrlib.steprunner.UntilAllDoneStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.UntilOneDoneStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.WaitStep;
 import org.eastcobbrobotics.ftc.relic.RelicBot;
+import org.eastcobbrobotics.ftc.relic.autonomous.Steps.CheckImageStep;
 import org.eastcobbrobotics.ftc.relic.autonomous.Steps.TurnLeftStep;
 //import org.eastcobbrobotics.ftc.relic.autonomous.Steps.TurnRightStep;
 import org.eastcobbrobotics.ftc.relic.autonomous.Steps.JewelFlipLeftStep;
@@ -35,30 +36,63 @@ public class AutoOneRed extends StepAutoCore {
         Step mainStep = new SequenceStep(
                 deployRightArmStep,
                 new UntilAllDoneStep(
-                new JewelFlipRightStep(),
-                new WaitStep(2000)
-        ),
+                        new JewelFlipRightStep(),
+                        new WaitStep(2000)
+                ),
                 retractRightArmStep,
                 grabGlyph,
                 new SequenceStep(
                         new UntilOneDoneStep(
-                                new RamperDriveStep(1,1),
+                                new CheckImageStep(),
                                 new WaitStep(1000)
                         ),
+                        new UntilOneDoneStep(
+                                new RamperDriveStep(1.2, 1),
+                                new WaitStep(3000)
+                        ),
+                        // Code for Right column
+                       /* new SwitchStep("imageFound",
+                                new UntilOneDoneStep(new UntilOneDoneStep(
+                                        new WaitStep(1750),
+                                        new RamperTurnStep(30, 0.5)
+                                ),
+                                        new UntilOneDoneStep(
+                                                new RamperDriveStep(1, 1),
+                                                new WaitStep(1000)
+                                        )),
+                                new UntilOneDoneStep(new UntilOneDoneStep(
+                                        new WaitStep(1750),
+                                        new RamperTurnStep(44, 0.5)
+                                ),
+                                        new UntilOneDoneStep(
+                                                new RamperDriveStep(1.2, 1),
+                                                new WaitStep(1000)
+                                        )
+                                ),
+                                new UntilOneDoneStep(new UntilOneDoneStep(
+                                        new WaitStep(1750),
+                                        new RamperTurnStep(55, 0.5)
+                                ),
+                                        new UntilOneDoneStep(
+                                                new RamperDriveStep(1.4, 1),
+                                                new WaitStep(1000)
+                                        )
+                                )
+                        ),
+                        */
                         new UntilOneDoneStep(
                                 new WaitStep(1750),
-                                new TurnLeftStep()
+                                new RamperTurnStep(-44, 0.5)
                         ),
                         new UntilOneDoneStep(
-                                new RamperDriveStep(1.2,1),
-                                new WaitStep(1000)
+                                new RamperDriveStep(1.5, 1),
+                                new WaitStep(3000)
                         ),
                         releaseGlyph,
                         new UntilOneDoneStep(
                                 new DriveStep(-0.50),
                                 new WaitStep(200)
                         )
-
                 )
         );
         runStepAutonomous("AutoOneRed", robot, mainStep);

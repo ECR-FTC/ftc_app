@@ -86,9 +86,7 @@ public class HardwareJunior_V0
     public double leftWristRight     =  0.20;  // left wrist setting to knock off the right ball
     public double leftWristStore     =  0.00;  // left wrist store value, inits here
 
-
-
-    public double topSpeed           =  0.70;  // top speed for drive
+    public double topSpeed           =  0.80;  // top speed for drive
     /* Constructor */
     public HardwareJunior_V0() {
     }
@@ -144,11 +142,7 @@ public class HardwareJunior_V0
         }
 */
 
-        // set the button pushing servos to the store positions
-        servoRightGrab.setPosition(rightRelease);
-        servoLeftGrab.setPosition(leftRelease);
-        servoRightJewel.setPosition(rightJewelStore);
-        servoLeftJewel.setPosition(leftJewelStore);
+
     }
 
     /***

@@ -94,6 +94,16 @@ public class JuniorTeleop extends LinearOpMode {
             robot.servoLeftGrab.setPosition(leftGlyphterArmPos);
             robot.servoRightGrab.setPosition(rightGlyphterArmPos);
 
+            //store jewel servos
+            if (gamepad2.left_bumper || gamepad2.right_bumper)
+            {
+                // set the button pushing servos to the store positions
+                robot.servoRightGrab.setPosition(robot.rightRelease);
+                robot.servoLeftGrab.setPosition(robot.leftRelease);
+                robot.servoRightJewel.setPosition(robot.rightJewelStore);
+                robot.servoLeftJewel.setPosition(robot.leftJewelStore);
+            }
+
             // Send telemetry message to signify robot running;
             telemetry.addData("left", "%.2f", left);
             telemetry.addData("right", "%.2f", right);

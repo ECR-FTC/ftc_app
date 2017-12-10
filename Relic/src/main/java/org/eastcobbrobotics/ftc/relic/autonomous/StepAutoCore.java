@@ -74,6 +74,8 @@ abstract public class StepAutoCore extends LinearOpMode {
     protected Step grabGlyph;
     protected Step releaseGlyph;
 
+    public int VuforiaChoice = 2; // 1 is left, 2 is center, and 3 is right
+
     public StepAutoCore() {
 
         // Define all the common steps we use in our routines

@@ -47,7 +47,7 @@ public class AutoTwoRed extends StepAutoCore {
                 ),
                 new UntilOneDoneStep(
                         new WaitStep(3000),
-                        new TurnRightStep()
+                        new RamperTurnStep(90, 0.5)
                 ),
                 new UntilOneDoneStep(
                         new RamperDriveStep(1.2,1),

@@ -6,6 +6,7 @@ import org.eastcobbrobotics.ftc.ecrlib.steprunner.DriveStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.RamperDriveStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.SequenceStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.Step;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.TurnStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.UntilAllDoneStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.UntilOneDoneStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.WaitStep;
@@ -41,12 +42,12 @@ public class AutoTwoBlue extends StepAutoCore {
                 retractLeftArmStep,
                 grabGlyph,
                 new UntilOneDoneStep(
-                        new RamperDriveStep(0.9,1),
+                        new RamperDriveStep(0.85,1),
                         new WaitStep(1000)
                 ),
                 new UntilOneDoneStep(
                         new WaitStep(2800),
-                        new TurnLeftStep()
+                        new RamperTurnStep(-90, 0.5)
                 ),
                 new UntilOneDoneStep(
                         new RamperDriveStep(1.2,1),

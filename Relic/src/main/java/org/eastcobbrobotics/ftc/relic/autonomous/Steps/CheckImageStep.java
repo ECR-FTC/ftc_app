@@ -11,16 +11,24 @@ import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 
 public class CheckImageStep extends Step {
 
-    @Override
-    public void start(StepRobot r) {
-        super.start(r);
-    }
+    // Use Vuforia to detect the image. Sets the flag imageFound to 0 for UNKNOWN,
+    // 1 for LEFT, 2 for CENTER, and 3 for RIGHT. Step STOPS when it sees something
+    // besides UNKNOWN.
 
     @Override
     public void run() {
         super.run();
         RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(((RelicBot) robot).relicTemplate);
-        tell("%b Image Found", vuMark.ordinal());
-        setFlag("imageFound", vuMark.ordinal());
+        int imageFound = vuMark.ordinal();
+
+        // SwitchSteps should assuming that UNKNOWN=0, LEFT=1, CENTER=2, RIGHT=3. TODO: is this
+        // correct?
+        setFlag("imageFound", imageFound);
+        if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
+            tell("%b Image Found", imageFound);
+            stop();
+        } else {
+            tell("no image detected yet");
+        }
     }
 }

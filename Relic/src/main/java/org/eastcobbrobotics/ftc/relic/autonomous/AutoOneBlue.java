@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.DriveStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.RamperDriveStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.SayStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.SequenceStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.ServoStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.Step;
@@ -40,67 +41,41 @@ public class AutoOneBlue extends StepAutoCore {
 
         RelicBot robot = new RelicBot();
         Step mainStep = new SequenceStep(
-                deployLeftArmStep,
-                new UntilAllDoneStep(
-                        new JewelFlipLeftStep(),
-                        new WaitStep(2000)
-                ),
-                retractLeftArmStep,
-                grabGlyph,
-                new SequenceStep(
-                        new UntilOneDoneStep(
-                                new CheckImageStep(),
-                                new WaitStep(1000)
-                        ),
-                        new UntilOneDoneStep(
-                                new RamperDriveStep(1.2, 1),
-                                new WaitStep(3000)
-                        ),
-                        // Code for left column
-                       /* new SwitchStep("imageFound",
-                                new UntilOneDoneStep(new UntilOneDoneStep(
-                                        new WaitStep(1750),
-                                        new RamperTurnStep(30, 0.5)
-                                ),
-                                        new UntilOneDoneStep(
-                                                new RamperDriveStep(1, 1),
-                                                new WaitStep(1000)
-                                        )),
-                                new UntilOneDoneStep(new UntilOneDoneStep(
-                                        new WaitStep(1750),
-                                        new RamperTurnStep(44, 0.5)
-                                ),
-                                        new UntilOneDoneStep(
-                                                new RamperDriveStep(1.2, 1),
-                                                new WaitStep(1000)
-                                        )
-                                ),
-                                new UntilOneDoneStep(new UntilOneDoneStep(
-                                        new WaitStep(1750),
-                                        new RamperTurnStep(55, 0.5)
-                                ),
-                                        new UntilOneDoneStep(
-                                                new RamperDriveStep(1.4, 1),
-                                                new WaitStep(1000)
-                                        )
-                                )
-                        ),
-                        */
-                        new UntilOneDoneStep(
-                                new WaitStep(1750),
-                                new RamperTurnStep(44, 0.5)
-                        ),
-                        new UntilOneDoneStep(
-                                new RamperDriveStep(1.5, 1),
-                                new WaitStep(3000)
-                        ),
-                        releaseGlyph,
-                        new UntilOneDoneStep(
-                                new DriveStep(-0.50),
-                                new WaitStep(200)
-                        )
-                )
 
+            deployLeftArmStep,
+            new UntilAllDoneStep(
+                    new JewelFlipLeftStep(),
+                    new WaitStep(2000)
+            ),
+            retractLeftArmStep,
+
+            grabGlyph,
+
+            // Wait up to a second to detect one of the Vuforia images and set
+            // the "imageFound" flag.
+            timeoutStep(new CheckImageStep(), 1000),
+
+            // FOR TESTING let's just report which image we saw with a switchstep.
+            // TODO: define driving steps for each path (left, enter, right) and
+            // switch to those!
+            new SwitchStep("imageFound",
+                    new SayStep("I didn't see an image - maybe guess?"),
+                    new SayStep("Take the LEFT path"),
+                    new SayStep("Take the CENTER path"),
+                    new SayStep("Take the RIGHT path")
+            ),
+
+            // Ths is the LEFT path...?
+            timeoutStep(new RamperDriveStep(1.2, 1), 3000),
+            timeoutStep(new RamperTurnStep(44, 0.5), 1750),
+            timeoutStep(new RamperDriveStep(1.5, 1), 3000),
+
+            releaseGlyph,
+
+            new UntilOneDoneStep(
+                    new DriveStep(-0.50),
+                    new WaitStep(200)
+                )
         );
         runStepAutonomous("AutoOneBlue", robot, mainStep);
     }

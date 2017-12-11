@@ -10,20 +10,17 @@ package org.eastcobbrobotics.ftc.relic.autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Blinker;
 
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.SayStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.SequenceStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.Step;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.StepRobot;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.SwitchStep;
-import org.eastcobbrobotics.ftc.ecrlib.steprunner.TelMessage;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.WaitStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.UntilAllDoneStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.UntilOneDoneStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.ServoStep;
 import org.eastcobbrobotics.ftc.relic.RelicBot;
 import org.eastcobbrobotics.ftc.relic.autonomous.Steps.GlyphterStep;
-import org.eastcobbrobotics.ftc.relic.autonomous.Steps.ReadColorSensorLeftStep;
-import org.eastcobbrobotics.ftc.relic.autonomous.Steps.ReadColorSensorRightStep;
-import org.eastcobbrobotics.ftc.relic.autonomous.Steps.ReadColorSensorStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.DriveStep;
 
 import java.util.List;
@@ -61,7 +58,6 @@ abstract public class StepAutoCore extends LinearOpMode {
     // protected static final double TURN_POWER = 0.8;
 
     // Common steps
-    protected Step pause;
 
     protected Step deployLeftArmStep;
     protected Step retractLeftArmStep;
@@ -80,40 +76,40 @@ abstract public class StepAutoCore extends LinearOpMode {
 
         // Define all the common steps we use in our routines
 
-        // Two-second pause for troubleshooting.
-        pause = new WaitStep(2000);
-
         // TODO: define other common steps that are used in multiple
         // autonomous routines. See StepAutoCore.java in Velocity project
         // for examples.
 
         //Left side code
         deployLeftArmStep = new UntilAllDoneStep(
-                new WaitStep(2000),
+                waitFor(2000),
                 new SequenceStep(
                         new WaitStep(100),
                         new ServoStep(LEFT_ARM_WRIST_SERVO, RelicBot.LEFT_WRIST_CENTER)
                 ),
                 new ServoStep(LEFT_ARM_ELBOW_SERVO, RelicBot.LEFT_JEWEL_DOWN)
         );
+
         retractLeftArmStep = new SequenceStep(
                 new UntilAllDoneStep
                         (
-                        new WaitStep(1000),
-                        new ServoStep(RelicBot.LEFT_ARM_ELBOW_SERVO, ((RelicBot.LEFT_JEWEL_STORE + RelicBot.LEFT_JEWEL_DOWN) / 2))
+                                waitFor(1000),
+                                new ServoStep(LEFT_ARM_ELBOW_SERVO, ((RelicBot.LEFT_JEWEL_STORE + RelicBot.LEFT_JEWEL_DOWN) / 2))
                         ),
                 new SequenceStep
                         (
-                                new WaitStep(1000),
+                                waitFor(1000),
                                 new ServoStep(LEFT_ARM_WRIST_SERVO, RelicBot.LEFT_WRIST_STORE),
-                                new WaitStep(1000)
+                                waitFor(1000)
                         ),
                 new UntilAllDoneStep
                         (
-                        new WaitStep(1000),
-                        new ServoStep(RelicBot.LEFT_ARM_ELBOW_SERVO, RelicBot.LEFT_JEWEL_STORE)
+                                waitFor(1000),
+                                new ServoStep(LEFT_ARM_ELBOW_SERVO, RelicBot.LEFT_JEWEL_STORE)
                         )
         );
+
+/*
         flickLeftBallStep = new SequenceStep(
                 new UntilOneDoneStep(
                         new WaitStep(3000),
@@ -130,6 +126,7 @@ abstract public class StepAutoCore extends LinearOpMode {
                                 )
                         ))
         );
+*/
 
         //Right side code
         deployRightArmStep = new UntilAllDoneStep(
@@ -140,25 +137,27 @@ abstract public class StepAutoCore extends LinearOpMode {
                 ),
                 new ServoStep(RIGHT_ARM_WRIST_SERVO, RelicBot.RIGHT_WRIST_CENTER)
         );
+
         retractRightArmStep = new SequenceStep(
                 new UntilAllDoneStep
                         (
-                                new WaitStep(1000),
+                                waitFor(1000),
                                 new ServoStep(RelicBot.RIGHT_ARM_ELBOW_SERVO, ((RelicBot.RIGHT_JEWEL_STORE + RelicBot.RIGHT_JEWEL_DOWN) / 2))
                         ),
                 new SequenceStep
                         (
-                                new WaitStep(1000),
+                                waitFor(1000),
                                 new ServoStep(RIGHT_ARM_WRIST_SERVO, RelicBot.RIGHT_WRIST_STORE),
-                                new WaitStep(1000)
+                                waitFor(1000)
                         ),
                 new UntilAllDoneStep
                         (
-                                new WaitStep(1000),
+                                waitFor(1000),
                                 new ServoStep(RelicBot.RIGHT_ARM_ELBOW_SERVO, RelicBot.RIGHT_JEWEL_STORE)
                         )
         );
-        flickRightBallStep = new SequenceStep(
+
+/*        flickRightBallStep = new SequenceStep(
                 new UntilOneDoneStep(
                         new WaitStep(3000),
                         new UntilAllDoneStep(
@@ -173,7 +172,7 @@ abstract public class StepAutoCore extends LinearOpMode {
                                         new ServoStep(RIGHT_ARM_WRIST_SERVO, RelicBot.RIGHT_WRIST_RIGHT)
                                 )
                         ))
-        );
+        );*/
 
         grabGlyph = new SequenceStep(
                 new UntilAllDoneStep(
@@ -252,6 +251,17 @@ abstract public class StepAutoCore extends LinearOpMode {
         return new WaitStep(duration);
     }
 
+    /*
+     * Generate a step that times out.
+     */
+    protected Step timeoutStep(Step step, int timeout) {
+        return new UntilOneDoneStep(
+                step,
+                new SequenceStep(
+                        new WaitStep(timeout),
+                        new SayStep(String.format("TIMEOUT after %d ms", timeout))
+                )
+        );
+    }
 }
-
 

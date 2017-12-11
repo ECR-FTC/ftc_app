@@ -8,22 +8,18 @@ this code is used for developing autonomous functions for the competition robot
 package org.eastcobbrobotics.ftc.relic.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.Blinker;
 
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.SayStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.SequenceStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.Step;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.StepRobot;
-import org.eastcobbrobotics.ftc.ecrlib.steprunner.SwitchStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.WaitStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.UntilAllDoneStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.UntilOneDoneStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.ServoStep;
 import org.eastcobbrobotics.ftc.relic.RelicBot;
 import org.eastcobbrobotics.ftc.relic.autonomous.Steps.GlyphterStep;
-import org.eastcobbrobotics.ftc.ecrlib.steprunner.DriveStep;
 
-import java.util.List;
 
 import static org.eastcobbrobotics.ftc.relic.RelicBot.LEFT_ARM_ELBOW_SERVO;
 import static org.eastcobbrobotics.ftc.relic.RelicBot.LEFT_ARM_WRIST_SERVO;
@@ -61,141 +57,92 @@ abstract public class StepAutoCore extends LinearOpMode {
 
     protected Step deployLeftArmStep;
     protected Step retractLeftArmStep;
-    protected Step flickLeftBallStep;
-
-    protected Step flickRightBallStep;
     protected Step deployRightArmStep;
     protected Step retractRightArmStep;
 
     protected Step grabGlyph;
     protected Step releaseGlyph;
 
-    public int VuforiaChoice = 2; // 1 is left, 2 is center, and 3 is right
-
     public StepAutoCore() {
 
         // Define all the common steps we use in our routines
 
-        // TODO: define other common steps that are used in multiple
-        // autonomous routines. See StepAutoCore.java in Velocity project
-        // for examples.
+        // Left side code
 
-        //Left side code
         deployLeftArmStep = new UntilAllDoneStep(
-                waitFor(2000),
-                new SequenceStep(
-                        new WaitStep(100),
-                        new ServoStep(LEFT_ARM_WRIST_SERVO, RelicBot.LEFT_WRIST_CENTER)
-                ),
-                new ServoStep(LEFT_ARM_ELBOW_SERVO, RelicBot.LEFT_JEWEL_DOWN)
+            waitFor(2000),
+            new SequenceStep(
+                new WaitStep(100),
+                new ServoStep(LEFT_ARM_WRIST_SERVO, RelicBot.LEFT_WRIST_CENTER)
+            ),
+            new ServoStep(LEFT_ARM_ELBOW_SERVO, RelicBot.LEFT_JEWEL_DOWN)
         );
 
         retractLeftArmStep = new SequenceStep(
-                new UntilAllDoneStep
-                        (
-                                waitFor(1000),
-                                new ServoStep(LEFT_ARM_ELBOW_SERVO, ((RelicBot.LEFT_JEWEL_STORE + RelicBot.LEFT_JEWEL_DOWN) / 2))
-                        ),
-                new SequenceStep
-                        (
-                                waitFor(1000),
-                                new ServoStep(LEFT_ARM_WRIST_SERVO, RelicBot.LEFT_WRIST_STORE),
-                                waitFor(1000)
-                        ),
-                new UntilAllDoneStep
-                        (
-                                waitFor(1000),
-                                new ServoStep(LEFT_ARM_ELBOW_SERVO, RelicBot.LEFT_JEWEL_STORE)
-                        )
+            new UntilAllDoneStep(
+                waitFor(1000),
+                new ServoStep(LEFT_ARM_ELBOW_SERVO, ((RelicBot.LEFT_JEWEL_STORE + RelicBot.LEFT_JEWEL_DOWN) / 2))
+            ),
+            new SequenceStep(
+                waitFor(1000),
+                new ServoStep(LEFT_ARM_WRIST_SERVO, RelicBot.LEFT_WRIST_STORE),
+                waitFor(1000)
+            ),
+            new UntilAllDoneStep(
+                waitFor(1000),
+                new ServoStep(LEFT_ARM_ELBOW_SERVO, RelicBot.LEFT_JEWEL_STORE)
+            )
         );
 
-/*
-        flickLeftBallStep = new SequenceStep(
-                new UntilOneDoneStep(
-                        new WaitStep(3000),
-                        new UntilAllDoneStep(
-                                new ReadColorSensorLeftStep(),
-                                new WaitStep(1000)
-                        ),
-                        new UntilAllDoneStep(
-                                new WaitStep(1000),
-                                new SwitchStep("colorFound",
-                                        new ServoStep(LEFT_ARM_WRIST_SERVO, RelicBot.LEFT_WRIST_LEFT),
-                                        new WaitStep(500),
-                                        new ServoStep(LEFT_ARM_WRIST_SERVO, RelicBot.LEFT_WRIST_RIGHT)
-                                )
-                        ))
-        );
-*/
 
-        //Right side code
+        // Right side code
         deployRightArmStep = new UntilAllDoneStep(
-                new WaitStep(2000),
-                new SequenceStep(
-                        new WaitStep(200),
-                        new ServoStep(RIGHT_ARM_ELBOW_SERVO, RelicBot.RIGHT_JEWEL_DOWN)
-                ),
-                new ServoStep(RIGHT_ARM_WRIST_SERVO, RelicBot.RIGHT_WRIST_CENTER)
+            new WaitStep(2000),
+            new SequenceStep(
+                new WaitStep(200),
+                new ServoStep(RIGHT_ARM_ELBOW_SERVO, RelicBot.RIGHT_JEWEL_DOWN)
+            ),
+            new ServoStep(RIGHT_ARM_WRIST_SERVO, RelicBot.RIGHT_WRIST_CENTER)
         );
 
         retractRightArmStep = new SequenceStep(
-                new UntilAllDoneStep
-                        (
-                                waitFor(1000),
-                                new ServoStep(RelicBot.RIGHT_ARM_ELBOW_SERVO, ((RelicBot.RIGHT_JEWEL_STORE + RelicBot.RIGHT_JEWEL_DOWN) / 2))
-                        ),
-                new SequenceStep
-                        (
-                                waitFor(1000),
-                                new ServoStep(RIGHT_ARM_WRIST_SERVO, RelicBot.RIGHT_WRIST_STORE),
-                                waitFor(1000)
-                        ),
-                new UntilAllDoneStep
-                        (
-                                waitFor(1000),
-                                new ServoStep(RelicBot.RIGHT_ARM_ELBOW_SERVO, RelicBot.RIGHT_JEWEL_STORE)
-                        )
+            new UntilAllDoneStep(
+                waitFor(1000),
+                new ServoStep(RelicBot.RIGHT_ARM_ELBOW_SERVO, ((RelicBot.RIGHT_JEWEL_STORE + RelicBot.RIGHT_JEWEL_DOWN) / 2))
+            ),
+            new SequenceStep(
+                waitFor(1000),
+                new ServoStep(RIGHT_ARM_WRIST_SERVO, RelicBot.RIGHT_WRIST_STORE),
+                waitFor(1000)
+            ),
+            new UntilAllDoneStep(
+                waitFor(1000),
+                new ServoStep(RelicBot.RIGHT_ARM_ELBOW_SERVO, RelicBot.RIGHT_JEWEL_STORE)
+            )
         );
 
-/*        flickRightBallStep = new SequenceStep(
-                new UntilOneDoneStep(
-                        new WaitStep(3000),
-                        new UntilAllDoneStep(
-                                new ReadColorSensorRightStep(),
-                                new WaitStep(1000)
-                        ),
-                        new UntilAllDoneStep(
-                                new WaitStep(1000),
-                                new SwitchStep("colorFound",
-                                        new ServoStep(RIGHT_ARM_WRIST_SERVO, RelicBot.RIGHT_WRIST_LEFT),
-                                        new WaitStep(500),
-                                        new ServoStep(RIGHT_ARM_WRIST_SERVO, RelicBot.RIGHT_WRIST_RIGHT)
-                                )
-                        ))
-        );*/
-
         grabGlyph = new SequenceStep(
-                new UntilAllDoneStep(
-                        new WaitStep(1000),
-                        new ServoStep(LEFT_GRAB_SERVO, 0.22),//todo this is the value for the old servos
-                        new ServoStep(RIGHT_GRAB_SERVO, 0.59)//todo this is the value for the old servos
-                ),
-                new UntilOneDoneStep(
-                        new WaitStep(500),
-                        new GlyphterStep(-1)
-                )
+            new UntilAllDoneStep(
+                new WaitStep(1000),
+                new ServoStep(LEFT_GRAB_SERVO, 0.22),//todo this is the value for the old servos
+                new ServoStep(RIGHT_GRAB_SERVO, 0.59)//todo this is the value for the old servos
+            ),
+            new UntilOneDoneStep(
+                new WaitStep(500),
+                new GlyphterStep(-1)
+            )
         );
 
         releaseGlyph = new SequenceStep(
-                new UntilOneDoneStep(
-                        new WaitStep(200),
-                        new GlyphterStep(1)
-                ),
-                new UntilAllDoneStep(
-                        new WaitStep(500),
-                        new ServoStep(LEFT_GRAB_SERVO, 0.80),//todo this is the value for the old servos
-                        new ServoStep(RIGHT_GRAB_SERVO, 0.07)    //todo this is the value for the old servos
-                )
+            new UntilOneDoneStep(
+                new WaitStep(200),
+                new GlyphterStep(1)
+            ),
+            new UntilAllDoneStep(
+                new WaitStep(500),
+                new ServoStep(LEFT_GRAB_SERVO, 0.80),//todo this is the value for the old servos
+                new ServoStep(RIGHT_GRAB_SERVO, 0.07)    //todo this is the value for the old servos
+            )
         );
     }
 
@@ -256,11 +203,11 @@ abstract public class StepAutoCore extends LinearOpMode {
      */
     protected Step timeoutStep(Step step, int timeout) {
         return new UntilOneDoneStep(
-                step,
-                new SequenceStep(
-                        new WaitStep(timeout),
-                        new SayStep(String.format("TIMEOUT after %d ms", timeout))
-                )
+            step,
+            new SequenceStep(
+                new WaitStep(timeout),
+                new SayStep(String.format("TIMEOUT after %d ms", timeout))
+            )
         );
     }
 }

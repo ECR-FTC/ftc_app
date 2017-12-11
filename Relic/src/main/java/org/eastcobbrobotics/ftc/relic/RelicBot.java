@@ -185,6 +185,12 @@ public class RelicBot extends StepRobot {
         imu = hwMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
 
+
+        // TODO: determine what this does and if we need to do it. Does it reset our
+        // orientation to zero?
+        // Start the logging of measured acceleration
+        // imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+
         // Set up our Vuforia camera.
         VuforiaLocalizer.Parameters vuforiaParameters = new VuforiaLocalizer.Parameters();
         vuforiaParameters.vuforiaLicenseKey = "ATzOAID/////AAAAGWB+pRDolE/Mlr+59IMYtjx6LhM5Ct9clbf5okK+ie5MhZ7gTp7z0hdxcRP/DAzErKsfTg3Cz3JNZMUVM2LL5Aj5Nx3r0awwiSDS5/FRxdDurfddsF4wVzgzDyyIk3jIW3LQu96DVlcsGS2NzCcnclfft/kwfcQt6J5lGBbbWOp65h/cSopGehPckyTjrOUuIDQGQnrmqM+QjdL2eardbNfvQQ3/DGLHHsO4f/ZYXXHxahD4r6vCNBCW282upQVl8dflrEVcGaQ9G39MbBOJSsxpFsece0P+MsHoF6Y58GQDxBXQzRrNbP2OBU14lhSTb0mZBl52MLEhCZGgzWXgMkKronzDwp2g4QwVAngF8XzU";

@@ -4,33 +4,27 @@
 package org.eastcobbrobotics.ftc.relic.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 
 import org.eastcobbrobotics.ftc.relic.HardwareJunior_V0;
 
-/*
- */
-
-@TeleOp(name = "Junior: TTLV0", group = "Junior")
-//@Disabled
-
 /**
  * Created by ECR FTC on 9/17/2017.
+ * <p>
+ * This base class does NOT have working methods for the glyphter, so
+ * it is an abstract base class. Extend this class and implement glyhpter
+ * methods to get a working teleop.
  **/
 
-public class JuniorTeleop extends LinearOpMode {
+public abstract class JuniorTeleop extends LinearOpMode {
 
-    /* Declare OpMode members. */
     HardwareJunior_V0 robot = new HardwareJunior_V0();
 
     @Override
     public void runOpMode() {
-        //variables that set positions/speeds of motors and servos
+        //variables that set positions/speeds of motors
         double left;
         double right;
-        double leftGlyphterArmPos = robot.leftRelease;
-        double rightGlyphterArmPos = robot.rightRelease;
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
@@ -42,9 +36,8 @@ public class JuniorTeleop extends LinearOpMode {
             //todo handle this falure
         }
 
-
         // Send telemetry message to signify robot waiting;
-        telemetry.addData("Say", "Hello Driver");    //
+        telemetry.addData("Say", "Hello Driver");
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
@@ -71,74 +64,32 @@ public class JuniorTeleop extends LinearOpMode {
             robot.motorFR.setPower(right);
             robot.motorBR.setPower(right);
 
-            //lift/retract glyphter
-            robot.motorGlyphter.setPower(gamepad2.right_stick_y * robot.glyphterSpeed);
+            telemetry.addData("left", "%.2f", left);
+            telemetry.addData("right", "%.2f", right);
+            telemetry.addData("top speed", "%.2f", robot.topSpeed);
 
-            //version 2 of grab controls, it is operated like the k-9 controls
-            //change the position of the glyphter servo by glyphterChangeSpeed
-            if (gamepad2.y) // open
-            {
-                leftGlyphterArmPos = leftGlyphterArmPos - robot.glyphterChangeSpeed;
-                rightGlyphterArmPos = rightGlyphterArmPos + robot.glyphterChangeSpeed;
-            }
-            if (gamepad2.b) // close
-            {
-                leftGlyphterArmPos = leftGlyphterArmPos + robot.glyphterChangeSpeed;
-                rightGlyphterArmPos = rightGlyphterArmPos - robot.glyphterChangeSpeed;
-            }
-            //make sure the servos don't go too far
-            leftGlyphterArmPos = Range.clip(leftGlyphterArmPos, robot.leftGrab, robot.leftRelease);
-            rightGlyphterArmPos = Range.clip(rightGlyphterArmPos, robot.rightRelease, robot.rightGrab);
+            // Call child class overrides to handle the glyphter.
+            handleGlyphter();
 
-            //set the position
-            robot.servoLeftGrab.setPosition(leftGlyphterArmPos);
-            robot.servoRightGrab.setPosition(rightGlyphterArmPos);
-
-            //version 3 of the grab controls, it uses omotors rather than servos
-            /*
-            if (gamepad2.y)
-            {
-                //set the glyphter motors to close
-                robot.motorLeftGrab.setPower(robot.maxGrabSpeed);
-                robot.motorRightGrab.setPower(robot.maxGrabSpeed);
-            }
-            else if (gamepad2.a)
-            {
-                //set the glyphter motors to open
-                robot.motorLeftGrab.setPower(-robot.maxGrabSpeed);
-                robot.motorRightGrab.setPower(-robot.maxGrabSpeed);
-            } else if (gamepad2.x)
-            {
-                //set the glyphter motors to hold
-                robot.motorLeftGrab.setPower(robot.holdSpeed);
-                robot.motorRightGrab.setPower(robot.holdSpeed);
-            }
-            else {
-                //set the glyphter motors to stay put
-                robot.motorLeftGrab.setPower(0.00);
-                robot.motorRightGrab.setPower(0.00);
-            }
-            */
             //store jewel servos
-            if (gamepad2.left_bumper || gamepad2.right_bumper)
-            {
+            if (gamepad2.left_bumper || gamepad2.right_bumper) {
                 // set the button pushing servos to the store positions
                 robot.servoRightGrab.setPosition(robot.rightRelease);
                 robot.servoLeftGrab.setPosition(robot.leftRelease);
                 robot.servoRightJewel.setPosition(robot.rightJewelStore);
                 robot.servoLeftJewel.setPosition(robot.leftJewelStore);
             }
-            // Send telemetry message to signify robot running;
-            telemetry.addData("left", "%.2f", left);
-            telemetry.addData("right", "%.2f", right);
-            telemetry.addData("left glyphter servo", "%.2f", robot.servoLeftGrab.getPosition());
-            telemetry.addData("right glyphter servo", "%.2f", robot.servoRightGrab.getPosition());
-            telemetry.addData("top speed", "%.2f", robot.topSpeed);
-            telemetry.update();
 
+            telemetry.update();
 
             // Pause for 40 mS each cycle = update 25 times a second.
             sleep(40);
         }
     }
+
+    // Subclasses must override this method to implement glyphter control.
+
+    abstract protected void handleGlyphter();
+
+
 }

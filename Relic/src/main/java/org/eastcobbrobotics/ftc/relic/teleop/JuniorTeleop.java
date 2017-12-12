@@ -94,6 +94,31 @@ public class JuniorTeleop extends LinearOpMode {
             robot.servoLeftGrab.setPosition(leftGlyphterArmPos);
             robot.servoRightGrab.setPosition(rightGlyphterArmPos);
 
+            //version 3 of the grab controls, it uses omotors rather than servos
+            /*
+            if (gamepad2.y)
+            {
+                //set the glyphter motors to close
+                robot.motorLeftGrab.setPower(robot.maxGrabSpeed);
+                robot.motorRightGrab.setPower(robot.maxGrabSpeed);
+            }
+            else if (gamepad2.a)
+            {
+                //set the glyphter motors to open
+                robot.motorLeftGrab.setPower(-robot.maxGrabSpeed);
+                robot.motorRightGrab.setPower(-robot.maxGrabSpeed);
+            } else if (gamepad2.x)
+            {
+                //set the glyphter motors to hold
+                robot.motorLeftGrab.setPower(robot.holdSpeed);
+                robot.motorRightGrab.setPower(robot.holdSpeed);
+            }
+            else {
+                //set the glyphter motors to stay put
+                robot.motorLeftGrab.setPower(0.00);
+                robot.motorRightGrab.setPower(0.00);
+            }
+            */
             //store jewel servos
             if (gamepad2.left_bumper || gamepad2.right_bumper)
             {
@@ -103,7 +128,6 @@ public class JuniorTeleop extends LinearOpMode {
                 robot.servoRightJewel.setPosition(robot.rightJewelStore);
                 robot.servoLeftJewel.setPosition(robot.leftJewelStore);
             }
-
             // Send telemetry message to signify robot running;
             telemetry.addData("left", "%.2f", left);
             telemetry.addData("right", "%.2f", right);

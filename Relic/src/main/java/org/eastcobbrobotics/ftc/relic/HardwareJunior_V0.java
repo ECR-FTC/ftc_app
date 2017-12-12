@@ -5,6 +5,7 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.Gyroscope;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -49,6 +50,8 @@ public class HardwareJunior_V0
     public DcMotor motorFR;
     public DcMotor motorBR;
     public DcMotor motorGlyphter;
+    public DcMotor motorLeftGrab;
+    public DcMotor motorRightGrab;
 
     public Servo servoLeftGrab;
     public Servo servoRightGrab;
@@ -63,7 +66,7 @@ public class HardwareJunior_V0
     public HardwareMap hwMap  = null;
     private ElapsedTime period  = new ElapsedTime();
 
-
+    //servo glyphter settings
     public double leftGrab           =  0.32;  // leftgrab grab value
     public double leftRelease        =  0.87;  // leftgrab release value
     public double rightGrab          =  0.55;  // rightgrab grab value
@@ -71,6 +74,11 @@ public class HardwareJunior_V0
     public double glyphterSpeed      =  0.50;  // top speed for glyphter
     public double glyphterChangeSpeed=  0.02;  // amount of change in the position of the glyphter arm
 
+    //motor glyphter settings
+    public double maxGrabSpeed       =  0.25;  // Max speed of the motors.
+    public double holdSpeed          =  0.05;  // Speed while holding glyphs
+
+    //jewel settings
     public double leftJewelStore     =  0.25;  // leftjewel store value
     public double leftJewelDown      =  0.91;  // leftjewel deployed value
     public double rightJewelStore    =  0.84;  // rightjewel store value
@@ -86,6 +94,7 @@ public class HardwareJunior_V0
     public double leftWristRight     =  0.20;  // left wrist setting to knock off the right ball
     public double leftWristStore     =  0.00;  // left wrist store value, inits here
 
+    //drive setttings
     public double topSpeed           =  0.80;  // top speed for drive
     /* Constructor */
     public HardwareJunior_V0() {
@@ -106,16 +115,20 @@ public class HardwareJunior_V0
         motorBL.setDirection(DcMotor.Direction.REVERSE);
 
         motorGlyphter = hwMap.dcMotor.get("motorGlyphter");
+        motorLeftGrab = hwMap.dcMotor.get("motorLeftGrab");
+        motorRightGrab = hwMap.dcMotor.get("motorRightGrab");
 
         //servo hardware map
         servoLeftGrab = hwMap.servo.get("servoLeftGrab");
         servoRightGrab = hwMap.servo.get("servoRightGrab");
 
+        motorLeftGrab.setDirection(DcMotor.Direction.REVERSE);
+        motorRightGrab.setDirection(DcMotor.Direction.FORWARD);
+
         servoLeftJewel = hwMap.servo.get("servoLeftJewel");
         servoRightJewel = hwMap.servo.get("servoRightJewel");
         servoLeftWrist = hwMap.servo.get("servoLeftWrist");
         servoRightWrist = hwMap.servo.get("servoRightWrist");
-
 
         // Set all motors to zero power
         motorFL.setPower(0);
@@ -123,6 +136,8 @@ public class HardwareJunior_V0
         motorBR.setPower(0);
         motorBL.setPower(0);
         motorGlyphter.setPower(0);
+        motorLeftGrab.setPower(0);
+        motorRightGrab.setPower(0);
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
@@ -131,7 +146,8 @@ public class HardwareJunior_V0
         motorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorGlyphter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
+        motorRightGrab.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorLeftGrab.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 /*        // start calibrating the gyro.
         gyro.calibrate();

@@ -99,6 +99,10 @@ public class RelicBot extends StepRobot {
     public static final double LEFT_WRIST_RIGHT = 0.28;
     public static final double LEFT_WRIST_STORE = 0.00;
 
+    // The values for the colors we detect with the color sensor.
+    public static final int COLOR_BLUE = 0;
+    public static final int COLOR_UNKNOWN = 1;
+    public static final int COLOR_RED = 2;
 
     public double colorDifference = 10;
 
@@ -181,6 +185,12 @@ public class RelicBot extends StepRobot {
         imu = hwMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
 
+
+        // TODO: determine what this does and if we need to do it. Does it reset our
+        // orientation to zero?
+        // Start the logging of measured acceleration
+        // imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+
         // Set up our Vuforia camera.
         VuforiaLocalizer.Parameters vuforiaParameters = new VuforiaLocalizer.Parameters();
         vuforiaParameters.vuforiaLicenseKey = "ATzOAID/////AAAAGWB+pRDolE/Mlr+59IMYtjx6LhM5Ct9clbf5okK+ie5MhZ7gTp7z0hdxcRP/DAzErKsfTg3Cz3JNZMUVM2LL5Aj5Nx3r0awwiSDS5/FRxdDurfddsF4wVzgzDyyIk3jIW3LQu96DVlcsGS2NzCcnclfft/kwfcQt6J5lGBbbWOp65h/cSopGehPckyTjrOUuIDQGQnrmqM+QjdL2eardbNfvQQ3/DGLHHsO4f/ZYXXHxahD4r6vCNBCW282upQVl8dflrEVcGaQ9G39MbBOJSsxpFsece0P+MsHoF6Y58GQDxBXQzRrNbP2OBU14lhSTb0mZBl52MLEhCZGgzWXgMkKronzDwp2g4QwVAngF8XzU";
@@ -255,37 +265,30 @@ public class RelicBot extends StepRobot {
         motorBackLeft.setDirection(DcMotor.Direction.REVERSE);
     }
 
+    // Read the value of a color sensor.
+    public int readColor(ColorSensor sensor) {
+        float blue = sensor.blue();
+        float red = sensor.red();
+
+        // Assume unknown until we get a blue reading significantly above the
+        // red reading, or vice versa.
+        int color = COLOR_UNKNOWN;
+        if (blue - red > colorDifference) {
+            color = COLOR_BLUE;
+        } else if (red - blue > colorDifference) {
+            color = COLOR_RED;
+        }
+        return color;
+
+    }
+
     //@Override
     public int readColorRight() {
-        int color = 1; // 0 is blue, 1 is neither(or both), 2 is red
-        float blue = colorSensorRight.blue();
-        float red = colorSensorRight.red();
-
-        if (blue - red > colorDifference) {
-            color = 0;
-        } else if (red - blue > colorDifference) {
-            color = 2;
-        } else {
-            color = 1;
-        }
-
-        return color;
+        return readColor(colorSensorRight);
     }
 
     public int readColorLeft() {
-        int color = 1; // 0 is blue, 1 is neither(or both), 2 is red
-        float blue = colorSensorLeft.blue();
-        float red = colorSensorLeft.red();
-
-        if (blue - red > colorDifference) {
-            color = 0;
-        } else if (red - blue > colorDifference) {
-            color = 2;
-        } else {
-            color = 1;
-        }
-
-        return color;
+        return readColor(colorSensorLeft);
     }
 
 

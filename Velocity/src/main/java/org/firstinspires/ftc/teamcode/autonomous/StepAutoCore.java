@@ -25,13 +25,10 @@ import org.eastcobbrobotics.ftc.ecrlib.steprunner.Step;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.StepRobot;
 import org.firstinspires.ftc.teamcode.autonomous.steps.StopShooterStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.SwitchStep;
-import org.eastcobbrobotics.ftc.ecrlib.steprunner.TelMessage;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.TurnStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.UntilOneDoneStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.WaitForFlagStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.WaitStep;
-
-import java.util.List;
 
 /*
  *  This is the base class for all StepRunner-based autonomous classes. The actual logic
@@ -258,17 +255,6 @@ abstract public class StepAutoCore extends LinearOpMode {
         // Run until we're done
         while (opModeIsActive() && mainStep.isRunning()) {
             mainStep.run();
-
-            // If there are telemetry messages, show them and flush them.
-            // NO LONGER SUPPORTED
-//            List<TelMessage> messages = mainStep.getMessages();
-//            if (!messages.isEmpty()) {
-//                for (TelMessage tm : messages) {
-//                    telemetry.addData(tm.caption, tm.message);
-//                }
-//                telemetry.update();
-//                messages.clear();
-//            }
 
             // Let the rest of the robot do whatever it wants
             idle();

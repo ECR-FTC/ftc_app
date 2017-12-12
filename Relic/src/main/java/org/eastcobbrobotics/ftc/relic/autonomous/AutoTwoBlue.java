@@ -42,7 +42,7 @@ public class AutoTwoBlue extends StepAutoCore {
                 retractLeftArmStep,
                 grabGlyph,
                 new UntilOneDoneStep(
-                        new RamperDriveStep(0.85,1),
+                        new RamperDriveStep(1,1),
                         new WaitStep(1000)
                 ),
                 new UntilOneDoneStep(

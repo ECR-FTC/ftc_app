@@ -124,7 +124,7 @@ public class RelicBot extends StepRobot {
     public void init(Object map) throws InterruptedException {
 
         // Tracecaster must be DISABLED (false) for competition
-        tracecastEnabled = false;
+        tracecastEnabled = true;
 
         tell("RelicBot: Initializing");
 

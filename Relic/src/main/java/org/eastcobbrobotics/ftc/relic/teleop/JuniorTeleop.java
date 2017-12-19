@@ -73,7 +73,7 @@ public class JuniorTeleop extends LinearOpMode {
 
             //lift/retract glyphter
             robot.motorGlyphter.setPower(gamepad2.right_stick_y * robot.glyphterSpeed);
-
+            /*
             //version 2 of grab controls, it is operated like the k-9 controls
             //change the position of the glyphter servo by glyphterChangeSpeed
             if (gamepad2.y) // open
@@ -93,38 +93,33 @@ public class JuniorTeleop extends LinearOpMode {
             //set the position
             robot.servoLeftGrab.setPosition(leftGlyphterArmPos);
             robot.servoRightGrab.setPosition(rightGlyphterArmPos);
-
+            */
             //version 3 of the grab controls, it uses omotors rather than servos
-            /*
-            if (gamepad2.y)
+            if (gamepad2.a)
             {
-                //set the glyphter motors to close
-                robot.motorLeftGrab.setPower(robot.maxGrabSpeed);
-                robot.motorRightGrab.setPower(robot.maxGrabSpeed);
+                //set the glyphter motors to slow open
+                robot.motorLeftGrab.setPower(-robot.holdSpeed);
+                robot.motorRightGrab.setPower(-robot.holdSpeed);
             }
-            else if (gamepad2.a)
+            else if (gamepad2.x)
             {
-                //set the glyphter motors to open
-                robot.motorLeftGrab.setPower(-robot.maxGrabSpeed);
-                robot.motorRightGrab.setPower(-robot.maxGrabSpeed);
-            } else if (gamepad2.x)
-            {
-                //set the glyphter motors to hold
+                //set the glyphter motors to slow close
                 robot.motorLeftGrab.setPower(robot.holdSpeed);
                 robot.motorRightGrab.setPower(robot.holdSpeed);
             }
-            else {
+            else
+            {
                 //set the glyphter motors to stay put
                 robot.motorLeftGrab.setPower(0.00);
                 robot.motorRightGrab.setPower(0.00);
             }
-            */
+
             //store jewel servos
             if (gamepad2.left_bumper || gamepad2.right_bumper)
             {
                 // set the button pushing servos to the store positions
-                robot.servoRightGrab.setPosition(robot.rightRelease);
-                robot.servoLeftGrab.setPosition(robot.leftRelease);
+                robot.servoRightWrist.setPosition(robot.rightWristStore);
+                robot.servoLeftWrist.setPosition(robot.leftWristStore);
                 robot.servoRightJewel.setPosition(robot.rightJewelStore);
                 robot.servoLeftJewel.setPosition(robot.leftJewelStore);
             }

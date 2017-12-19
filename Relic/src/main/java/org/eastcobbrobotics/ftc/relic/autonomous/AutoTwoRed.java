@@ -42,8 +42,8 @@ public class AutoTwoRed extends StepAutoCore {
                 retractRightArmStep,
                 grabGlyph,
                 new UntilOneDoneStep(
-                        new RamperDriveStep(1,1),
-                        new WaitStep(1000)
+                        new RamperDriveStep(1.2,1),
+                        new WaitStep(2000)
                 ),
                 new UntilOneDoneStep(
                         new WaitStep(3000),
@@ -51,7 +51,7 @@ public class AutoTwoRed extends StepAutoCore {
                 ),
                 new UntilOneDoneStep(
                         new RamperDriveStep(1.2,1),
-                        new WaitStep(1000)
+                        new WaitStep(2000)
                 ),
                 releaseGlyph,
                 new UntilOneDoneStep(

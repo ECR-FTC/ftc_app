@@ -19,7 +19,7 @@ import org.eastcobbrobotics.ftc.ecrlib.steprunner.RamperTurnStep;
 
 /**
  * ECR FTC 11096 - 2017 - 2018 Relic Recovery
- *
+ * <p>
  * AutoOneBlue is a minimal autonomous routine, which uses
  * StepRunner to perform several competition processes.
  */
@@ -36,28 +36,28 @@ public class AutoTwoBlue extends StepAutoCore {
         Step mainStep = new SequenceStep(
                 deployLeftArmStep,
                 new UntilAllDoneStep(
-                new JewelFlipLeftStep(),
-                new WaitStep(2000)
+                        new JewelFlipLeftStep(),
+                        new WaitStep(2000)
                 ),
                 retractLeftArmStep,
                 grabGlyph,
                 new UntilOneDoneStep(
-                        new RamperDriveStep(1,1),
-                        new WaitStep(1000)
+                        new RamperDriveStep(1.2, 1),
+                        new WaitStep(2000)
                 ),
                 new UntilOneDoneStep(
                         new WaitStep(2800),
                         new RamperTurnStep(-90, 0.5)
                 ),
                 new UntilOneDoneStep(
-                        new RamperDriveStep(1.2,1),
-                        new WaitStep(1000)
+                        new RamperDriveStep(1.2, 1),
+                        new WaitStep(2000)
                 ),
                 releaseGlyph,
                 new UntilOneDoneStep(
-                new DriveStep(-0.50),
-                new WaitStep(200)
-         )
+                        new DriveStep(-0.50),
+                        new WaitStep(200)
+                )
         );
         runStepAutonomous("AutoTwoBlue", robot, mainStep);
     }

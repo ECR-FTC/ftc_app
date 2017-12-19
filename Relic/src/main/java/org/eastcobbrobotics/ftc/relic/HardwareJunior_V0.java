@@ -76,7 +76,7 @@ public class HardwareJunior_V0
 
     //motor glyphter settings
     public double maxGrabSpeed       =  0.25;  // Max speed of the motors.
-    public double holdSpeed          =  0.05;  // Speed while holding glyphs
+    public double holdSpeed          =  0.15;  // Speed while holding glyphs
 
     //jewel settings
     public double leftJewelStore     =  0.25;  // leftjewel store value

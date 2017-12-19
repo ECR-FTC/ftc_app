@@ -30,7 +30,7 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package org.firstinspires.ftc.k9code;
+package org.eastcobbrobotics.ftc.relic.lab;
 
 //import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import android.media.MediaPlayer;
@@ -38,16 +38,6 @@ import android.media.MediaPlayer;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
-import com.qualcomm.robotcore.hardware.TouchSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.GyroSensor;
-import com.qualcomm.robotcore.hardware.TouchSensor;
-import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwareK9bot;
-
 
 
 //import org.firstinspires.ftc.robotcontroller.external.samples.HardwareK9bot;
@@ -70,32 +60,19 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwareK9bot;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="K9bot: Telop Tank ECR2", group="K9bot")
+@TeleOp(name="NotBotOperation WARNING BE CAREFUL", group="K9bot")
 //@Disabled
-public class K9TankDriveECR extends LinearOpMode {
+public class NotBotOperationTeliop extends LinearOpMode {
 
     /* Declare OpMode members. */
-    HardwareK9botECR   robot        = new HardwareK9botECR();          // Use a K9's hardware
-    double          armPosition     = HardwareK9botECR.ARM_HOME;       // Servo home position
-    double          clawPosition    = HardwareK9botECR.CLAW_HOME;      // Servo home position
-    double          tailPosition    = HardwareK9botECR.TAIL_HOME;      // Servo home position
-    final double    CLAW_SPEED      = 0.01;                            // sets rate to move servo
-    final double    ARM_SPEED       = 0.01;                            // sets rate to move servo
-    final double    TAIL_SPEED      = 0.02;                            // sets rate to move servo
-    double          Speed           = 1.00;                            // amount that the max speed (one) is divided by, aka 1/speed
-    int             tailDirection   = 1;                               // direction of tail
-
-
-
+    HardwareNotBot2   robot        = new HardwareNotBot2();          // Use a K9's hardware
+    double          outerElbowPosition    = HardwareNotBot2.OUTER_ELBOW_HOME;      // Servo home position
+    double          innerElbowPosition    = HardwareNotBot2.INNER_ELBOW_HOME;      // Servo home position
+    double          elbowSpeed = 0.01;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        double left;
-        double right;
-        final MediaPlayer mp; // instantiate the object name
-        // populate the MediaPlayer object. The resource should be in the res/raw folder
-        // and should be named "puppybarking.wav"
-        mp = MediaPlayer.create(hardwareMap.appContext, R.raw.puppybarking);
+        double motorSpeed;
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
@@ -114,92 +91,33 @@ public class K9TankDriveECR extends LinearOpMode {
 
             // Run wheels in tank mode (note: The joystick goes negative when pushed forward, so negate it)
             // add /4 to slow down drive motors
-            left = -gamepad1.left_stick_y/Speed;
-            right = -gamepad1.right_stick_y/Speed;
-            robot.leftMotor.setPower(left);
-            robot.rightMotor.setPower(right);
-            if (robot.touchR.isPressed()){
-                robot.leftMotor.setPower(0);
-                robot.rightMotor.setPower(0);
-            }
+            motorSpeed = -gamepad1.left_stick_y;
+            robot.shoulderMotor.setPower(motorSpeed);
 
             // Use gamepad Y & A raise and lower the arm
             if (gamepad1.a)
-                armPosition += ARM_SPEED;
+                innerElbowPosition += elbowSpeed;
             else if (gamepad1.y)
-                armPosition -= ARM_SPEED;
+                innerElbowPosition -= elbowSpeed;
 
             // Use gamepad X & B to open and close the claw
             if (gamepad1.x)
-              clawPosition += CLAW_SPEED;
+                outerElbowPosition += elbowSpeed;
             else if (gamepad1.b)
-              clawPosition -= CLAW_SPEED;
+                outerElbowPosition -= elbowSpeed;
 
             // Move both servos to new position.
-            armPosition  = Range.clip(armPosition, HardwareK9botECR.ARM_MIN_RANGE, HardwareK9botECR.ARM_MAX_RANGE);
-            robot.arm.setPosition(armPosition);
-            clawPosition = Range.clip(clawPosition, HardwareK9botECR.CLAW_MIN_RANGE, HardwareK9botECR.CLAW_MAX_RANGE);
-            robot.claw.setPosition(clawPosition);
+            innerElbowPosition  = Range.clip(innerElbowPosition, robot.INNER_ELBOW_OPEN, robot.INNER_ELBOW_CLOSE);
+            robot.innerElbowServo.setPosition(innerElbowPosition);
+            outerElbowPosition  = Range.clip(outerElbowPosition, robot.OUTER_ELBOW_OPEN, robot.OUTER_ELBOW_CLOSE);
+            robot.outerElbowServo.setPosition(outerElbowPosition);
 
-            if (gamepad1.left_bumper){
-                mp.start(); // this plays the sound
-                robot.LED2.enable(true); // turn on LED
-            }
-            if (gamepad1.right_bumper){
-                mp.start(); // this plays the sound
-                robot.LED2.enable(false); // turn off LED
-            }
-
-            //change speed, set to gamepad 2 to do this (outreach)
-            if (gamepad2.a)
-            {
-                Speed = 4;
-                telemetry.addData("Driver Mode+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++4++1","Slow");
-                telemetry.update();
-                robot.waitForTick(2000);
-            }
-            if (gamepad2.b)
-            {
-                Speed = 2;
-                telemetry.addData("Driver Mode","Medium");
-                telemetry.update();
-                robot.waitForTick(2000);
-            }
-            if (gamepad2.x)
-            {
-                Speed = 2;
-                telemetry.addData("Driver Mode","Medium");
-                telemetry.update();
-                robot.waitForTick(2000);
-            }
-            if (gamepad2.y)
-            {
-                Speed = 1;
-                telemetry.addData("Driver Mode","Fast");
-                telemetry.update();
-                robot.waitForTick(2000);
-            }
-
-
-            //operate tail
-            if(tailPosition > robot.TAIL_MAX_RANGE || tailPosition < robot.TAIL_MIN_RANGE)
-            {
-                tailDirection = -tailDirection;
-            }
-            tailPosition = tailPosition + (tailDirection*TAIL_SPEED);
-            robot.tail.setPosition(tailPosition);
 
             // Send telemetry message to signify robot running;
-//            telemetry.addData("isPressed",String.valueOf(robot.touchR.isPressed()));
-            telemetry.addData("arm",   "%.2f", armPosition);
-            telemetry.addData("claw",  "%.2f", clawPosition);
-            telemetry.addData("left",  "%.2f", left);
-            telemetry.addData("right", "%.2f", right);
-//            telemetry.addData("touch", "%b", robot.touchR.isPressed());
-            telemetry.addData("logLin1", "%.3f", robot.logLin1.getVoltage());
-            telemetry.addData("4. h", "%03d", robot.gyro.getHeading());
-            telemetry.addData("tailPos ", tailPosition);
-            telemetry.addData("tailDir ", tailDirection);
+            telemetry.addData("outer elbow",  "%.2f", outerElbowPosition);
+            telemetry.addData("inner elbow",  "%.2f", innerElbowPosition);
+            telemetry.addData("speed",  "%.2f", motorSpeed);
+
 //            telemetry.addData("speed = speed /", Speed);
             telemetry.update();
 
@@ -207,6 +125,5 @@ public class K9TankDriveECR extends LinearOpMode {
             robot.waitForTick(40);
             idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
         }
-        robot.LED2.enable(false);
     }
 }

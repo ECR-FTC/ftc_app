@@ -1,13 +1,11 @@
-package org.firstinspires.ftc.k9code;
+package org.eastcobbrobotics.ftc.relic.lab;
 
 import com.qualcomm.robotcore.hardware.AnalogInput;
-import com.qualcomm.robotcore.hardware.AnalogOutput;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.LED;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -31,38 +29,25 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  *   As the arm servo approaches 0, the arm position moves up (away from the floor).
  *   As the claw servo approaches 0, the claw opens up (drops the game element).
  */
-public class HardwareK9botECR
+public class HardwareNotBot2
 {
     /* Public OpMode members. */
-    public DcMotor  leftMotor   = null;
-    public DcMotor  rightMotor  = null;
-    public Servo    arm         = null;
-    public Servo    claw        = null;
-    public Servo    tail        = null;
-    public LED      LED2        = null;
-    public AnalogInput logLin1  = null;
-//    public AnalogOutput led1 = null;
+    public DcMotor  shoulderMotor   = null;
+    public Servo    innerElbowServo = null;
+    public Servo    outerElbowServo = null;
 
-    //public SensorMRGyro gyro    = null;
-    public GyroSensor  gyro     = null;
-    public TouchSensor touchR   = null;
-
-    public final static double ARM_HOME        = 0.2;
-    public final static double CLAW_HOME       = 0.2;
-    public final static double TAIL_HOME       = 0.6;
-    public final static double ARM_MIN_RANGE   = 0.00;
-    public final static double ARM_MAX_RANGE   = 1.00;
-    public final static double CLAW_MIN_RANGE  = 0.00;
-    public final static double CLAW_MAX_RANGE  = 0.7;
-    public final static double TAIL_MAX_RANGE  = 0.9;
-    public final static double TAIL_MIN_RANGE  = 0.3;
-
+    public final static double INNER_ELBOW_HOME        = 0.5;
+    public final static double OUTER_ELBOW_HOME        = 0.5;
+    public final static double INNER_ELBOW_OPEN        = 0.0;
+    public final static double OUTER_ELBOW_OPEN        = 0.0;
+    public final static double INNER_ELBOW_CLOSE       = 1.0;
+    public final static double OUTER_ELBOW_CLOSE       = 1.0;
     /* Local OpMode members. */
     HardwareMap hwMap  = null;
     private ElapsedTime period  = new ElapsedTime();
 
     /* Constructor */
-    public HardwareK9botECR() {
+    public HardwareNotBot2() {
     }
 
     /* Initialize standard Hardware interfaces */
@@ -70,45 +55,20 @@ public class HardwareK9botECR
         // save reference to HW Map
         hwMap = ahwMap;
 
-        gyro = hwMap.gyroSensor.get("gyro");
-        touchR = hwMap.touchSensor.get("touchFR");
-        // Define and Initialize Motors
-        leftMotor   = hwMap.dcMotor.get("motor_1");
-        rightMotor  = hwMap.dcMotor.get("motor_2");
-        leftMotor.setDirection(DcMotor.Direction.REVERSE);
+      // Define and Initialize Motors
+        shoulderMotor   = hwMap.dcMotor.get("ShoulderMotor");
 
         // Set all motors to zero power
-        leftMotor.setPower(0);
-        rightMotor.setPower(0);
-
-        logLin1 = hwMap.analogInput.get("logLin1");
-
-        // this works, but the output current is too low.
-  //      led1 = hwMap.analogOutput.get("led1");
-  //      led1.setAnalogOutputMode((byte)0);
-  //      led1.setAnalogOutputVoltage(1023);
-        LED2 = hwMap.led.get("led2");
+        shoulderMotor.setPower(0);;
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
-        leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        shoulderMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Define and initialize ALL installed servos.
-        arm = hwMap.servo.get("servo_1");
-        claw = hwMap.servo.get("servo_6");
-        tail = hwMap.servo.get("servo_2");
-        arm.setPosition(ARM_HOME);
-        claw.setPosition(CLAW_HOME);
-        tail.setPosition(TAIL_HOME);
+        outerElbowServo = hwMap.servo.get("OuterElbowServo");
+        innerElbowServo = hwMap.servo.get("InnerElbowServo");
 
-        // start calibrating the gyro.
-        gyro.calibrate();
-
-        // make sure the gyro is calibrated.
-        while (gyro.isCalibrating()) {
-            Thread.sleep(50);
-        }
 
     }
 

@@ -114,6 +114,10 @@ public class MockRobot extends StepRobot {
         say(String.format("setServo: servoId=%d, position=%.2f", servoId, position));
 
     }
+    @Override
+    public void setMotor(int motorID, double speed) {
+//TODO fix
+    }
 
     @Override
     public double getTicksPerTile() {

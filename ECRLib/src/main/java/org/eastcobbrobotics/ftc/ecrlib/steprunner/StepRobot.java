@@ -77,8 +77,12 @@ public abstract class StepRobot {
     abstract public void setServo(int servoId, double position);
 
     /*
-     * Get number of encoder ticks per tile.
+     * Set motor speed
      */
+    abstract public void setMotor(int motorID, double speed);
+    /*
+    * Get number of encoder ticks per tile.
+    */
     abstract public double getTicksPerTile();
 
     /*

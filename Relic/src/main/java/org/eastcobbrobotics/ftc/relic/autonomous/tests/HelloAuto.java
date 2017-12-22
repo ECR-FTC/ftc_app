@@ -12,6 +12,7 @@ import org.eastcobbrobotics.ftc.ecrlib.steprunner.UntilOneDoneStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.WaitStep;
 import org.eastcobbrobotics.ftc.relic.RelicBot;
 import org.eastcobbrobotics.ftc.relic.autonomous.StepAutoCore;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.MotorStep;
 
 /**
  * ECR FTC 11096 - 2016 - 2017 Velocity Vortex
@@ -21,7 +22,7 @@ import org.eastcobbrobotics.ftc.relic.autonomous.StepAutoCore;
  */
 
 @Autonomous(name = "HelloAuto", group = "Testing")
-@Disabled
+//@Disabled
 
 public class HelloAuto extends StepAutoCore {
 
@@ -30,12 +31,7 @@ public class HelloAuto extends StepAutoCore {
 
         RelicBot robot = new RelicBot();
         Step mainStep = new SequenceStep(
-                new UntilAllDoneStep(
-                        new WaitStep(2000),
-                        new ServoStep(4, RelicBot.LEFT_WRIST_CENTER),
-                        new ServoStep(2, RelicBot.LEFT_JEWEL_DOWN)
-                )
-
+            new MotorStep(RelicBot.RIGHT_FRONT_MOTOR, 1)
 
         );
         runStepAutonomous("HelloAuto", robot, mainStep);

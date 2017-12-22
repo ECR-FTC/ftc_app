@@ -79,6 +79,15 @@ public class RelicBot extends StepRobot {
     public final static int LEFT_ARM_WRIST_SERVO = 4;
     public final static int RIGHT_ARM_WRIST_SERVO = 5;
 
+    public List<DcMotor> motorList;
+    public final static int RIGHT_FRONT_MOTOR = 0;
+    public final static int LEFT_FRONT_MOTOR = 1;
+    public final static int RIGHT_BACK_MOTOR = 2;
+    public final static int LEFT_BACK_MOTOR = 3;
+    public final static int LIFT_MOTOR = 4;
+    public final static int RIGHT_GRAB_MOTOR = 5;
+    public final static int LEFT_GRAB_MOTOR = 6;
+
     // Constants
     public static final double TICKS_PER_TILE = 1525;   // encoder ticks for one game tile
 
@@ -387,6 +396,10 @@ public class RelicBot extends StepRobot {
     @Override
     public void setServo(int servoId, double position) {
         servoList.get(servoId).setPosition(position);
+    }
+    @Override
+    public void setMotor(int motorID, double speed) {
+        motorList.get(motorID).setPower(speed);
     }
 
     @Override

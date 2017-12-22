@@ -55,6 +55,8 @@ public class RelicBot extends StepRobot {
     public DcMotor motorGlyphter;
     public Servo leftGrab;
     public Servo rightGrab;
+    public DcMotor motorLeftGrab;
+    public DcMotor motorRightGrab;
 
     // Jewel arm servos
     public Servo leftArmElbow;
@@ -152,6 +154,11 @@ public class RelicBot extends StepRobot {
         motorGlyphter = hwMap.dcMotor.get("motorGlyphter");
         leftGrab = hwMap.servo.get("servoLeftGrab");
         rightGrab = hwMap.servo.get("servoRightGrab");
+        motorLeftGrab = hwMap.dcMotor.get("motorLeftGrab");
+        motorRightGrab = hwMap.dcMotor.get("motorRightGrab");
+
+        motorLeftGrab.setDirection(DcMotor.Direction.REVERSE);
+        motorRightGrab.setDirection(DcMotor.Direction.FORWARD);
 
         // Jewel arms.
         leftArmElbow = hwMap.servo.get("servoLeftJewel");
@@ -166,6 +173,10 @@ public class RelicBot extends StepRobot {
         // Make a list of the Servos, so we can refer to them by number.
         // Make sure they are in the right order! SEE COMMENT ABOVE!
         servoList = asList(leftGrab, rightGrab, leftArmElbow, rightArmElbow, leftArmWrist, rightArmWrist);
+
+        // Make a list of the motors, so we can refer to them by number.
+        // Make sure they are in the right order! SEE COMMENT ABOVE!
+         motorList = asList(motorFrontRight,motorFrontLeft,motorBackRight,motorBackLeft,motorGlyphter,motorRightGrab,motorLeftGrab);
 
         // Reset all drive motors
         resetDriveMotors();

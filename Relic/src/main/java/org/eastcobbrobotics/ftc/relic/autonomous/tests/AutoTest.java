@@ -11,8 +11,16 @@ import org.eastcobbrobotics.ftc.ecrlib.steprunner.UntilOneDoneStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.WaitStep;
 import org.eastcobbrobotics.ftc.relic.RelicBot;
 import org.eastcobbrobotics.ftc.relic.autonomous.StepAutoCore;
+import org.eastcobbrobotics.ftc.relic.autonomous.Steps.GlyphterStep;
 import org.eastcobbrobotics.ftc.relic.autonomous.Steps.TurnLeftStep;
-//import org.eastcobbrobotics.ftc.relic.autonomous.Steps.TurnRightStep;
+import org.eastcobbrobotics.ftc.relic.autonomous.Steps.TurnRightStep;
+import org.eastcobbrobotics.ftc.relic.autonomous.Steps.CheckImageStep;
+import org.eastcobbrobotics.ftc.relic.autonomous.Steps.ReadColorSensorStep;
+import org.eastcobbrobotics.ftc.relic.autonomous.Steps.TurnLeftStep;
+import org.eastcobbrobotics.ftc.relic.autonomous.Steps.TurnRightStep;
+import org.eastcobbrobotics.ftc.relic.autonomous.Steps.JewelFlipLeftStep;
+import org.eastcobbrobotics.ftc.relic.autonomous.Steps.JewelFlipRightStep;
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.RamperTurnStep;
 
 /**
  * ECR FTC 11096 - 2017 - 2018 Relic Recovery
@@ -22,7 +30,7 @@ import org.eastcobbrobotics.ftc.relic.autonomous.Steps.TurnLeftStep;
  */
 
 @Autonomous(name = "AutoTest", group = "Competition")
-@Disabled
+//@Disabled
 
 public class AutoTest extends StepAutoCore {
 
@@ -31,7 +39,9 @@ public class AutoTest extends StepAutoCore {
 
         RelicBot robot = new RelicBot();
         Step mainStep = new SequenceStep(
-                new RamperDriveStep( 1 , 1 )
+                new RamperDriveStep(1.5 ,1 ),
+                grabGlyph,
+                new RamperDriveStep(-1,1)
         );
         runStepAutonomous("AutoTest", robot, mainStep);
     }

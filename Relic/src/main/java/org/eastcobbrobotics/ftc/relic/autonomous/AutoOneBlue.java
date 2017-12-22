@@ -68,14 +68,13 @@ public class AutoOneBlue extends StepAutoCore {
             // Ths is the LEFT path...?
             timeoutStep(new RamperDriveStep(1.2, 1), 3000),
             timeoutStep(new RamperTurnStep(44, 0.5), 1750),
+                releaseGlyph,
             timeoutStep(new RamperDriveStep(1.5, 1), 3000),
-
-            releaseGlyph,
 
             new UntilOneDoneStep(
                     new DriveStep(-0.50),
                     new WaitStep(200)
-                )
+            )
         );
         runStepAutonomous("AutoOneBlue", robot, mainStep);
     }

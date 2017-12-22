@@ -121,17 +121,19 @@ abstract public class StepAutoCore extends LinearOpMode {
             )
         );
 
+
         grabGlyph = new SequenceStep(
             new UntilAllDoneStep(
                 new WaitStep(1000),
-                new ServoStep(LEFT_GRAB_SERVO, 0.22),//todo this is the value for the old servos
-                new ServoStep(RIGHT_GRAB_SERVO, 0.59)//todo this is the value for the old servos
+                new ServoStep(LEFT_GRAB_SERVO, 0.22),
+                new ServoStep(RIGHT_GRAB_SERVO, 0.59)
             ),
             new UntilOneDoneStep(
                 new WaitStep(500),
                 new GlyphterStep(-1)
             )
         );
+
 
         releaseGlyph = new SequenceStep(
             new UntilOneDoneStep(
@@ -140,8 +142,8 @@ abstract public class StepAutoCore extends LinearOpMode {
             ),
             new UntilAllDoneStep(
                 new WaitStep(500),
-                new ServoStep(LEFT_GRAB_SERVO, 0.80),//todo this is the value for the old servos
-                new ServoStep(RIGHT_GRAB_SERVO, 0.07)    //todo this is the value for the old servos
+                new ServoStep(LEFT_GRAB_SERVO, 0.80),
+                new ServoStep(RIGHT_GRAB_SERVO, 0.07)
             )
         );
     }

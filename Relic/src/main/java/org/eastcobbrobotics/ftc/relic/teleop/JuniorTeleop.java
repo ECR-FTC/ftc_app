@@ -31,6 +31,7 @@ public class JuniorTeleop extends LinearOpMode {
         double right;
         double leftGlyphterArmPos = robot.leftRelease;
         double rightGlyphterArmPos = robot.rightRelease;
+        double grabHome = 0.00;
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
@@ -94,7 +95,15 @@ public class JuniorTeleop extends LinearOpMode {
             robot.servoLeftGrab.setPosition(leftGlyphterArmPos);
             robot.servoRightGrab.setPosition(rightGlyphterArmPos);
             */
-            //version 3 of the grab controls, it uses omotors rather than servos
+            //version 3 of the grab controls, it uses motors rather than servos
+            if(gamepad2.y)
+            {
+                grabHome = 0.00;
+            }
+            if(gamepad2.b)
+            {
+                grabHome = 0.40;
+            }
             if (gamepad2.a)
             {
                 //set the glyphter motors to slow open
@@ -109,9 +118,9 @@ public class JuniorTeleop extends LinearOpMode {
             }
             else
             {
-                //set the glyphter motors to stay put
-                robot.motorLeftGrab.setPower(0.00);
-                robot.motorRightGrab.setPower(0.00);
+                //set the glyphter motors to the set 'home' value
+                robot.motorLeftGrab.setPower(grabHome);
+                robot.motorRightGrab.setPower(grabHome);
             }
 
             //store jewel servos

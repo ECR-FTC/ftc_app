@@ -59,18 +59,38 @@ public class AutoOneBlue extends StepAutoCore {
             // TODO: define driving steps for each path (left, enter, right) and
             // switch to those!
             new SwitchStep("imageFound",
-                    new SayStep("I didn't see an image - maybe guess?"),
-                    new SayStep("Take the LEFT path"),
-                    new SayStep("Take the CENTER path"),
-                    new SayStep("Take the RIGHT path")
+                    new SequenceStep(
+                            new SayStep("I didn't see an image - maybe guess?")
+                    ),
+                    new SequenceStep(
+                            new SayStep("Take the LEFT path"),
+                            timeoutStep(new RamperDriveStep(1,1),3000),
+                            timeoutStep(new RamperTurnStep(20,0.5),2000),
+                            timeoutStep(new RamperDriveStep(0,0),0),
+                            timeoutStep(new RamperTurnStep(0,0),0),
+                            openMotorGlyphterStep,
+                            timeoutStep(new RamperDriveStep(0.5,1),3000)
+                    ),
+                    new SequenceStep(
+                            new SayStep("Take the CENTER path"),
+                            timeoutStep(new RamperDriveStep(1,1),3000),
+                            timeoutStep(new RamperTurnStep(30,0.5),2000),
+                            timeoutStep(new RamperDriveStep(0,0),0),
+                            timeoutStep(new RamperTurnStep(0,0),0),
+                            openMotorGlyphterStep,
+                            timeoutStep(new RamperDriveStep(0.7,1),3000)
+                    ),
+                    new SequenceStep(
+                            new SayStep("Take the RIGHT path")
+                    )
             ),
-
+            /*
             // Ths is the LEFT path...?
             timeoutStep(new RamperDriveStep(1.2, 1), 3000),
             timeoutStep(new RamperTurnStep(44, 0.5), 1750),
                 openMotorGlyphterStep,
             timeoutStep(new RamperDriveStep(1.5, 1), 3000),
-
+            */
             new UntilOneDoneStep(
                     new DriveStep(-0.50),
                     new WaitStep(200)

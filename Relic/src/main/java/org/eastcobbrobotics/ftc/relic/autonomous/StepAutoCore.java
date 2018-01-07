@@ -9,6 +9,7 @@ package org.eastcobbrobotics.ftc.relic.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.eastcobbrobotics.ftc.ecrlib.steprunner.MotorStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.SayStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.SequenceStep;
 import org.eastcobbrobotics.ftc.ecrlib.steprunner.Step;
@@ -23,9 +24,11 @@ import org.eastcobbrobotics.ftc.relic.autonomous.Steps.GlyphterStep;
 
 import static org.eastcobbrobotics.ftc.relic.RelicBot.LEFT_ARM_ELBOW_SERVO;
 import static org.eastcobbrobotics.ftc.relic.RelicBot.LEFT_ARM_WRIST_SERVO;
+import static org.eastcobbrobotics.ftc.relic.RelicBot.LEFT_GRAB_MOTOR;
 import static org.eastcobbrobotics.ftc.relic.RelicBot.LEFT_GRAB_SERVO;
 import static org.eastcobbrobotics.ftc.relic.RelicBot.RIGHT_ARM_ELBOW_SERVO;
 import static org.eastcobbrobotics.ftc.relic.RelicBot.RIGHT_ARM_WRIST_SERVO;
+import static org.eastcobbrobotics.ftc.relic.RelicBot.RIGHT_GRAB_MOTOR;
 import static org.eastcobbrobotics.ftc.relic.RelicBot.RIGHT_GRAB_SERVO;
 import static org.eastcobbrobotics.ftc.relic.RelicBot.RIGHT_JEWEL_STORE;
 
@@ -63,9 +66,43 @@ abstract public class StepAutoCore extends LinearOpMode {
     protected Step grabGlyph;
     protected Step releaseGlyph;
 
+    protected Step closeMotorGlyphterStep;
+    protected Step openMotorGlyphterStep;
+
     public StepAutoCore() {
 
         // Define all the common steps we use in our routines
+
+
+        closeMotorGlyphterStep = new SequenceStep(
+                new UntilOneDoneStep(
+                        new MotorStep(RIGHT_GRAB_MOTOR,0.5),
+                        new MotorStep(LEFT_GRAB_MOTOR,0.5),
+                        new WaitStep(500)
+                ),
+                new WaitStep(500),
+                new UntilOneDoneStep(
+                        new WaitStep(500),
+                        new GlyphterStep(-1)
+                ),
+                new MotorStep(RIGHT_GRAB_MOTOR,0.1),
+                new MotorStep(LEFT_GRAB_MOTOR,0.1)
+        );
+
+        openMotorGlyphterStep = new SequenceStep(
+                new UntilOneDoneStep(
+                        new MotorStep(RIGHT_GRAB_MOTOR,-0.5),
+                        new MotorStep(LEFT_GRAB_MOTOR,-0.5),
+                        new WaitStep(500)
+                ),
+                new UntilOneDoneStep(
+                new WaitStep(500),
+                new GlyphterStep(1)
+                ),
+                new MotorStep(RIGHT_GRAB_MOTOR,0.0),
+                new MotorStep(LEFT_GRAB_MOTOR,0.0)
+        );
+
 
         // Left side code
 

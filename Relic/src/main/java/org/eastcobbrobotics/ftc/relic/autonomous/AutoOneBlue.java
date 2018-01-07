@@ -49,7 +49,7 @@ public class AutoOneBlue extends StepAutoCore {
             ),
             retractLeftArmStep,
 
-            grabGlyph,
+            closeMotorGlyphterStep,
 
             // Wait up to a second to detect one of the Vuforia images and set
             // the "imageFound" flag.
@@ -68,7 +68,7 @@ public class AutoOneBlue extends StepAutoCore {
             // Ths is the LEFT path...?
             timeoutStep(new RamperDriveStep(1.2, 1), 3000),
             timeoutStep(new RamperTurnStep(44, 0.5), 1750),
-                releaseGlyph,
+                openMotorGlyphterStep,
             timeoutStep(new RamperDriveStep(1.5, 1), 3000),
 
             new UntilOneDoneStep(

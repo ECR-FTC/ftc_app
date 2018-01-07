@@ -40,7 +40,7 @@ public class AutoOneRed extends StepAutoCore {
                         new WaitStep(2000)
                 ),
                 retractRightArmStep,
-                grabGlyph,
+                closeMotorGlyphterStep,
                 new SequenceStep(
                         new UntilOneDoneStep(
                                 new CheckImageStep(),
@@ -88,7 +88,7 @@ public class AutoOneRed extends StepAutoCore {
                                 new RamperDriveStep(1.5, 1),
                                 new WaitStep(3000)
                         ),
-                        releaseGlyph,
+                        openMotorGlyphterStep,
                         new UntilOneDoneStep(
                                 new DriveStep(-0.50),
                                 new WaitStep(200)
